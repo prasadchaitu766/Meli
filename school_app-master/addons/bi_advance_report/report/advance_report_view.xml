@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="bi_advance_report.employee_report_advance">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="report.external_layout">
+                <div class="page">
+                    <h2 align="center">ADVANCE</h2>
+                    <!-- <p t-field="o.name"/> -->
+
+                    <table class="table table-condensed table-bordered">
+                        <tr>
+                            <td colspan="2" align="center"><b><span t-field="o.employee_id.school_id.name"/></b></td>
+                        </tr>
+                        <tr>
+                        </tr>
+                        <tr>
+                            <td><strong>Employee Name</strong></td>
+                            <td><span t-field="o.employee_id.name"/></td>
+                        </tr>
+                         <tr>
+                            <td><strong>Employee Code</strong></td>
+                            <td><span t-field="o.employee_id.code"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Department</strong></td>
+                            <td><span t-field="o.department_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Designation</strong></td>
+                            <td><span t-field="o.design_id.name"/></td>
+                        </tr>
+                        <tr>
+                        </tr>
+                         <tr>
+                            <td><strong>Request Amount</strong></td>
+                            <td><span t-field="o.amount"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Request Date</strong></td>
+                            <td><span t-field="o.request_date"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Confirm Date</strong></td>
+                            <td><span t-field="o.confirm_date"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Confirm Manager</strong></td>
+                            <td><span t-field="o.confirm_manager"/></td>
+                        </tr>
+                    </table>
+                      <!-- <tr t-foreach="o.pdf_merge()" t-as="inc"/> -->
+                    <br/>
+                    <br/>
+                    <p class="text-right"><strong>Authorized signature</strong></p>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

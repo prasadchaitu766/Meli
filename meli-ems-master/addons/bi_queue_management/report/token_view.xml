@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+	    <report 
+            id="token_report"
+            model="bi.token.management"
+            string="Token"
+            report_type="qweb-pdf"
+            name="bi_queue_management.report_token_view"
+            file="bi_queue_management.report_token_view"
+            attachment_use="False"
+            menu="False"
+        />
+    </data>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_employee_list_wizard" model="ir.ui.view">
+            <field name="name">employee.list.form</field>
+            <field name="model">employee.list</field>
+            <field name="arch" type="xml">
+                <form string="Employee List">
+                    <group>
+                        <field name="company_id"/>
+                    </group>
+                    <footer>
+                        <button name="generated_employee_list" string="Employee List" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_employee_list_details" model="ir.actions.act_window">
+        <field name="name">Employee List</field>
+        <field name="res_model">employee.list</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        </record>
+
+        <menuitem
+            id="bi_menu_analytic_report_main"
+            name="Employee List"
+            parent="bi_hr.hr_employee_menu_main"
+            action="action_employee_list_details"
+            sequence="4"
+            groups="school.group_school_administration,hr.group_hr_manager,school.module_category_hr_assistant"
+        />
+
+</odoo>

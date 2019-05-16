@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!-- FORM VIEW -->     
+	<record id="account_petty_cash_fund_form" model="ir.ui.view">
+		<field name="name">Petty Cash Fund Form View new</field>
+		<field name="model">account.petty.cash</field> 
+		<field name="arch" type="xml">
+		<form>
+
+			<header>
+					
+						 <button name="button_post" type="object" string="Confirm" class="oe_highlight" attrs="{'invisible': [('state','in',('draft','posted'))]}" groups= "account.group_account_manager"/>
+						 <button name="button_verify" type="object" string="Submit" class="oe_highlight" attrs="{'invisible': [('state','in',('posted','verified'))]}"/>
+						 <span class="label label-danger" attrs="{'invisible': [('closing_balance','&gt;','0.0')]}">Not sufficient balance!!!</span>
+						 <field name="state" widget="statusbar" statusbar_visible="draft,verified,posted"/>
+				
+			</header>
+			<sheet>
+
+				<group string="Petty Cash Fund"/>
+					<group>
+						<group>
+								<field name="name"/>       
+								<field name="custodian_id" invisible="1"/>
+								<field name="school_id" required="1"/>       
+								<field name="journal_id"  invisible="1"/>
+								<field name="opening_balance"/>
+						</group>
+						<group>
+								<field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+								<field name="payment_date"/>
+								<field name="journal_ref" attrs="{'invisible':[('state','!=','posted')]}"/>  
+						</group>
+					</group>
+					
+					<notebook>
+			 
+							<page string="Voucher" >
+								<group>
+									  <field name="vouchers"  colspan="4" nolabel="1"> 
+											<tree string="Voucher" editable="bottom">
+												<field name="partner_id"/>
+												<field name="description"/>    
+												<field name="account_id" options="{'no_create': True}"/>
+												<field name="amount"/>
+
+											</tree>
+									 </field>
+								</group> 
+								<group class="oe_subtotal_footer oe_right">	
+									<field name="amount_total" class="oe_subtotal_footer_separator"/>
+									<field name="closing_balance" class="oe_subtotal_footer_separator"/>	   
+							 	</group>                      
+				 
+							</page>
+					</notebook>
+	
+			</sheet>
+		</form>
+		</field>
+	</record>
+	
+	 <!-- TREE VIEW --> 	
+
+	<record id="account_petty_cash_fund_tree" model="ir.ui.view">
+			<field name="name">Petty Cash Fund Tree View new</field>
+			<field name="model">account.petty.cash</field>
+			<field name="arch" type="xml">
+				<tree string="Petty Cash Funds">
+					<field name="name"/>
+					<field name="payment_date"/>
+					<field name="custodian_id" />
+					<field name="journal_id"/>
+					<field name="opening_balance"/>
+					<field name="amount_total"  sum="Total"/>
+					<field name="closing_balance"/>
+					<field name="state"/>
+					
+				</tree>
+			</field>
+		</record>
+
+	<record id="account_petty_cash_fund_tree_view" model="ir.ui.view">
+			<field name="name">Petty Cash Fund Tree View new</field>
+			<field name="model">account.petty.cash</field>
+			<field name="arch" type="xml">
+				<tree string="Petty Cash Funds" create="false">
+					<field name="name"/>
+					<field name="payment_date"/>
+					<field name="custodian_id" />
+					<field name="journal_id"/>
+					<field name="opening_balance"/>
+					<field name="amount_total"  sum="Total"/>
+					<field name="closing_balance"/>
+					<field name="state"/>
+					
+				</tree>
+			</field>
+		</record>
+		
+	  <record id="action_account_petty_cash_mgmt" model="ir.actions.act_window">
+			<field name="name">Petty Cash Management</field>
+			<field name="res_model">account.petty.cash</field>
+			<field name="view_type">form</field>
+			<field name="domain">[('custodian_id','=', uid)]</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="account_petty_cash_fund_tree"/>
+
+		</record>
+
+	  <record id="action_account_petty_cash_mgmt_view" model="ir.actions.act_window">
+			<field name="name">All Vouchers</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">account.petty.cash</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="account_petty_cash_fund_tree_view"/>
+			   
+		</record>
+		 
+	   
+
+		<menuitem id="menu_finance_petty" name="Petty Cash Voucher" parent="account.menu_finance" groups="account.group_account_manager,account.group_account_invoice"/>
+		<menuitem id="menu_finance_petty_sub" name="Payment Voucher" parent="menu_finance_petty" action="action_account_petty_cash_mgmt" groups= "account.group_account_manager,account.group_account_user,account.group_account_invoice"/>
+		<menuitem id="menu_finance_petty_sub_all" name="All Vouchers" parent="menu_finance_petty"
+		sequence="5" action="action_account_petty_cash_mgmt_view" groups="account.group_account_manager,account.group_account_invoice"/>
+
+</odoo>

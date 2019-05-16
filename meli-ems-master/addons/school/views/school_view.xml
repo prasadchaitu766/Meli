@@ -1,0 +1,1917 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<odoo>
+   
+        <!-- Form View Of Student Reminder -->
+        <record id="view_student_reminder_form_2" model="ir.ui.view">
+            <field name="name">student.reminder.form</field>
+            <field name="model">student.reminder</field>
+            <field name="arch" type="xml">
+                <form string="Student Reminder">
+                    <sheet>
+                        <separator string="Reminder" />
+                        <group col="4" colspan="4">
+                            <field name="stu_id" widget="selection" placeholder="Student" domain="[('state','in',('done','followup'))]"/>
+                            <field name="date" placeholder="Select Date" required="1"/>
+                            <field name="name" placeholder="Reminder Title" required="1"/>
+                            <newline />
+                            <field name="description" colspan="4" placeholder="Description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Kanban View Of Student Reminder -->
+        <record id="student_reminder_kanban_view" model="ir.ui.view">
+            <field name="name">Student KANBAN</field>
+            <field name="model">student.reminder</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="date">
+                    <field name="name" />
+                    <field name="date" />
+                    <field name="color" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}} oe_kanban_global_click_edit oe_semantic_html_override">
+                                <div class="oe_dropdown_toggle oe_dropdown_kanban">
+                                    <ul class="oe_dropdown_menu">
+                                        <li>
+                                            <a type="edit">Edit...</a>
+                                        </li>
+                                        <li>
+                                            <a type="delete">Delete</a>
+                                        </li>
+                                        <li>
+                                            <ul class="oe_kanban_colorpicker" data-field="color" />
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="oe_kanban_box_header oe_kanban_color_bgdark oe_kanban_color_border oe_kanban_draghandle">
+                                    <table class="oe_kanban_table">
+                                        <tr>
+                                            <td class="oe_kanban_title1" align="left" valign="middle" style="padding-left:10px;">
+                                                <h4>
+                                                    <a type="open">
+                                                        <field name="date" />
+                                                        <field name="name" />
+                                                    </a>
+                                                </h4>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br />
+                                </div>
+                                <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_box_show_onclick_trigger oe_kanban_color_border">
+                                    <table class="oe_kanban_table">
+                                        <tr width="300">
+                                            <td valign="top" align="left" style="padding-left:10px;">
+                                                <table>
+                                                    <tr>
+                                                        <td>Name :</td>
+                                                        <td style="padding-left:10px;">
+                                                            <b>
+                                                                <field name="name" />
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Date : </td>
+                                                        <td style="padding-left:10px;">
+                                                            <b>
+                                                                <field name="date" />
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Description : </td>
+                                                        <td style="padding-left:10px;">
+                                                            <b>
+                                                                <field name="description" />
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="oe_kanban_buttons_set oe_kanban_color_border oe_kanban_color_bglight oe_kanban_box_show_onclick">
+                                    <div class="oe_kanban_left" style="margin-left:10px;">
+                                        <br />
+                                        <a string="Edit" class="btn btn-sm btn-default fa fa-pencil" type="edit" />
+                                        <a string="Change Color" icon="color-picker" type="color" name="color" />
+                                    </div>
+                                    <br class="oe_kanban_clear" />
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_student_reminder_search" model="ir.ui.view">
+            <field name="name">student.reminder.search</field>
+            <field name="model">student.reminder</field>
+            <field name="arch" type="xml">
+                <search string="Reminder">
+                    <group col="10" colspan="4">
+                        <filter icon="terp-go-month" string="This Month" name="month" domain="[('date','&lt;=',(datetime.date.today()+relativedelta(day=31)).strftime('%Y-%m-%d')),('date','&gt;=',(datetime.date.today()-relativedelta(day=1)).strftime('%Y-%m-%d'))]"  help="Current Month"/>
+                        <filter icon="terp-go-week" string="Current Week" separator="1" name="week" domain="[('date','&lt;=', (context_today() + relativedelta(weeks=0,day=7, weekday=-1)).strftime('%Y-%m-%d')),('date','&gt;=',(context_today() - relativedelta(weeks=1, weekday=0)).strftime('%Y-%m-%d'))]" help="Current Week" />
+                        <filter string="Prev Month" name="prev_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%Y-%m-01')),('date','&lt;',time.strftime('%Y-%m-01'))]"/>
+                        <separator orientation="vertical"/>
+                        <field name="stu_id"/>
+                        <field name="date"/>
+                        <field name="name"/>
+                    </group>
+                    <newline/>
+                    <group expand="0" string="Group By..." colspan="12" col="10">
+                        <filter string="Student" icon="terp-personal" name="student_id" context="{'group_by':'stu_id'}"/>
+                        <separator orientation="vertical"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <!-- Form View Of School Information -->
+        <record id="view_school_school_form" model="ir.ui.view">
+            <field name="name">school.school.form</field>
+            <field name="model">school.school</field>
+            <field name="arch" type="xml">
+                <form string="Campus Information">
+                    <sheet>
+                        <separator string="Campus Configuration" />
+                        <group col="4" colspan="4">
+                            <field name="name" string="Campus Name" placeholder="Campus Name" required="1"/>
+                            <field name="code" placeholder="Code" />
+                        </group>
+                        <group>
+                            <label for="street" string="Address" />
+                            <div class="o_address_format">
+                                <field name="street" class="o_address_street" placeholder="Street..." />
+                                <field name="street2" class="o_address_street" placeholder="Street2..." />
+                                <field name="city" class="o_address_city" placeholder="City" required="1" />
+                                <field name="state_id" class="o_address_state" domain="[('country_id','=',country_id)]" required="1" placeholder="State" options="{&quot;no_open&quot;: true}" />
+                                <field name="zip" class="o_address_zip" placeholder="ZIP" />
+                                <field name="country_id" class="o_address_city,oe_no_button" placeholder="Country"  options="{&quot;no_open&quot;: true}" required="1"/>
+                                <field name="company_id" placeholder="Company"/>
+                            </div>
+                        </group>
+                        <group col="4" colspan="4">
+                            <field name="currency_id" placeholder="Select Or Create Currency" />
+                            <field name="lang" placeholder="Language"/>
+                            <field name="tv_user_id"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Programs">
+                                <field name="standards" nolabel="1" colspan="4" readonly="1"/>
+                            </page>
+                            <page string="Users">
+                                <field name="member_ids" nolabel="1" colspan="4">
+                                    <tree string="Members" editable="bottom">
+                                        <field name="user_id" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of School Information -->
+        <record id="view_school_school_tree" model="ir.ui.view">
+            <field name="name">school.school.tree</field>
+            <field name="model">school.school</field>
+            <field name="arch" type="xml">
+                <tree string="Campus Information">
+                    <field name="name" string="Campus Name" />
+                    <field name="code" />
+                </tree>
+            </field>
+        </record>
+        <!-- Form View Of School Attendace -->
+        <record id="view_school_attendance_form" model="ir.ui.view">
+            <field name="name">school.attendance.form</field>
+            <field name="model">attendance.type</field>
+            <field name="arch" type="xml">
+                <form string="Programs Information">
+                    <separator string="Attendance Type" />
+                    <group col="4" colspan="2">
+                        <field name="name" placeholder="name"/>
+                        <field name="code" placeholder="code"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+    
+        <!-- Form View Of School Standard Information -->
+        <record id="view_school_standard_form" model="ir.ui.view">
+            <field name="name">school.standard.form</field>
+            <field name="model">school.standard</field>
+            <field name="arch" type="xml">
+                <form string="Class Information">
+                    <header>
+                        <field name="state" widget="statusbar" clickable="1"/>
+                    </header>
+                    <sheet>
+                        <separator string="Class Information" />
+                        <group col="4" colspan="4">
+                            <field name="standard_id" placeholder="Programs"/>
+                            <field name="school_id" placeholder="Campus"/>
+                            <field name="semester_id" placeholder="Course Level" domain="[('standard_id','=',standard_id)]" required="1"/>
+                            <field name="medium_id"  placeholder="Shift"/>
+                            <field name="division_id" placeholder="Room Number"/>
+                            <field name="capacity"/>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date" required="1"/>
+                            
+                            <field name="total_students"/>
+                            <field name="remaining_seats"/>
+                            <field name="tv_user_id"/>
+                            <field name="user_id" placeholder="Teacher" options="{'no_create_edit': True}" invisible="1"/>
+                            <field name="standard" invisible="1"/>
+                            <!-- <field name="class_room_id" options="{&quot;no_create&quot;: True}"/> -->
+                            <field name="name" invisible="1"/>
+                            <field name="total_no_subjects" invisible="1"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Students" name="students" attrs="{'invisible':[('state', '=', 'close')]}">
+                                <field name="student_ids" nolabel="1" colspan="4">
+                                    <tree string="Student Information" style="width:40%%">
+                                        <field name="roll_no" type="char"/>
+                                        <field name="name"/>
+                                        <field name="percentage" invisible="1"/>
+                                        <field name="eligible" invisible="1"/>
+                                        <field name="state" invisible="1" />
+                                    </tree>
+                                    <form string="Student Information">
+                                        <group col="4" colspan="4">
+                                            <field name="roll_no" />
+                                            <field name="name" placeholder="Name" />
+                                            <field name="state" invisible="1" />
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Students History" name="history">
+                                <field name="history_ids" nolabel="1" colspan="4">
+                                    <tree string="Student History Information" style="width:40%%">
+                                        <field name="roll_no" type="char"/>
+                                        <field name="student_id" style="width:40%%"/>
+                                    </tree>
+                                    <form string="Student Information">
+                                        <group col="4" colspan="4">
+                                            <field name="roll_no"/>
+                                            <field name="student_id" style="width:40%%"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Subjects">
+                                <field name="subject_ids" nolabel="1" colspan="4" string="Add Subjects" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                            </page>
+                            <page string="Syllabus" attrs="{'invisible': [('total_no_subjects', '&lt;', 1)]}">
+                                <group>
+                                    <field name="syllabus_ids" nolabel="1" colspan="4" context="{'default_standard_id':standard_id}">
+                                        <tree editable="top" string="Syllabus">
+                                            <field name="standard_id" invisible="1"/>
+                                            <field name="subject_id" required="1" 
+                                                            widget="selection"/>
+                                            <field name="syllabus_doc" required="1"/>
+                                        </tree>
+                                        <form string="Syllabus">
+                                            <group>
+                                                <field name="subject_id" required="1"/>
+                                                <field name="syllabus_doc" required="1"/>
+                                            </group>
+                                            
+                                        </form>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of School Standard Information -->
+        <record id="view_school_standard_tree" model="ir.ui.view">
+            <field name="name">school.standard.tree</field>
+            <field name="model">school.standard</field>
+            <field name="arch" type="xml">
+                <tree string="Class Information"  default_order="id desc">
+                    <field name="school_id"/>
+                    <field name="semester_id"/>
+                    <field name="medium_id"/>
+                    <field name="division_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="remaining_seats" type="char"/>
+                    <field name="standard"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <!-- Kanban View Of School Standard Information -->
+        <record id="school_standard_kanban_view" model="ir.ui.view">
+            <field name="name">school.standard.kanban</field>
+            <field name="model">school.standard</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="standard_id">
+                    <field name="school_id" />
+                    <field name="standard_id" />
+                    <field name="semester_id"/>
+                    <field name="division_id" />
+                    <field name="medium_id" />
+                    <field name="user_id" />
+                    <field name="color" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <t t-set="color" t-value="kanban_color(record.color.raw_value || record.school_id.value)" />
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}} oe_kanban_global_click_edit oe_semantic_html_override">
+                            <!-- <div t-att-class="color + (record.color.raw_value == 1 ? ' oe_kanban_color_alert' : '')"> -->
+                                <div class="oe_kanban_box oe_kanban_color_border">
+                                    <div class="oe_kanban_box_header oe_kanban_color_bgdark oe_kanban_color_border oe_kanban_draghandle">
+                                        <table class="oe_kanban_table">
+                                            <tr>
+                                                <td class="oe_kanban_title1" align="left" valign="middle">
+                                                    <div>
+                                                        Campus :-
+                                                        <field name="school_id" /></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_box_show_onclick_trigger oe_kanban_color_border">
+                                        <table class="oe_kanban_table">
+                                            <tr>
+                                                <td valign="top" align="left">
+                                                    
+                                                    <div class="oe_kanban_title3">
+                                                        <div>
+                                                            Programs :-
+                                                            <field name="standard_id" /></div>
+                                                        <div>
+                                                            Course Level :-
+                                                            <field name="semester_id" /></div>    
+                                                        <div>
+                                                            Room Number :-
+                                                            <field name="division_id" /></div>
+                                                        <div>
+                                                            Shift :-
+                                                            <field name="medium_id" /></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="oe_kanban_buttons_set oe_kanban_color_border oe_kanban_color_bglight oe_kanban_box_show_onclick">
+                                        <div class="oe_kanban_left">
+                                            <a string="Edit" class="btn btn-sm btn-default fa fa-pencil" type="edit" />
+                                            <a string="Delete" class="btn btn-sm btn-default fa fa-trash" type="delete" />
+                                            <a string="Change Color" icon="color-picker" type="color" name="color" />
+                                        </div>
+                                        <br class="oe_kanban_clear" />
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record forcecreate="True" id="ir_crm_notification1" model="ir.cron">
+            <field name="name">Class Scheduler</field>
+            <field eval="True" name="active"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'school.standard'" name="model"/>
+            <field eval="'send_class_status_new'" name="function"/>
+            <field eval="'()'" name="args"/>
+        </record>
+        <!-- Search View Of School Standard Information -->
+        <record id="view_student_student_search" model="ir.ui.view">
+            <field name="name">school.standard.search</field>
+            <field name="model">school.standard</field>
+            <field name="arch" type="xml">
+                <search string="Class Information">
+                    <group col="10" colspan="4">
+                        <field name="standard" />
+                        <field name="user_id" />
+                        <field name="division_id" />
+                        <field name="medium_id" />
+                    </group>
+                    <newline />
+                    <filter icon="terp-project" string="New" name="draft" domain="[('state','=', 'draft')]" help="Admission In Draft State" />
+                    <group expand="0" string="Group By..." colspan="12" col="10">
+                        <filter icon="terp-project" string="Campus" help="By Campus" context="{'group_by':'school_id'}" />
+                        <filter icon="terp-project" string="Class" help="By Class" context="{'group_by':'standard'}" />
+                        <filter icon="terp-project" string="Room Number" help="By Room Number" context="{'group_by':'division_id'}" />
+                        <filter icon="terp-project" string="Shift" help="By Shift" context="{'group_by':'medium_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+       
+        <!-- From View Of Grade System -->
+        <record id="view_grade_form" model="ir.ui.view">
+            <field name="name">grade.master.form</field>
+            <field name="model">grade.master</field>
+            <field name="arch" type="xml">
+                <form string="Grade">
+                    <sheet>
+                        <group col="2" colspan="2" string="Grade" >
+                            <field name="name" string="Grade Names" placeholder="Enter GradeName" />
+                        </group>
+                            <newline />
+                            <field name="grade_ids" nolabel="1" colspan="4" >
+                                <tree >
+                                    <field name="from_mark" type="char"/>
+                                    <field name="to_mark" type="char"/>
+                                    <field name="grade" />
+                                 </tree>
+                                 <form>
+                                     <group>
+                                         
+                                         <field name="grade" placeholder="Grade"/>
+                                         <newline />
+                                         <field name="from_mark" placeholder="From Mark"/>
+                                         <field name="to_mark" placeholder="To Mark"/>
+                                         <field name="fail" />
+                                     </group>
+                                 </form>
+                             </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of Grade System -->
+        <record id="view_grade_tree" model="ir.ui.view">
+            <field name="name">grade.master.tree</field>
+            <field name="model">grade.master</field>
+            <field name="arch" type="xml">
+                <tree string="Grade">
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+        <!-- Form View Of Academic Year's Information -->
+        <record id="view_academic_year_form" model="ir.ui.view">
+            <field name="name">acdemic.year.form</field>
+            <field name="model">academic.year</field>
+            <field name="arch" type="xml">
+                <form string="Academic Years">
+                    <header>
+                        <button name="generate_academicmonth" type="object" string="Generate Months"/>
+                    </header>
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="name" placeholder="Name" />
+                            <field name="code" placeholder="Code" />
+                            <field name="date_start" placeholder="Start Date" />
+                             <field name="date_stop" placeholder="Stop Date" />
+                            <field name="sequence" />
+                            <field name="current"/>
+                            <field name="grade_id" placeholder="Grade System" 
+                                options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" invisible="1"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Months">
+                                <field name="month_ids" nolabel="1" colspan="4" 
+                                        options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}">
+                                    <tree string="Months">
+                                        <field name="name" />
+                                        <field name="code" />
+                                        <field name="date_start" />
+                                        <field name="date_stop" />
+                                    </tree>
+                                    <form string="Months">
+                                        <group col="4" colspan="4">
+                                            <field name="name" placeholder="Name" />
+                                            <field name="code" placeholder="Code" />
+                                            <field name="date_start" placeholder="Start Date" />
+                                            <field name="date_stop" placeholder="Stop Date" />
+                                            <field name="description" colspan="4" placeholder="Description"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                        <newline />
+                        <separator string="Description" colspan="4" />
+                        <field name="description" colspan="4" placeholder="Description"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of Academic Year's Information -->
+        <record id="view_academic_year_tree" model="ir.ui.view">
+            <field name="name">academic.year.tree</field>
+            <field name="model">academic.year</field>
+            <field name="arch" type="xml">
+                <tree string="Academic Years">
+                    <field name="sequence" />
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="date_start" />
+                    <field name="date_stop" />
+                </tree>
+            </field>
+        </record>
+        <!-- From View Of Academic Month's Information -->
+        <record id="view_academic_month_form" model="ir.ui.view">
+            <field name="name">academic.month.form</field>
+            <field name="model">academic.month</field>
+            <field name="arch" type="xml">
+                <form string="Months">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="name" placeholder="Name" />
+                            <field name="code" placeholder="Code" />
+                            <field name="date_start" placeholder="Start Date" />
+                            <field name="date_stop" placeholder="Stop Date" />
+                            <field name="year_id" colspan="4" placeholder="Year" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                            <field name="description" colspan="4" placeholder="Description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of Academic Month's Information -->
+        <record id="view_academic_month_tree" model="ir.ui.view">
+            <field name="name">academic.month.tree</field>
+            <field name="model">academic.month</field>
+            <field name="arch" type="xml">
+                <tree string="Months">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="date_start" />
+                    <field name="date_stop" />
+                    <field name="year_id" />
+                </tree>
+            </field>
+        </record>
+        <!-- From View Of Standard Medium Information -->
+        <record id="view_standard_medium_form" model="ir.ui.view">
+            <field name="name">standard.medium.form</field>
+            <field name="model">standard.medium</field>
+            <field name="arch" type="xml">
+                <form string="Shift">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="sequence" readonly="1"/>
+                            <field name="name" placeholder="Name" />
+                            <field name="code" placeholder="Code" />
+                            <!-- <field name="hour_from" placeholder="Time From" widget="timepicker" required="1" options="{'step': '60', 'disableTextInput': false}"/>
+                            <field name="hour_to" placeholder="Time To" widget="timepicker" required="1" options="{'step': '60', 'disableTextInput': false}"/>
+                            <field name="from_hour" invisible="1"/>
+                            <field name="to_hour" invisible="1"/> -->
+                            <field name="hour_from" placeholder="Time From"  invisible="1" required="1"/> 
+                            <field name="from_hour" placeholder="Time From" required="1" widget="odoo_timepicker"/>
+                            <field name="to_hour" placeholder="Time To" required="1" widget="odoo_timepicker"/>
+                            <field name="hour_to" placeholder="Time To" invisible="1"  required="1" />
+                            <newline />
+                            <field name="description" colspan="4" placeholder="Description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of Standard Medium Information -->
+        <record id="view_standard_medium_tree" model="ir.ui.view">
+            <field name="name">standard.medium.tree</field>
+            <field name="model">standard.medium</field>
+            <field name="arch" type="xml">
+                <tree string="Shift">
+                    <field name="sequence" />
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="hour_from" type="char" invisible="1"/>
+                    <field name="hour_to" type="char" invisible="1"/>
+                    <field name="from_hour" />
+                    <field name="to_hour" />
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Form View Of Standard Division Information-->
+        <record id="view_standard_division_form" model="ir.ui.view">
+            <field name="name">standard.division.form</field>
+            <field name="model">standard.division</field>
+            <field name="arch" type="xml">
+                <form string="Room Number">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="sequence" readonly="1"/>
+                            <field name="name" placeholder="Name" />
+                            <field name="code" placeholder="Code" />
+                            <newline />
+                            <field name="description" colspan="4" placeholder="Description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of Standard Division Information-->
+        <record id="view_standard_division_tree" model="ir.ui.view">
+            <field name="name">standard.division.tree</field>
+            <field name="model">standard.division</field>
+            <field name="arch" type="xml">
+                <tree string="Room Number">
+                    <field name="sequence" />
+                    <field name="name" />
+                    <field name="code" />
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View Of Standard Semester Information-->
+        <record id="view_standard_semester_form" model="ir.ui.view">
+            <field name="name">standard.semester.form</field>
+            <field name="model">standard.semester</field>
+            <field name="arch" type="xml">
+                <form string="Course Level">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="sequence" readonly="1"/>
+                            <field name="name" placeholder="Name" />
+                            <field name="code" placeholder="Code" />
+                            <field name="standard_id"/>
+                            <newline />
+                            <field name="description" colspan="4" placeholder="Description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of Standard Semester Information-->
+        <record id="view_standard_semester_tree" model="ir.ui.view">
+            <field name="name">standard.semester.tree</field>
+            <field name="model">standard.semester</field>
+            <field name="arch" type="xml">
+                <tree string="Course Level">
+                    <field name="sequence" />
+                    <field name="name" />
+                    <field name="code" />
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View Of Elective Subject Group -->
+        <record id="view_elective_group_form" model="ir.ui.view">
+            <field name="name">elective.subject.form</field>
+            <field name="model">subject.elective</field>
+            <field name="arch" type="xml">
+                <form string="Elective Group">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="name" colspan="4" required="1" />
+                            <separator String="Subjects" col="4" colspan="4" />
+                            <field name="subject_ids" nolabel="1" colspan="4">
+                                <form>
+                                    <group col="4" colspan="4">
+                                        <field name="name" placeholder="Name" />
+                                        <field name="code" placeholder="Code" />
+                                        <field name="standard_id" placeholder="Program" />
+                                        <field name="maximum_marks" placeholder="Maximum Marks"/>
+                                        <field name="minimum_marks" placeholder="Minimum Marks"/>
+<!--                                         <field name="weightage" placeholder="Weightage"/> -->
+                                        <field name="is_practical" />
+<!--                                         <field name="no_exam" /> -->
+                                        <field name="elective_id" string="Elective Group" invisible="1" />
+                                    </group>
+                                    <notebook colspan="4">
+                                        <!-- <page string="Programs">
+                                            <field name="standard_ids" nolabel="1" colspan="4"
+                                                options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}">
+                                                <tree string="Programs">
+                                                    <field name="name" />
+                                                    <field name="code" />
+                                                </tree>
+                                                <form string="Programs">
+                                                    <group col="4" colspan="4">
+                                                        <field name="name" placeholder="Name"/>
+                                                        <field name="code" placeholder="Code"/>
+                                                    </group>
+                                                </form>
+                                            </field>
+                                        </page> -->
+                                        <page string="Teachers">
+                                            <field name="teacher_ids" nolabel="1" colspan="4" />
+                                        </page>
+                                        <page string="Students" attrs="{'invisible':[('elective_id','!=',True)]}">
+                                            <field name="student_ids" nolabel="1" />
+                                        </page>
+                                    </notebook>
+                                </form>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Form View Of Subject's Information -->
+        <record id="view_subject_subject_form" model="ir.ui.view">
+            <field name="name">subject.subject.form</field>
+            <field name="model">subject.subject</field>
+            <field name="arch" type="xml">
+                <form string="Subjects">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="name" placeholder="Name" />
+                            <field name="code" placeholder="Code" />
+                            <field name="standard_id" placeholder="Program" />
+                            <field name="maximum_marks" placeholder="Maximum Marks"/>
+                            <field name="minimum_marks" placeholder="Minimum Marks"/>
+<!--                             <field name="weightage" placeholder="Weightage"/> -->
+                            <field name="is_practical" invisible="1"/>
+                             <field name="grade_system" required="1"/>
+<!--                             <field name="no_exam" /> -->
+                            <field name="elective_id" string="Elective Group" readonly="1" invisible="1" />
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Teachers">
+                                <field name="teacher_ids" nolabel="1" colspan="4"
+                                     options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                            </page>
+                            <page string="Students" attrs="{'invisible':[('elective_id','!=',True)]}">
+                                <field name="student_ids" nolabel="1" />
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of Subject's Information -->
+        <record id="view_subject_subject_tree" model="ir.ui.view">
+            <field name="name">subject.subject.tree</field>
+            <field name="model">subject.subject</field>
+            <field name="arch" type="xml">
+                <tree string="Subjects">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="standard_id" />
+                    <field name="maximum_marks" type="char"/>
+                    <field name="minimum_marks" type="char"/>
+
+                </tree>
+            </field>
+        </record>
+        <!-- Search View Of Subject's Information -->
+        <!-- <record id="view_student_student_search_new" model="ir.ui.view">
+            <field name="name">subject.subject.search</field>
+            <field name="model">subject.subject</field>
+            <field name="arch" type="xml">
+                <search string="Subjects">
+                    <group col="10" colspan="4">
+                        <field name="standard_id" />
+                    </group>
+                    <newline />
+                    <group expand="0" string="Group By..." colspan="12" col="10">
+                        <filter icon="terp-project" string="Program" help="By Program" context="{'group_by':'standard_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record> -->
+        <!-- Form View Of Standard Information -->
+        <record id="view_standard_standard_form" model="ir.ui.view">
+            <field name="name">standard.standard.form</field>
+            <field name="model">standard.standard</field>
+            <field name="arch" type="xml">
+                <form string="Program Information">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="sequence" readonly="1"/>
+                            <newline />
+                            <field name="name" placeholder="Name" />
+                            <field name="code" placeholder="Code" />
+                            <newline />
+                            <field name="description" colspan="4" placeholder="Description"/>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Course Level" name="semester">
+                                <field name="semester_ids" nolabel="1" colspan="4" editable="bottom">
+                                    <tree string="Course Level Information">
+                                        <field name="sequence" readonly="1" type="char"/>
+                                        <field name="name" />
+                                        <field name="code" />
+                                    </tree>
+                                    <form string="Student Information">
+                                        <group col="4" colspan="4">
+                                            <field name="sequence" readonly="1" />
+                                            <field name="name" placeholder="Name" />
+                                            <field name="code" placeholder="Code" />
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of Standard Information -->
+        <record id="view_standard_standard_tree" model="ir.ui.view">
+            <field name="name">standard.standard.tree</field>
+            <field name="model">standard.standard</field>
+            <field name="arch" type="xml">
+                <tree string="Program Information">
+                    <field name="sequence" />
+                    <field name="name" />
+                    <field name="code" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="student_transfer_request_tree" model="ir.ui.view">
+                <field name="name">student.transfer.tree</field>
+                <field name="model">student.transfer</field>
+                <field name="arch" type="xml">
+                    <tree string="Student Transfer Request">
+                        <field name="student_name"/>
+                        <field name="date"/> 
+                        <field name="from_campus"/>
+                        <field name="school_id"/> 
+                        <field name="reason"/>    
+                        <field name="state"/>    
+                    </tree>
+                </field>
+            </record>
+
+            <record id="student_transfer_request_menu_kanban" model="ir.ui.view">
+                <field name="name">student.transfer.kanban</field>
+                <field name="model">student.transfer</field>
+                <field name="priority">10</field>
+                <field name="arch" type="xml">
+                    <kanban class="o_hr_student_transfer_model_kanban">
+                        <templates>
+                            <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <ul>
+                                <li><strong>Name : </strong><field name="student_name"/></li>
+                                <li><strong>Campus : </strong><field name="from_campus"/></li>
+                                <li><strong>Reason  : </strong><field name="reason"/></li>
+                                </ul>
+                            </div>
+                            </t>
+                        </templates>
+                    </kanban>
+                </field>
+            </record>
+
+            <record id="student_transfer_request_menu_form" model="ir.ui.view">
+				<field name="name">student.transfer.form</field>
+				<field name="model">student.transfer</field>
+				<field name="arch" type="xml">
+					<form string="Student Transfer Request">
+					<header>
+					<button name="set_start" string="Start" type="object" help="start" states="draft" class="oe_highlight"/> 
+					<button name="set_close" string="Approve" type="object" help="close" states="in progress" class="oe_highlight" groups="school.group_school_administration"/> 
+					<button name="set_reject" string="Reject" type="object" help="reject" states="in progress" class="oe_highlight" groups="school.group_school_administration"/>
+					<field name="state" widget="statusbar" statusbar_visible="draft,in progress,approve,rejected"/>
+					</header>
+					<sheet>
+						<group string="From Campus Details">
+							<group>
+
+								<field name="student_name" required="1" domain="[('state', '=' , 'done')]" options="{'no_create_edit': True}"/>
+								<field name="shift_id" readonly="1" />
+								<field name="course_id" readonly="1" />
+								<field name="from_campus"/>
+                                <field name="school_id_from" invisible="1" readonly="1"/>
+
+							</group>
+							<group>
+								<field name="date" required="1" />
+								<field name="program_id" readonly="1" />
+								<field name="class_id" readonly="1" />
+								<field name="reason" required="1" />
+							</group>
+						</group>
+						<group string="To Campus Details">
+							<group>
+								<field name="school_id" required="1" domain="[('id', '!=', school_id_from)]" options="{'no_create_edit': True}" />
+								<field name="semester_id"/>
+								<field name="standard_id" required="1" domain="[('school_id','=', school_id),('standard_id','=',program),('medium_id','=',medium_id),('semester_id','=',semester_id)]" />
+							</group>
+							<group>
+								<field name="program"/>
+								<field name="medium_id" required="1" />
+								<field name="remaining_seats_transfer" readonly="1"/>
+							</group>
+						</group>
+					</sheet>
+					</form>
+				</field>
+			</record>
+
+<record id="studenttransfer_request_mail" model="mail.template">
+            <field name="name">Student Transfer Request Mail</field>
+            <field name="model_id" ref="school.model_student_transfer"></field>
+            <field name="email_from"><![CDATA[${object.student_name.name} <${object.student_name.email}>]]></field>
+            <field name="email_to">academic_director@muslim.af</field>
+            <field name="subject">Student Transfer Request Submitted</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="built_in" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <p>Dear Academic Director,</p>
+                <p>${object.student_name.name} has submitted a transfer request.</p>
+                <hr/>
+            ]]>
+            </field>
+        </record>
+
+
+            <record id="view_transfer_request_search" model="ir.ui.view">
+            <field name="name">transfer.request.search</field>
+            <field name="model">student.transfer</field>
+            <field name="arch" type="xml">
+                <search string="Student Information">
+                    <group col="10" colspan="4">
+                       
+                        <field name="state"/>
+                    </group>
+                    <newline/>
+                    <group expand="0" string="Group By..." colspan="12" col="10">
+                        <filter string="Student" icon="terp-personal" name="student_name" context="{'group_by':'student_name'}"/>
+                        <separator orientation="vertical"/>
+                         <filter string="Current Campus" icon="terp-personal" name="from_campus" context="{'group_by':'from_campus'}"/>
+                        <separator orientation="vertical"/>
+                         <filter string="To Campus" icon="terp-personal" name="school_id" context="{'group_by':'school_id'}"/>
+                        <separator orientation="vertical"/>
+
+                         
+                       
+                    </group>
+                      <filter icon="terp-go-month" string="This Month" name="month" domain="[('start_date','&lt;=',(datetime.date.today()+relativedelta(day=31)).strftime('%Y-%m-%d')),('start_date','&gt;=',(datetime.date.today()-relativedelta(day=1)).strftime('%Y-%m-%d'))]"  help="Current Month"/>
+                        
+                        <filter string="Prev Month" name="prev_month" domain="[('start_date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%Y-%m-01')),('start_date','&lt;',time.strftime('%Y-%m-01'))]"/>
+                          <filter icon="terp-camera_test" string="New" domain="[('state','=','draft')]" help="Draft Slip"/>
+                            <filter icon="terp-camera_test" string="Approved" domain="[('state','=','approve')]" help="Approved Slip"/>
+                              <filter icon="terp-camera_test" string="Rejected" domain="[('state','=','rejected')]" help="Rejected Slip"/>
+                              <filter icon="terp-camera_test" string="In Progress" domain="[('state','=','in progress')]" help="In Progress Slip"/>
+
+
+                </search>
+            </field>
+        </record>
+
+            <record id="action_student_transfer_request_form" model="ir.actions.act_window">
+                <field name="name">Student Transfer Request</field>
+                <field name="res_model">student.transfer</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,kanban,form</field>
+                <field name="domain">[]</field>
+                <field name="context">{}</field>
+                <field name="view_id" eval="False"/>
+      
+                <field name="help" type="html">
+                    <p>
+
+                       Student Transfer Request
+                    </p>
+                </field>
+            </record>
+        <!-- Student Withdrawal Request -->
+        <record id="student_withdrawal_request_tree" model="ir.ui.view">
+                <field name="name">student.withdrawal.tree</field>
+                <field name="model">student.withdrawal</field>
+                <field name="arch" type="xml">
+                    <tree string="Student Withdrawal Request">
+                        <field name="student_name"/>
+                        <field name="student_code"/>
+                        <field name="withdrawal_date"/> 
+                        <field name="student_campus"/>
+                        <field name="withdrawal_reason"/>  
+                         <field name="state"/>      
+                    </tree>
+                </field>
+            </record>
+
+            <record id="student_withdrawal_request_menu_kanban" model="ir.ui.view">
+                <field name="name">student.withdrawal.kanban</field>
+                <field name="model">student.withdrawal</field>
+                <field name="priority">10</field>
+                <field name="arch" type="xml">
+                    <kanban class="o_hr_student_transfer_model_kanban">
+                        <templates>
+                            <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <ul>
+                                <li><strong>Name : </strong><field name="student_name"/></li>
+                                <li><strong>Campus : </strong><field name="student_campus"/></li>
+                                <li><strong>Reason  : </strong><field name="withdrawal_reason"/></li>
+                                </ul>
+                            </div>
+                            </t>
+                        </templates>
+                    </kanban>
+                </field>
+            </record>
+
+            <record id="student_withdrawal_request_menu_form" model="ir.ui.view">
+                <field name="name">student.withdrawal.form</field>
+                <field name="model">student.withdrawal</field>
+                <field name="arch" type="xml">
+                    <form string="Student Transfer Request">
+                    <header>
+                        <button name="set_start" string="Start" type="object" help="start" states="draft" class="oe_highlight"/> 
+                        <button name="set_close" string="Alumni" type="object" help="close" states="in progress" class="oe_highlight" groups="school.group_school_administration"/> 
+                        <button name="set_terminate" string="Terminated" type="object" help="close" states="in progress" class="oe_highlight" groups="school.group_school_administration"/>
+                        <button name="set_reject" string="Reject" type="object" help="reject" states="in progress" class="oe_highlight" groups="school.group_school_administration"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,in progress,rejected"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="student_name" required="1" domain="[('state','not in',['alumni','terminate'])]" options="{'no_create_edit': True}"/>
+                                <field name="student_campus" readonly="1"/>
+                                <field name="withdrawal_reason" required="1" />
+                            </group>
+                            <group>
+                                <field name="student_code" readonly="1" />
+                                <field name="withdrawal_date" required="1" />     
+                            </group>
+                        </group>
+                    </sheet>
+                    </form>
+                </field>
+            </record>
+
+
+            <record id="withdrawal_request_mail" model="mail.template">
+            <field name="name">Student Withrawal Request Mail</field>
+            <field name="model_id" ref="school.model_student_withdrawal"></field>
+            <field name="email_from"><![CDATA[${object.student_name.name} <${object.student_name.email}>]]></field>
+            <field name="email_to">academic_director@muslim.af</field>
+            <field name="subject">Student Withdrawal Request Submitted</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="built_in" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <p>Dear Academic Director,</p>
+                <p>${object.student_name.name} has submitted a withdrawal request.</p>
+                <hr/>
+            ]]>
+            </field>
+        </record>
+            <!-- search view -->
+             <record id="view_withdrawal_request_search" model="ir.ui.view">
+            <field name="name">withdrawal.request.search</field>
+            <field name="model">student.withdrawal</field>
+            <field name="arch" type="xml">
+                <search string="Student Information">
+                    <group col="10" colspan="4">
+                       
+                        <field name="student_name"/>
+                        <field name="student_campus"/>
+                        <field name="student_code"/>
+
+
+                    </group>
+                    <newline/>
+                    <group expand="0" string="Group By..." colspan="12" col="10">
+                       
+                         <filter string="Student Campus" icon="terp-personal" name="student_campus" context="{'group_by':'student_campus'}"/>
+                        <separator orientation="vertical"/>
+                         <filter string="Student Code" icon="terp-personal" name="student_code" context="{'group_by':'student_code'}"/>
+                        <separator orientation="vertical"/>
+                    </group>
+
+                      <filter icon="terp-go-month" string="This Month" name="month" domain="[('withdrawal_date','&lt;=',(datetime.date.today()+relativedelta(day=31)).strftime('%Y-%m-%d')),('withdrawal_date','&gt;=',(datetime.date.today()-relativedelta(day=1)).strftime('%Y-%m-%d'))]"  help="Current Month"/>
+                        
+                        <filter string="Prev Month" name="prev_month" domain="[('withdrawal_date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%Y-%m-01')),('withdrawal_date','&lt;',time.strftime('%Y-%m-01'))]"/>
+                          <filter icon="terp-camera_test" string="New" domain="[('state','=','draft')]" help="Draft Slip"/>
+                            <filter icon="terp-camera_test" string="In Progress" domain="[('state','=','in progress')]" help="In Progress Slip"/>
+                            <filter icon="terp-camera_test" string="Alumni" domain="[('state','=','alumni')]" help="Alumni Slip"/>
+                            <filter icon="terp-camera_test" string="Terminated" domain="[('state','=','terminate')]" help="Terminated Slip"/>
+                              <filter icon="terp-camera_test" string="Rejected" domain="[('state','=','rejected')]" help="Rejected Slip"/>
+                              
+
+                </search>
+            </field>
+        </record>
+
+            <record id="action_student_withdrawal_request_form" model="ir.actions.act_window">
+                <field name="name">Student Withdrawal Requests</field>
+                <field name="res_model">student.withdrawal</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,kanban,form</field>
+                <field name="domain">[]</field>
+                <field name="context">{}</field>
+                <field name="view_id" eval="False"/>
+                <field name="help" type="html">
+                    <p>
+                       Student Withdrawal Request
+                    </p>
+                </field>
+            </record>
+
+        <!-- Teacher Transfer Request -->
+
+        <record id="teacher_transfer_request_tree" model="ir.ui.view">
+                <field name="name">teacher.transfer.tree</field>
+                <field name="model">teacher.transfer</field>
+                <field name="arch" type="xml">
+                    <tree string="Teacher Transfer Request">
+                        <field name="teacher_id"/>
+                        <field name="date"/> 
+                        <field name="from_campus"/>
+                        <field name="school_id"/> 
+                        <field name="reason"/>  
+                        <field name="state"/>      
+                    </tree>
+                </field>
+            </record>
+
+            <record id="teacher_transfer_request_menu_kanban" model="ir.ui.view">
+                <field name="name">teacher.transfer.kanban</field>
+                <field name="model">teacher.transfer</field>
+                <field name="priority">10</field>
+                <field name="arch" type="xml">
+                    <kanban class="o_hr_teacher_transfer_model_kanban">
+                        <templates>
+                            <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <ul>
+                                <li><strong>Name : </strong><field name="teacher_id"/></li>
+                                <li><strong>Campus : </strong><field name="from_campus"/></li>
+                                <li><strong>Reason  : </strong><field name="reason"/></li>
+                                </ul>
+                            </div>
+                            </t>
+                        </templates>
+                    </kanban>
+                </field>
+            </record>
+            <!-- search view -->
+              <record id="view_transfer_request_search" model="ir.ui.view">
+            <field name="name">transfer.request.search</field>
+            <field name="model">teacher.transfer</field>
+            <field name="arch" type="xml">
+                <search string="Student Information">
+                    <group col="10" colspan="4">
+                       
+                        <field name="teacher_id"/>
+                        <field name="from_campus"/>
+                        <field name="school_id"/>
+
+
+                    </group>
+                    <newline/>
+                    <group expand="0" string="Group By..." colspan="12" col="10">
+                       
+                         <filter string="From campus" icon="terp-personal" name="from_campus" context="{'group_by':'from_campus'}"/>
+                        <separator orientation="vertical"/>
+                         <filter string="To Campus" icon="terp-personal" name="school_id" context="{'group_by':'school_id'}"/>
+                        <separator orientation="vertical"/>
+                    </group>
+
+                      <filter icon="terp-go-month" string="This Month" name="month" domain="[('date','&lt;=',(datetime.date.today()+relativedelta(day=31)).strftime('%Y-%m-%d')),('date','&gt;=',(datetime.date.today()-relativedelta(day=1)).strftime('%Y-%m-%d'))]"  help="Current Month"/>
+                        
+                        <filter string="Prev Month" name="prev_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%Y-%m-01')),('date','&lt;',time.strftime('%Y-%m-01'))]"/>
+                          <filter icon="terp-camera_test" string="New" domain="[('state','=','draft')]" help="Draft Slip"/>
+                            <filter icon="terp-camera_test" string="In Progress" domain="[('state','=','in progress')]" help="In Progress Slip"/>
+                            <filter icon="terp-camera_test" string="Approved" domain="[('state','=','approve')]" help="Approved Slip"/>
+                           <filter icon="terp-camera_test" string="Rejected" domain="[('state','=','rejected')]" help="Rejected Slip"/>
+                              
+
+                </search>
+            </field>
+        </record>
+
+            <record id="teacher_transfer_request_menu_form" model="ir.ui.view">
+                <field name="name">teacher.transfer.form</field>
+                <field name="model">teacher.transfer</field>
+                <field name="arch" type="xml">
+                    <form string="Teacher Transfer Request">
+                    <header>
+                    <button name="set_start" string="Start" type="object" help="start" states="draft" class="oe_highlight"/> 
+                    <button name="set_close" string="Approve" type="object" help="close" states="in progress" class="oe_highlight" groups="school.group_school_administration"/> 
+                    <button name="set_reject" string="Reject" type="object" help="reject" states="in progress" class="oe_highlight" groups="school.group_school_administration"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in progress,approve,rejected"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+
+                                <field name="teacher_id" required="1" options="{'no_create_edit': True}"/>
+                                <field name="from_campus" readonly="1"/>
+                                <field name="reason" required="1" />
+                            </group>
+                            <group>
+                                <field name="date" required="1" />
+                                <field name="school_id" required="1" options="{'no_create_edit': True}" />
+                            </group>
+                        </group>
+                    </sheet>
+                    </form>
+                </field>
+            </record>
+
+
+             <record id="teacher_transfer_request_mail" model="mail.template">
+            <field name="name">Teacher Transfer Request Mail</field>
+            <field name="model_id" ref="school.model_teacher_transfer"></field>
+            <field name="email_from"><![CDATA[${object.teacher_id.name} <${object.teacher_id.work_email}>]]></field>
+            <field name="email_to">${object.teacher_id.line_manager_id.work_email|safe}</field>
+            <field name="subject">Teacher Transfer Request Submitted</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="built_in" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <p>Dear ${object.teacher_id.line_manager_id.name},</p>
+                <p>${object.teacher_id.name} has submitted transfer request.</p>
+                <hr/>
+            ]]>
+            </field>
+        </record>
+
+            <record id="action_teacher_transfer_request_form" model="ir.actions.act_window">
+                <field name="name">Teacher Transfer Request</field>
+                <field name="res_model">teacher.transfer</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,kanban,form</field>
+                <field name="domain">[]</field>
+                <field name="context">{}</field>
+                <field name="view_id" eval="False"/>
+                <field name="help" type="html">
+                    <p>
+                       Teacher Transfer Request
+                    </p>
+                </field>
+            </record>
+
+        <!-- Staff Transfer Request Form -->
+        <record id="staff_transfer_request_tree" model="ir.ui.view">
+                <field name="name">staff.transfer.tree</field>
+                <field name="model">staff.transfer</field>
+                <field name="arch" type="xml">
+                    <tree string="Staff Transfer Request">
+                        <field name="staff_id"/>
+                        <field name="staff_date"/>
+                        <field name="staff_job_id"/> 
+                        <field name="current_company_id"/>
+                        <field name="cmp_id"/>
+                        <field name="staff_work_location"/>
+                        <field name="staff_purpose"/>        
+                    </tree>
+                </field>
+            </record>
+
+            <record id="staff_transfer_request_menu_kanban" model="ir.ui.view">
+                <field name="name">staff.transfer.kanban</field>
+                <field name="model">staff.transfer</field>
+                <field name="priority">10</field>
+                <field name="arch" type="xml">
+                    <kanban class="o_hr_staff_transfer_model_kanban">
+                        <templates>
+                            <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <ul>
+                                    <li><strong>Name : </strong><field name="staff_id"/></li>
+                                    <li><strong>Date : </strong><field name="staff_date"/></li>
+                                    <li><strong>Designation : </strong><field name="staff_job_id"/></li>
+                                    <li><strong>From : </strong><field name="current_company_id"/></li>
+                                    <li><strong>To  : </strong><field name="cmp_id"/></li>
+                                    <li><strong>Purpose  : </strong><field name="staff_purpose"/></li>
+                                </ul>
+                            </div>
+                            </t>
+                        </templates>
+                    </kanban>
+                </field>
+            </record>
+
+            <record id="staff_transfer_request_menu_form" model="ir.ui.view">
+                <field name="name">staff.transfer.form</field>
+                <field name="model">staff.transfer</field>
+                <field name="arch" type="xml">
+                    <form string="Staff Transfer Request">
+                        <header>
+                            <button name="set_start" string="Start" type="object" help="start" states="draft" class="oe_highlight"/> 
+                            <button name="set_close" string="Approve" type="object" help="close" states="in progress" class="oe_highlight"/> 
+                            <button name="set_reject" string="Reject" type="object" help="reject" states="in progress" class="oe_highlight"/>
+                            <field name="state" widget="statusbar" statusbar_visible="draft,in progress,approve,rejected"/>
+                        </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="staff_id" required="1" options="{'no_create_edit': True}"/>
+                                <field name="staff_job_id" required="0" readonly="1" /> 
+                                <field name="current_company_id" required="1" readonly="1" />
+                                <field name="staff_purpose" required="1"/>
+                            </group>
+                            <group>
+                                <field name="staff_date" required="1" />
+                                <field name="staff_work_location" required="1" />
+                                <field name="cmp_id" required="1" options="{'no_create_edit': True}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    </form>
+                </field>
+            </record>
+
+            <record id="action_staff_transfer_request_form" model="ir.actions.act_window">
+                <field name="name">Staff Transfer Request</field>
+                <field name="res_model">staff.transfer</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">kanban,tree,form</field>
+                <field name="domain">[]</field>
+                <field name="context">{}</field>
+                <field name="view_id" eval="False"/>
+                <field name="help" type="html">
+                    <p>
+                       Staff Transfer Request
+                    </p>
+                </field>
+            </record>
+
+            <record id="staff_transfer_request_mail" model="mail.template">
+            <field name="name">Staff Transfer Request Mail</field>
+            <field name="model_id" ref="school.model_staff_transfer"></field>
+            <field name="email_from"><![CDATA[${object.staff_id.name} <${object.staff_id.work_email}>]]></field>
+            <field name="email_to">${object.staff_id.line_manager_id.work_email|safe}</field>
+            <field name="subject">Staff Transfer Request Submitted</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="built_in" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <p>Dear ${object.staff_id.line_manager_id.name},</p>
+                <p>${object.staff_id.name} has submitted transfer request.</p>
+                <hr/>
+            ]]>
+            </field>
+        </record>
+
+        <!-- Actions Of Form & Kanban Views Of Student Reminder -->
+        <record id="action_student_reminder" model="ir.actions.act_window">
+            <field name="name">Students Reminder</field>
+            <field name="res_model">student.reminder</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a new Reminder.
+                </p>
+                <p>
+                 This structure is used to create and manage all Remainders
+                related to students regarding exams, events etc.
+              </p>
+            </field>
+            <field name="context">{'search_default_month':1}</field>
+        </record>
+        <!-- Action View Of Kanban View Of Student Reminder -->
+        <record id="action_view_student_reminder_kanban" model="ir.actions.act_window.view">
+            <field name="view_mode">kanban</field>
+            <field eval="0" name="sequence" />
+            <field name="view_id" ref="student_reminder_kanban_view" />
+            <field name="act_window_id" ref="action_student_reminder" />
+        </record>
+        <record id="action_standard_semester_form" model="ir.actions.act_window">
+            <field name="name">Course Level</field>
+            <field name="res_model">standard.semester</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of School Information -->
+        <record id="action_school_school_form" model="ir.actions.act_window">
+            <field name="name">Campus</field>
+            <field name="res_model">school.school</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of School Standard -->
+        <record id="action_school_standard_form" model="ir.actions.act_window">
+            <field name="name">Classes</field>
+            <field name="res_model">school.standard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="context">{'search_default_draft':True}</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of School Standard -->
+        <record id="action_school_standard_running" model="ir.actions.act_window">
+            <field name="name">Classes</field>
+            <field name="res_model">school.standard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="domain">[('state','=','running')]</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of School Standard -->
+        <record id="action_school_standard_finished" model="ir.actions.act_window">
+            <field name="name">Classes</field>
+            <field name="res_model">school.standard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="domain">[('state','=','close')]</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of Elective Subject -->
+        <record id="action_elective_subject_form" model="ir.actions.act_window">
+            <field name="name">Elective Group</field>
+            <field name="res_model">subject.elective</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of Grade System -->
+        <record id="action_grade_master_form" model="ir.actions.act_window">
+            <field name="name">Grade</field>
+            <field name="res_model">grade.master</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of Academic Year Information -->
+        <record id="action_academic_year_form" model="ir.actions.act_window">
+            <field name="name">Academic Years</field>
+            <field name="res_model">academic.year</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of Academic Month Information -->
+        <record id="action_academic_month_form" model="ir.actions.act_window">
+            <field name="name">Months</field>
+            <field name="res_model">academic.month</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of Standard Medium Information -->
+        <record id="action_standard_medium_form" model="ir.actions.act_window">
+            <field name="name">Shift</field>
+            <field name="res_model">standard.medium</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of Standard Division Information Action -->
+        <record id="action_standard_division_form" model="ir.actions.act_window">
+            <field name="name">Room Number</field>
+            <field name="res_model">standard.division</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of Subject Information -->
+        <record id="action_subject_subject_form" model="ir.actions.act_window">
+            <field name="name">Subjects</field>
+            <field name="res_model">subject.subject</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Action Of Form & Tree Views Of Standard Information -->
+        <record id="action_standard_standard_form" model="ir.actions.act_window">
+            <field name="name">Programs</field>
+            <field name="res_model">standard.standard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Form View Of Student News -->
+        <record id="edit_student_news_form" model="ir.ui.view">
+            <field name="name">student.news.form</field>
+            <field name="model">student.news</field>
+            <field name="arch" type="xml">
+                <form string="Noticeboard">
+                    <header>
+                        <button string="Send Mail" class="btn btn-sm btn-default fa fa-envelope" type="object" name="news_update" colspan="2" />
+                    </header>
+                    <sheet>
+                        <group col="4" colspan="2" string="News / Updates">
+                            <field name="subject" placeholder="Subject"/>
+                            <field name="date" placeholder="Date" required="1"/>
+                        </group>
+                        <group>
+                            <field name="description" colspan="4" placeholder="Description"/>
+                        </group>
+                            <notebook colspan="4">
+<!--                                 <page string="Description"> -->
+<!--                                     <field name="description" nolabel="1" colspan="4" /> -->
+<!--                                 </page> -->
+                                <page string="Users">
+                                    <field name="user_ids" nolabel="1" colspan="4"
+                                        options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                </page>
+                            </notebook>
+                        
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Tree View Of Student News -->
+        <record id="view_student_news_tree" model="ir.ui.view">
+            <field name="name">student.news.tree</field>
+            <field name="model">student.news</field>
+            <field name="arch" type="xml">
+                <tree string="Noticeboard">
+                    <field name="subject" />
+                    <field name="date" />
+                </tree>
+            </field>
+        </record>
+        <!-- Search View Of Student News -->
+        <record id="view_hr_student_news_search" model="ir.ui.view">
+            <field name="name">student.news.search</field>
+            <field name="model">student.news</field>
+            <field name="arch" type="xml">
+                <search string="News">
+                    <field name="subject" />
+                    <field name="date" />
+                </search>
+            </field>
+        </record>
+        <!-- Dashboard Event Kanban View -->
+        <!-- <record id="student_student_news_kanban_view" model="ir.ui.view"><field name="name">Student News</field><field name="model">student.news</field><field name="arch" type="xml"><kanban default_group_by="date"><field name="date"/><field name="subject"/><field name="color"/><templates><t t-name="kanban-box"><div t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}}
+                                               oe_kanban_global_click_edit oe_semantic_html_override
+                                               oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}"><div class="oe_dropdown_toggle oe_dropdown_kanban"><ul class="oe_dropdown_menu"><li><a type="edit">Edit...</a></li><li><a type="delete">Delete</a></li><li><ul class="oe_kanban_colorpicker" data-field="color"/></li></ul></div><div
+                                            class="oe_kanban_box_header oe_kanban_color_bgdark oe_kanban_color_border oe_kanban_draghandle"><table class="oe_kanban_table"><tr><td class="oe_kanban_title1" align="left" valign="middle"
+                                                    style="padding-left:10px;"><h4><a type="open"><field name="date"/><field name="subject"/></a></h4></td></tr></table></div><div
+                                    class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_box_show_onclick_trigger oe_kanban_color_border"><table class="oe_kanban_table"><tr width="300"><td valign="top" align="left" style="padding-left:10px;"><table><tr><t
+                                                            t-if="record.date.raw_value and record.date.raw_value lt (new Date())"
+                                                            t-set="red">oe_kanban_text_red</t><span t-attf-class="#{red || ''}"><td>Date :</td><td style="padding-left:10px;"><b><field name="date"/></b></td></span></tr><tr><td>Subject : </td><td style="padding-left:10px;"><b><field name="subject"/></b></td></tr></table></td></tr></table></div><div
+                                    class="oe_kanban_buttons_set oe_kanban_color_border oe_kanban_color_bglight oe_kanban_box_show_onclick"><div class="oe_kanban_left"><a string="Edit" icon="fa fa-pencil" type="edit" /><a string="Change Color" icon="color-picker" type="color"
+                                        name="color" /></div><br class="oe_kanban_clear"/></div></div></t></templates></kanban></field></record> -->
+        <!-- Action Of Form, Tree & Kanban Views Of Student News -->
+        <record id="view_student_news" model="ir.actions.act_window">
+            <field name="name">Noticeboard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">student.news</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!-- Form View of Class Room -->
+       <!--  <record id="class_room_form_view" model="ir.ui.view">
+            <field name="name">class.room.form</field>
+            <field name="model">class.room</field>
+            <field name="arch" type="xml">
+                <form string="Class Room Form View">
+                    <sheet>
+                        <group col="4" colspan="4">
+                            <field name="name" required="1"/>
+                            <field name="number" required="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record> -->
+        <!-- Tree view of class Room -->
+        <!-- <record id="class_room_tree_view" model="ir.ui.view">
+            <field name="name">class.room.tree</field>
+            <field name="model">class.room</field>
+            <field name="arch" type="xml">
+                <tree string="Class Room Tree View">
+                    <field name="name"/>
+                    <field name="number"/>
+                </tree>
+           </field>
+        </record> -->
+        <!-- Action of Class Room -->
+        <!-- <record id="action_class_room" model="ir.actions.act_window">
+            <field name="name">Class Room</field>
+            <field name="res_model">class.room</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record> -->
+        <record id="view_hr_employee_form_inherited" model="ir.ui.view">
+                <field name="name">hr.employee</field>
+                <field name="model">hr.employee</field>
+                <field name="inherit_id" ref="hr.view_employee_form"/>
+                <field name="priority">10</field>
+                <field name="arch" type="xml">
+                    <xpath expr="//form/sheet/notebook/page[@name='public']" position="inside">
+                        
+                            <group string="Staff's Transfer Details">
+                                <field name="employee_line_ids" readonly="1" nolabel="1">
+
+                                    <tree string="Staff's Transfer Details">
+                                        <field name="company_date"/>
+                                        <field name="from_company"/>
+                                        <field name="to_company"/>
+                                        <field name="reason"/>
+
+                                        <!-- <field name="course_id" widget="selection" /> -->
+                                    </tree>
+                                    
+                                </field>
+                            </group>
+                                        
+                    </xpath>
+                </field>
+            </record>
+
+            <record id="hr_expense_form_view_inherited" model="ir.ui.view">
+                <field name="name">hr.expense.form.inherited</field>
+                <field name="model">hr.expense</field>
+                <field eval="25" name="priority"/>
+                <field name="inherit_id" ref="hr_expense.hr_expense_form_view"/>
+                <field name="arch" type="xml">
+                        
+                        <field name = "unit_amount" position="after">
+                            <field name="school_id"/>
+                            <field name="to_school_id"/>
+                        </field>
+                         <field name = "employee_id" position="replace">
+                            <field name = "employee_id" domain="[('state','=','draft')]"/>
+                        </field>
+                        <field name = "employee_id" position="after">
+                            <field name="job_id"/>
+                            <field name="work_location"/>
+                        </field>
+
+                        <field name = "quantity" position="replace">
+                            <field name = "quantity" invisible="1"/>
+                        </field>
+
+                        <field name = "product_id" position="replace">
+                           <field name = "product_id" string="Expenses"/>
+                        </field>
+
+                        <field name = "unit_amount" position="replace">
+                           <field name="unit_amount" required="1" widget="monetary" options="{'currency_field': 'currency_id'}" string="Amount"/>
+                        </field>
+
+                        <label for="quantity" position="replace">
+                            <label for="quantity" invisible="1"/>
+                        </label>
+                </field>
+            </record>
+
+            <record id="hr_expense.action_hr_expense_form" model="ir.actions.act_window">
+                <field name="name">Expense Request</field>
+                <field name="res_model">hr.expense</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,kanban,form</field>
+            </record>
+            <record id="view_move_tree_receipt_picking_inherit" model="ir.ui.view">
+                <field name="name">stock.move.tree2.inherit</field>
+                <field name="model">stock.move</field>
+                 <field name="priority" eval="6"/>
+                 <field name="inherit_id" ref="stock.view_move_tree_receipt_picking"/>
+                 <field name="arch" type="xml">
+                    <xpath expr="//tree/field[@name='date']" position="after">
+                        <field name="picking_partner_id"/>
+                    </xpath>
+                </field>
+            </record>
+            <record model="ir.ui.view" id="purchase_requisition.purchase_order_form_inherit">
+        <field name="name">purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_ref" position="after">
+                <field name="requisition_id"
+                    domain="[('state', 'in', ('in_progress', 'open')), ('vendor_id', 'in', (partner_id, False))]" invisible="1"/>
+            </field>
+            <xpath expr="//field[@name='order_line']/tree" position="inside">
+                <field name="procurement_ids" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+
+
+
+
+        
+        <!-- Menu Item Of EMS -->
+        <menuitem id="menu_ems" name="EMS" web_icon="school,static/description/ems.png" sequence="1"/>
+        <!-- Menu Item Of Dashboard -->
+        <!-- <menuitem id="menu_dashboard" name="Dashboard" parent="menu_ems" action="open_board_my_dash_action" sequence="1"
+                  icon="terp-project" web_icon_hover="images/hover.png"/> -->
+        <!-- Menu of DashBoard -->
+<!--           <menuitem id="menu_school_dashboard" name="Dashboard" action="school_dashboard_act" sequence="2"  -->
+<!--             parent="menu_ems" icon="fa-dashboard" web_icon="school,static/description/dashboard.png"/> -->
+        <!-- MenuItem Of Admission Register -->
+        <menuitem id="admission_register" name="Admission Register" parent="menu_ems" sequence="2" groups="school.group_school_administration,school.group_is_admission,school.group_school_registrar_officer,school.group_school_academic_officer,school.group_school_finance_officer"/>
+        <menuitem id="menu_admission_form" name="Add Application" parent="admission_register" action="action_student_student_form_2" sequence="21" groups="school.group_school_administration,school.group_is_admission,school.group_school_registrar_officer,school.group_school_academic_officer,school.group_school_finance_officer"/>
+        <!-- Menu Item Of Teachers -->
+        <menuitem id="menu_teachers" name="Teacher" parent="menu_ems" sequence="4"/>
+        <!-- Menu Item Of Students & Parents -->
+        <menuitem id="menu_students_parents" name="Student" parent="menu_ems" sequence="3"/>
+        <menuitem id="menu_student_profile" name="Student Profiles" parent="menu_students_parents" action="action_student_student_form_12" groups="school.group_school_administration,school.group_school_student,school.group_school_teacher,school.group_school_parent,school.group_school_registrar_officer,school.group_school_academic_officer,school.group_school_finance_officer,school.module_category_tv_user" sequence="1"/>
+        <!-- MenuItem For Miscellaneous Services -->
+
+       <!--  <menuitem id="menu_miscellaneous" name="Request Forms" sequence="5" groups="group_school_administration,base.group_user" /> -->
+        <menuitem id="menu_student_transfer_request" name="Student Transfer Request" parent="menu_students_parents" action="action_student_transfer_request_form" sequence="3" groups="group_school_student,group_school_administration"/>
+        <menuitem id="menu_teacher_transfer_request" name="Teacher Transfer Request" parent="menu_teachers" action="action_teacher_transfer_request_form" sequence="4" groups="school.group_school_administration,school.group_school_teacher"/>
+        <menuitem id="menu_student_withdrawal_request" name="Student Withdrawal Request" parent="menu_students_parents" action="action_student_withdrawal_request_form" sequence="4" groups="school.group_school_administration,school.group_school_student"/>
+       <!--  <menuitem id="menu_taxi_expense_request" name="Expense Request" parent="menu_miscellaneous" action="hr_expense.action_hr_expense_form" /> -->
+       
+        <!-- MenuItem For Reminders -->
+        <menuitem id="menu_reminders" name="Reminders" parent="menu_ems" action="action_student_reminder" sequence="8" groups="school.group_school_administration,school.group_school_student,school.group_school_teacher,school.group_school_parent,school.group_school_attendance_officer,school.group_school_finance_officer,school.group_school_academic_officer"/>
+        <!-- MenuItem For Configurations -->
+        <menuitem id="menu_configuration" name="Configurations" parent="menu_ems" sequence="13" groups="group_school_administration,group_school_academic_officer" />
+        <!-- MenuItem For Configurations->School Configurations -->
+        <menuitem id="menu_school_config_form1" name="Campus Configurations" parent="menu_configuration" groups="group_school_administration"/>
+<!--         <menuitem id="menu_grno" name="GR No." parent="menu_school_config_form1" action="action_student_grn_form" /> -->
+        <!-- <menuitem id="menu_cast" name="Religion/Caste" parent="menu_school_config_form1" action="action_student_cast_form_7" /> -->
+        <!-- <menuitem id="menu_sub_doc_type_sub_form" name="Document Type" parent="menu_school_config_form1" action="action_document_type_form" /> -->
+        <menuitem id="submenu_sub_grade" name="Grade" parent="menu_school_config_form1" action="action_grade_master_form" />
+        <!-- <menuitem id="submenu_sub_news" name="Noticeboard" parent="menu_school_config_form1" action="view_student_news" /> -->
+        <!-- <menuitem id="mother_tongue_menu" name="Mother Tongue" parent="menu_school_config_form1" action="action_mother_toungue" groups="school.group_school_administration"/> -->
+        <menuitem id="menu_school_school_sub_form" name="Campus" parent="menu_school_config_form1" action="action_school_school_form" />
+        <!-- MenuItem For Configurations->Academic Years -->
+        <!-- <menuitem id="menu_academic_year_form" name="Academic Years" parent="menu_configuration" />
+        <menuitem id="menu_academic_year_sub_form" name="Years" parent="menu_academic_year_form" action="action_academic_year_form" />
+        <menuitem id="menu_academic_month_form" name="Months" parent="menu_academic_year_form" action="action_academic_month_form" /> -->
+        <!-- MenuItem For Configurations->Standards -->
+        <menuitem id="menu_school_standard_form" name="Courses Information" parent="menu_configuration" groups="group_school_administration,group_school_academic_officer"/>
+        <menuitem id="menu_sub_school_standard_form" name="Classes" parent="menu_school_standard_form" action="action_school_standard_form" sequence="5" groups="group_school_administration,group_school_academic_officer"/>
+        <menuitem id="menu_sub_school_standard_form_running" name="Running Classes" parent="menu_school_standard_form" action="action_school_standard_running" sequence="6" groups="group_school_administration,group_school_academic_officer"/>
+        <menuitem id="menu_sub_school_standard_form_finished" name="Finished Classes" parent="menu_school_standard_form" action="action_school_standard_finished" sequence="7" groups="group_school_administration,group_school_academic_officer"/>
+        <menuitem id="menu_standard_standard_form" name="Programs" parent="menu_school_standard_form" action="action_standard_standard_form" sequence="1" groups="group_school_administration"/>
+       <!--  <menuitem id="menu_standard_semester_form" name="Semesters" parent="menu_school_standard_form" action="action_standard_semester_form" sequence="2"/> -->
+        <menuitem id="menu_standard_division_form" name="Room Number" parent="menu_school_standard_form" action="action_standard_division_form" sequence="4" groups="group_school_administration"/>
+        <menuitem id="menu_standard_medium_form" name="Shift" parent="menu_school_standard_form" action="action_standard_medium_form" sequence="3" groups="group_school_administration"/>
+        <!-- <menuitem id="menu_class_room" name="Class Room" parent="menu_school_standard_form" action="action_class_room"/> -->
+        <!-- MenuItem For Configurations->Subject -->
+        <menuitem id="menu_subject_subject_form" name="Subjects" parent="menu_configuration" sequence="10" groups="group_school_administration" />
+        <menuitem id="menu_subject_subject_sub_form" name="Subjects" parent="menu_subject_subject_form" action="action_subject_subject_form" />
+        <!-- <menuitem id="menu_subject_elective_form" name="Elective Subject(s)" parent="menu_subject_subject_form" action="action_elective_subject_form" /> -->
+        <!-- Menuitem of alumni and terminate -->
+        <menuitem id="menu_student_alumni" name="Alumni" action="action_student_alumni" parent="admission_register" groups="school.group_school_administration,school.group_school_teacher,school.group_school_registrar_officer,school.group_school_academic_officer,school.group_school_finance_officer" sequence="22"/>
+        <menuitem id="menu_student_terminate" name="Terminated" action="action_student_terminate" parent="admission_register" groups="school.group_school_administration,school.group_school_teacher" sequence="23"/>
+        <menuitem id="menu_student_followup" name="Follow Up" action="action_student_followup" parent="admission_register" groups="school.group_school_administration,school.group_school_teacher,school.group_school_registrar_officer,school.group_school_academic_officer,school.group_school_finance_officer" sequence="24"/>
+        <menuitem id="menu_student_contacts" name="Contacts (Students)" action="action_student_contact" groups="school.group_school_administration,school.group_school_teacher" sequence="4"/>
+
+        <menuitem
+            id="hr.menu_hr_root"
+            name="Employees"
+            groups="-hr.group_hr_manager,-hr.group_hr_user,-base.group_user,school.group_school_administration"
+            web_icon="hr,static/description/icon.png"
+            sequence="75"/>
+<!--         <menuitem id="menu_student_terminate" name="Terminate Student" action="action_student_terminate" parent="admission_register"/> -->
+        <!-- MenuItem For Configurations->Subject -->
+        <!-- Inherited Form View Of Company -->
+       <!--  <menuitem id="hr_timesheet.timesheet_menu_root" name="Timesheets" sequence="55" groups="school.group_invisible" web_icon="hr_timesheet,static/description/icon_timesheet.png"/> -->
+       <!--  <menuitem id="hr_timesheet.menu_hr_time_tracking" name="My Timesheet" parent="timesheet_menu_root" sequence="5" groups="school.group_invisible"/> -->
+
+
+        <record id="view_company_form_inherit" model="ir.ui.view">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form" />
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="string">Campus Name</attribute>
+                </field>
+            </field>
+        </record>
+
+
+
+
+        <report 
+            id="account.action_report_print_overdue"
+            model="res.partner"
+            report_type="qweb-pdf"
+            string="Due Payments"
+            name="account.report_overdue"
+            file="account.report_overdue"
+            groups="school.group_school_administration"
+            />
+        <report 
+            id="account.action_report_partnerledger"
+            model="account.report_partnerledger"
+            string="Partner Ledger"
+            report_type="qweb-pdf"
+            name="account.report_partnerledger"
+            file="account.report_partnerledger"
+            groups="school.group_school_administration"
+            />
+        <act_window
+            id="account.act_account_partner_ledger_payable"
+            name="Partner Ledger: Payable"
+            res_model="account.move.line"
+            context="{'search_default_partner_id':[active_id], 'search_default_unreconciled':1, 'search_default_payable':1}"
+            src_model="res.partner"
+            groups="school.group_school_administration"/>
+        <act_window
+            id="account.act_account_partner_ledger_payable_no_partner"
+            name="Unknown Partner Ledger"
+            res_model="account.move.line"
+            context="{'search_default_unreconciled':1, 'search_default_payable':1}"
+            domain="[('partner_id', '=', False)]"
+            src_model="res.partner"
+            groups="school.group_school_administration"/>
+        <act_window
+            id="account.act_account_partner_ledger_receivable"
+            name="Partner Ledger: Receivable"
+            res_model="account.move.line"
+            context="{'search_default_partner_id':[active_id], 'search_default_unreconciled':1, 'search_default_receivable':1}"
+            src_model="res.partner"
+            groups="school.group_school_administration"/>
+        <act_window
+            id="account.act_account_partner_ledger_receivable_no_partner"
+            name="Unknown Partner Ledger"
+            res_model="account.move.line"
+            context="{'search_default_unreconciled':1, 'search_default_receivable':1}"
+            domain="[('partner_id', '=', False)]"
+            src_model="res.partner"
+            groups="school.group_school_administration"/>
+        <act_window
+            id="account.action_move_select"
+            name="Journal Entries"
+            context="{'search_default_dummy_account_id': [active_id]}"
+            res_model="account.move"
+            groups="school.group_school_administration"
+            />
+        <act_window
+            id="account.action_move_line_select_by_partner"
+            name="Journal Items"
+            context="{'search_default_partner_id': [active_id]}"
+            res_model="account.move.line"
+            src_model="res.partner"
+            groups="school.group_school_administration"/>
+
+        <menuitem name="Contacts"
+        id="contacts.menu_contacts"
+        sequence="4"
+        action="contacts.action_contacts"
+        web_icon="contacts,static/description/icon.png"
+        groups="school.group_invisible"/>
+       <!--  <menuitem id="hr_timesheet_sheet.menu_hr_to_approve" name="To Approve" parent="hr_timesheet.timesheet_menu_root" sequence="7" groups="school.group_invisible"/>
+ -->
+    <menuitem name="Sales"
+        id="sales_team.menu_base_partner"
+        groups="school.group_invisible" sequence="6"/>
+    <menuitem name="Invoicing"
+            id="sale.menu_sale_invoicing"
+            groups="school.group_invisible"
+            sequence="5"/>
+<menuitem action="sale.action_orders_to_invoice"
+            id="sale.menu_sale_order_invoice" parent="sale.menu_sale_invoicing" 
+            groups="school.group_invisible"
+            sequence="2"/>
+ <menuitem action="sale.action_orders_upselling"
+            id="sale.menu_sale_order_upselling" parent="sale.menu_sale_invoicing"
+            groups="school.group_invisible"
+            sequence="5"/>
+
+   <menuitem id="sales_team.menu_sales" name="Sales" sequence="5" 
+    groups="school.group_invisible"/>
+     
+   <menuitem id="sales_team.menu_partner_form" parent="sales_team.menu_sales" action="base.action_partner_form"  groups="school.group_invisible" sequence="3"/>
+  
+   <menuitem id="sale.menu_sale_quotations"
+                action="sale.action_quotations" parent="sales_team.menu_sales"
+                 groups="school.group_invisible"
+                sequence="11"/>
+  
+  <menuitem action="sale.action_orders"
+      id="sale.menu_sale_order" parent="sales_team.menu_sales"
+       sequence="12" groups="school.group_invisible"/>
+ 
+  <menuitem action="product.product_template_action" id="sale.menu_product_template_action" parent="sales_team.menu_sales" groups="school.group_invisible" sequence="13" />
+
+   
+ <!--   <menuitem id="sale.menu_account_customer" name="Customers"
+            parent="sales_team.menu_sales"
+            action="base.action_partner_customer_form" sequence="10"
+            groups="school.group_invisible"/>
+
+ -->
+    <menuitem id="sales_team.menu_partner_form" parent="sales_team.menu_sales" action="base.action_partner_form" groups="school.group_invisible" sequence="3"/>
+
+     <menuitem id="sales_team.menu_sale_config" name="Configuration" parent="sales_team.menu_base_partner"
+    sequence="100" groups="school.group_invisible"/>
+
+     <menuitem id="sales_team.menu_sale_general_settings" name="Settings" parent="sales_team.menu_sale_config"
+            sequence="0" action="sales_team.action_sale_config" groups="school.group_invisible"/>
+
+    
+
+     <menuitem
+        id="purchase_requisition.menu_purchase_requisition_pro_mgt"
+        sequence="10"
+        parent="purchase.menu_procurement_management"
+        action="purchase_requisition.action_purchase_requisition"
+        groups="school.group_invisible"/>
+
+    <!-- <menuitem id="sales_team.menu_sale_config" name="Configuration" parent="sales_team.menu_base_partner"
+    sequence="100" groups="school.group_invisible"/>
+    <menuitem id="sales_team.menu_sale_general_settings" name="Settings" parent="sales_team.menu_sale_config" sequence="0" action="sales_team.action_sale_config" groups="school.group_invisible"/>
+
+    <menuitem id="sales_team.menu_config_address_book" parent="sales_team.menu_sale_config" name="Contacts" sequence="4" groups="school.group_invisible"/>
+ -->
+
+  <menuitem id="sales_team.menu_config_address_book" parent="sales_team.menu_sale_config" name="Contacts" sequence="4" groups="school.group_invisible"/>
+            <menuitem action="base.action_partner_category_form" id="sales_team.menu_partner_category_form" name="Contact Tags" sequence="1" parent="sales_team.menu_config_address_book" groups="school.group_invisible"/>
+            <menuitem action="base.action_partner_title_contact" id="sales_team.menu_partner_title_contact" name="Contact Titles" parent="sales_team.menu_config_address_book" sequence="3" groups="school.group_invisible"/>
+            <menuitem id="sales_team.menu_localisation" name="Localization" parent="sales_team.menu_config_address_book" sequence="5" groups="school.group_invisible"/>
+                <menuitem action="base.action_country" id="sales_team.menu_country_partner" parent="sales_team.menu_localisation" sequence="1" groups="school.group_invisible"/>
+                <menuitem action="base.action_country_group" id="sales_team.menu_country_group" name="Country Group" parent="sales_team.menu_localisation" sequence="3" groups="school.group_invisible"/>
+                <menuitem action="base.action_country_state" id="sales_team.menu_country_state_partner" parent="sales_team.menu_localisation" sequence="2" groups="school.group_invisible"/>
+                <menuitem action="base.action_currency_form" id="sales_team.menu_action_currency_form" parent="sales_team.menu_localisation" sequence="3" groups="school.group_invisible"/>
+            <menuitem id="sales_team.menu_config_bank_accounts" name="Bank Accounts" parent="sales_team.menu_config_address_book" sequence="6" groups="school.group_invisible"/>
+                <menuitem action="base.action_res_bank_form" id="sales_team.menu_action_res_bank_form" parent="sales_team.menu_config_bank_accounts" sequence="1" groups="school.group_invisible"/>
+                <menuitem action="base.action_res_partner_bank_account_form" id="sales_team.menu_action_res_partner_bank_form" parent="sales_team.menu_config_bank_accounts" groups="school.group_invisible" sequence="2"/>
+                  <menuitem id="sales_team.menu_sales_team_act" action="sales_team.crm_team_salesteams_act" sequence="1" parent="sales_team.menu_base_partner" name="Dashboard" groups="school.group_invisible"/>
+                  <menuitem name="Sales" action="sale.action_order_report_all" id="sale.menu_report_product_all" parent="sales_team.menu_sale_report" sequence="10" groups="school.group_invisible"/>
+
+                   <menuitem  id="purchase_requisition.menu_purchase_requisition_type"
+        sequence="100"
+        parent="purchase.menu_purchase_config"
+        action="purchase_requisition.tender_type_action" groups="school.group_invisible"/>
+                 
+
+</odoo>

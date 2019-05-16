@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="etq_exam_share_action" model="ir.actions.act_window">
+            <field name="name">Share Quiz</field>
+            <field name="res_model">etq.exam.share</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_exam_id':active_id}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Share Your Quiz</p>
+            </field>
+        </record>
+        <record id="etq_exam_form_view" model="ir.ui.view">
+            <field name="name">etq exam Form View</field>
+            <field name="model">etq.exam</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="view_quiz" string="View Exam" type="object"/>
+                        <button name="%(etq_exam_share_action)d" string="Share Exam" type="action"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field invisible="1" name="start_time"/>
+                            <field invisible="1" name="end_time"/>
+                            <field invisible="0" name="start_tstring"/>
+                            <field invisible="0" name="end_tstring"/>
+                            <!-- <field name="hour_from" options="{'step': '60', 'disableTextInput': false}" placeholder="Time From" required="1" widget="timepicker"/><field name="hour_to" options="{'step': '60', 'disableTextInput': false}" placeholder="Time To" required="1" widget="timepicker"/><field invisible="1" name="from_hour"/><field invisible="1" name="to_hour"/><field invisible="0" name="diff_hour"/>-->
+                        </group>
+                        <group>
+                            <field name="show_correct_questions"/>
+                            <field name="fill_mode"/>
+                            <field name="exam_timetable_line_id" invisible="1"/>
+                            <field attrs="{'invisible':[('fill_mode','!=','random')]}" name="fill_mode_random_number"/>
+                        </group>
+                        <field name="questions">
+                            <tree>
+                                <field name="question"/>
+                                <field name="question_type"/>
+                                <field name="num_options"/>
+                                <field name="num_correct"/>
+                            </tree>
+                        </field>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="etq_exam_tree_view" model="ir.ui.view">
+            <field name="name">etq exam Tree View</field>
+            <field name="model">etq.exam</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="etq_exam_action" model="ir.actions.act_window">
+            <field name="name">Exams</field>
+            <field name="res_model">etq.exam</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create an online exam</p>
+            </field>
+        </record>
+        <record id="etq_question_form_view" model="ir.ui.view">
+            <field name="name">etq question Form View</field>
+            <field name="model">etq.question</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="school_id"/>
+                            <field name="semester_id"/>
+                        </group>
+                        <group>
+                            <field name="subject_id"/>
+                            <field name="standard_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="question"/>
+                        <field name="question_rendered"/>
+                        <field name="question_type"/>
+                        <field attrs="{'invisible':[('question_type','!=','multi_choice')]}" context="{'question_id':active_id}" name="question_options">
+                            <tree editable="bottom">
+                                <field name="option"/>
+                                <field name="correct"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <div attrs="{'invisible':[('question_type','!=','fill_blank')]}">pharse questions like this
+            
+            
+                        
+                        <br/>
+            Bob went to the {1} and bought a {2} yesterday
+            
+            
+                        
+                        <br/>
+            the {1} and {2} will get replaced by blank boxes and will be marked as correct if they match the answers in this list
+            
+            
+                        
+                        <br/>
+            max 27 blank boxes
+          
+            
+            
+                        
+                        <field context="{'question_id':active_id}" name="question_options_blank">
+                            <tree editable="bottom">
+                                <field name="answer"/>
+                            </tree>
+                        </field>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!-- etq.question.prepare form view -->
+        <record id="etq_question_view_form" model="ir.ui.view">
+            <field name="name">etq.question.prepare.view.form</field>
+            <field name="model">etq.question.prepare</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                             <field name="name" invisible="0"/>
+                        </group>
+                        <group>
+                       
+                            <group>
+                                <field name="school_id"/>
+                               <field name="semester_id" domain="[('standard_id', '=', standard_id)]"/>
+                            </group>
+                            <group>
+                                 <field name="standard_id"/>
+                                 <field name="subject_id"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="questions">
+                                <tree>
+                                    <field name="question"/>
+                                    <field name="question_type"/>
+                                    <field name="num_options"/>
+                                    <field name="num_correct"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- etq.question.prepare tree view -->
+        <record id="etq_question_view_tree" model="ir.ui.view">
+            <field name="name">etq.question.prepare.view.tree</field>
+            <field name="model">etq.question.prepare</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <!-- Add your fields here -->
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <!-- etq.question action window -->
+        <record id="etq_question_prepare_action" model="ir.actions.act_window">
+            <field name="name">Online Questions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">etq.question.prepare</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    <!-- Add Text Here -->
+                </p>
+                <p>
+                    <!-- More details about what a user can do with this object will be OK -->
+                </p>
+            </field>
+        </record>
+
+
+        <record id="etq_question_prepare_line_form_view" model="ir.ui.view">
+            <field name="name">etq question Form View</field>
+            <field name="model">etq.question.prepare.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="school_id"/>
+                            <field name="semester_id"/>
+                        </group>
+                        <group>
+                            <field name="subject_id"/>
+                            <field name="standard_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="question"/>
+                        <field name="question_rendered"/>
+                        <field name="question_type"/>
+                        <field attrs="{'invisible':[('question_type','!=','multi_choice')]}" context="{'question_id':active_id}" name="question_options">
+                            <tree editable="bottom">
+                                <field name="option"/>
+                                <field name="correct"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <div attrs="{'invisible':[('question_type','!=','fill_blank')]}">pharse questions like this
+
+
+
+                        <br/>
+            Bob went to the {1} and bought a {2} yesterday
+
+
+
+                        <br/>
+            the {1} and {2} will get replaced by blank boxes and will be marked as correct if they match the answers in this list
+
+
+
+                        <br/>
+            max 27 blank boxes
+
+
+
+
+                        <field context="{'question_id':active_id}" name="question_options_blank">
+                            <tree editable="bottom">
+                                <field name="answer"/>
+                            </tree>
+                        </field>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <menuitem groups="exam_master,school.group_school_teacher" id="training" name="Online Examination" parent="school.menu_ems" sequence="12"/>
+        <menuitem id="etq_exam" name="Online Tests" parent="training" sequence="10"/>
+        <menuitem action="etq_exam_action" id="etq_exams" name="Exams" parent="etq_exam" sequence="20"/>
+        <menuitem action="etq_question_prepare_action" id="etq_exams_prepare" name="Questions" parent="etq_exam" sequence="23"/>
+    </data>
+</odoo>

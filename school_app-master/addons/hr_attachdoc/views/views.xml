@@ -1,0 +1,38 @@
+<odoo>
+    <data>
+        <record id="hr_recruitment_stage_form_inherit" model="ir.ui.view">
+            <field name="name">Stages</field>
+            <field name="model">hr.recruitment.stage</field>
+            <field name="inherit_id" ref="hr_recruitment.hr_recruitment_stage_form"/>
+            <field name="arch" type="xml">
+                <group position="replace">
+                    <group string="Interview Round">
+                        <group>
+                            <field name="name" string=""/>
+                            <field name="sequence" groups="base.group_no_one"/>
+                            <field name="job_id"/>
+                        </group>
+                        <group>
+                             <field name="fold"/>
+                            <field name="template_id" domain="[('model_id.model', '=', 'hr.applicant')]"/>
+                        </group>
+                    </group>
+                    <separator string="Requirements"/>
+                    <field name="requirements"/>
+                </group>
+
+                <field name="name" position="replace">
+                    <field name="name" string="Interview Name"/>
+                </field>
+
+                <field name="job_id" position="after">
+                    <field name="interviewer_name"/>
+                    <field name="interviewer_designation"/>
+                </field>
+                <field name="job_id" position="replace">
+                    <field name="job_id" string="Job Title"/>
+                </field> 
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+        id="teacher_print_badge_new1"
+        string="Instructors ID Card"
+        model="school.teacher"
+        report_type="qweb-html"
+        name="bi_employee_card.print_teacher_badge_new1"
+        file="bi_employee_card.print_teacher_badge_new1"/>
+
+    <template id="bi_employee_card.print_teacher_badge_new1">
+        <t t-call="report.html_container">
+            <div class="page">
+                <t t-foreach="docs" t-as="teacher">
+                    <div class="col-sm-6">
+                     <table style="width:150pt; height:250pt; border: 1pt solid black; border-collapse:separate; border-radius:8pt; margin:5pt">
+                        <div class="col-sm-6">
+
+                               
+                            <td style="width:33%;" align="center" t-attf-style="background-image:url('/bi_employee_card/static/img/Instructorcard.jpg');opacity:1;background-size:75mm 100mm;">
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <table style="width:77pt; height:150pt">
+                                    <tr style="height:70%;">
+                                        <td align="center" valign="center">
+                                            <img t-if="teacher.image" t-att-src="'data:image/png;base64,%s' % (teacher.image,)" style="max-height:130pt;max-width:105%;" alt="Teacher Image"/>
+                                            <tr><th><div style="font-size:15pt; margin-bottom:0pt;margin-top:0pt;" align="center"><t t-esc="teacher.name"/></div></th></tr>
+                                            <!-- <tr><td><div align="center" style="font-size:10pt;font-weight:bold;margin-bottom:5pt;"><p>F/N</p><t t-esc="student.parent_id"/></div></td></tr>  -->
+                                           
+                                        </td>
+                                    </tr>
+                                    <td align="center" valign="center">
+                                        
+                                            <img t-if="teacher.company_id and teacher.company_id.logo" t-att-src="'data:image/png;base64,%s' % (teacher.company_id.logo,)" style="max-height:35pt;max-width:90%" alt="Company Logo"/>
+
+                                    </td>
+                                </table>
+                            </td>
+                            
+
+                            </div>
+                        </table>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

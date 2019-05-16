@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="invoice_form_inherit" model="ir.ui.view">
+            <field name="name">account.invoice.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field eval="12" name="priority"/>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="school_id" required="1"/>                                    
+                </xpath>
+                <xpath expr="//field[@name='number']" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button type="object"
+                        name="action_view_picking" states="open,paid"
+                        class="oe_stat_button" icon="fa-truck" attrs="{'invisible':[('student_payslip_id', '=', False)]}">
+                        <field name="picking_count"  string="Issued Books" widget="statinfo"/>
+                    </button>
+                </div>
+            </xpath>
+            </field>
+        </record>
+        <record id="invoice_supplier_form_inherit" model="ir.ui.view">
+            <field name="name">account.invoice.form.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml"> 
+                <field name="reference" position="after">
+                    <field name="school_id" required="1"/>                  
+                </field>  
+            </field>
+        </record>
+
+        <record id="view_move_form_inherit" model="ir.ui.view">
+            <field name="name">account.move.form.inherit</field>
+            <field name="model">account.move</field>
+            <field eval="12" name="priority"/>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='ref']" position="after">
+                    <field name="school_id"/>                  
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

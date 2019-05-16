@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        
+        <record id="view_student_student_form_2_inh" model="ir.ui.view">
+            <field name="name">student.student.inherit</field>
+            <field name="model">student.student</field>
+            <field name="inherit_id" ref="school.view_student_student_form_2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/div[1]" position="after">
+                <!-- <field name="pid" position="after"> -->
+                    <label for="ticket_number" string="Enq. Number" />
+                    <field name="ticket_number" options="{'no_create_edit': True}" domain="[('state_id', '=' , 'new')]"/>
+                </xpath>
+            </field>
+       </record>
+       
+   </data>
+</odoo>

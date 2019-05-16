@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="bi_employee_tree" model="ir.ui.view">
+			<field name="name">bi.employee.ledger.tree</field>
+			<field name="model">bi.employee.ledger</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="date_from"/>
+					<field name="date_to"/>
+					<field name="employee_id"/>
+					<field name="company_id"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_employee_ledger_form" model="ir.ui.view">
+			<field name="name">bi.employee.ledger.form</field>
+			<field name="model">bi.employee.ledger</field>
+			<field name="arch" type="xml">
+				<form string="Employee Ledger">
+					<header>
+						<button name="show_ledger" string="Show Ledger" class="oe_hightlight" type="object"/>						
+					</header>
+					<sheet>                        
+						<group>
+							<group>                             
+								<field name="date_from"/>                           
+								<field name="date_to"/>
+								<field name="employee_id"/>  
+								<field name="company_id"/>                             
+							</group>
+						</group>  
+						<notebook>
+								<page string="Employee Info">
+								<field name="line_ids">
+									<tree string="Employee Info" edit="false" create="false">
+										<field name="allowance" string="Total Allowance"/>
+										<field name="deduction" string="Total Deduction"/>
+									</tree>
+								</field>
+								</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		
+	  <record id="action_hr_employee_ledger" model="ir.actions.act_window">
+			<field name="name">Employee Ledger</field>
+			<field name="res_model">bi.employee.ledger</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+			<field name="view_id" eval="False"/>
+			<field name="help" type="html">
+			  <p class="oe_view_nocontent_create">
+				Click to add new entry.
+			  </p>            
+			</field>
+		</record>
+
+		<menuitem id="menu_hr_employee_ledger" 
+			name="Employee Ledger" 
+			parent="hr_payroll.menu_hr_payroll_root" 
+			action="action_hr_employee_ledger"/>  
+
+
+
+</odoo>

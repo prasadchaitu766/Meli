@@ -1,0 +1,2 @@
+import hr_payroll_contribution_register_report
+import hr_employee_list

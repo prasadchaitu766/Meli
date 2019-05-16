@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wizard_mustroll_report" model="ir.ui.view">
+        <field name="name">Mustroll Report</field>
+        <field name="model">bi.mustroll</field>
+        <field name="arch" type="xml">
+            <form string="Choose your date">
+                <!-- <p class="oe_gray">
+                    Choose a Dates of Invoice To Generate GSTR B2B Report in Xlsx.
+                </p> -->
+                <group>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+                <group>
+                    <field name="company_id"/>
+                </group>
+                <footer>
+                    <button name="print_Excel_report" string="Print Excel Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="wizard_mustroll_action_report" model="ir.actions.act_window">
+        <field name="name">Attendance Report</field>
+        <field name="res_model">bi.mustroll</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_mustroll_report"/>
+        <field name="target">new</field>
+    </record>
+ 
+    <menuitem action="wizard_mustroll_action_report" id="menu_reporting_mustroll_excel" parent="l10n_in_hr_payroll.menu_l10n_in_hr_payroll_report" sequence="2" />  
+
+   
+   
+</odoo>

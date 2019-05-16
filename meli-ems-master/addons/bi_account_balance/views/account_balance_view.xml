@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+ <record id="view_account_list_new" model="ir.ui.view">
+            <field name="name">account.account.list</field>
+            <field name="model">account.account</field>
+             <field name="inherit_id" ref="account.view_account_list"/>
+            <field name="arch" type="xml">
+                <tree string="Chart of accounts" toolbar="1" >
+                    <!-- <field name="user_type_id" position="after"> -->
+                    <field name="debit"/>
+                    <field name="credit"/>
+                    <field name="balance"/>
+                   <!-- </field>  -->
+                </tree>
+            </field>
+</record>
+<record id="view_account_transaction" model="ir.ui.view">
+            <field name="name">account transaction</field>
+            <field name="model">account.account</field>
+             <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+
+              <form>
+            <sheet>
+
+           
+            <notebook>
+
+           <page string="Transaction">
+             <group string="Transaction">
+              <field name="account_move_lines" nolabel="1"/>
+              
+            </group>
+                </page>
+                
+            </notebook>
+            </sheet>
+        </form>
+      </field> 
+      </record>
+
+       
+
+  </data>
+ </odoo>   	

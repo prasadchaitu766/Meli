@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+         <!-- <report 
+            id="action_contribution_register" 
+            model="hr.contribution.register" 
+            string="PaySlip Lines By Conribution Register"
+            report_type="qweb-pdf"
+            name="hr_payroll.report_contributionregister" 
+            file="hr_payroll.report_contributionregister"
+            menu="False"
+        /> -->
+        <report 
+            id="hr_payroll.action_report_payslip" 
+            model="hr.payslip" 
+            string="Payslip"
+            report_type="qweb-pdf"
+            name="hr_payroll.report_payslip_new" 
+            file="hr_payroll.report_payslip_new"
+        />
+         <report 
+            id="action_report_payslip_run" 
+            model="hr.payslip.run" 
+            string="Payslip"
+            report_type="qweb-pdf"
+            name="bi_hr.report_payslip_run_new" 
+            file="bi_hr.report_payslip_run_new"
+        />
+       
+       <report
+            auto="False"
+            id="l10n_in_hr_payroll.payroll_advice" 
+            model="hr.payroll.advice" 
+            string="Print Advice"
+            report_type="qweb-pdf"
+            name="l10n_in_hr_payroll.report_payrolladvice" 
+            file="l10n_in_hr_payroll.report_payrolladvice"/>
+
+        <report 
+            id="report_employee_details"
+            model="hr.employee"
+            string="Employee List"
+            report_type="qweb-pdf"
+            name="bi_hr.report_employee_new"
+            file="bi_hr.report_employee_new"
+        />
+
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		
+		<report
+			id="bi_payslip_report_new"
+			model="hr.payslip.run"
+			string="Payslip"
+			report_type="xlsx"
+			name="account.bi.payslip.new.xlsx"
+			file="account.bi.payslip.new.xlsx"
+			attachment_use="False"
+		    menu="False"
+		/>
+	</data>
+</odoo>

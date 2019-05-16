@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="report_account_voucher_bi">
+<!-- 		<t t-call="report.external_layout">
+ -->			
+ 			<template id="report_header_custom_one" inherit_id="report.external_layout_header">
+                <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+                <xpath expr="//div[@class='header']" position="replace">
+                <div class="header">
+                <div class="row">
+                        <br/>
+                        <div class="col-xs-6">
+                            <p><strong> <span style="left;font-size:25px;" t-field="company.name"/></strong></p>
+                            <div style="left;font-size:15px;line-height:9pt;">
+                                <p>TRN: <span t-field="company.vat"/></p>
+                                <p><span t-field="company.partner_id.street"/></p>
+                                <p><span t-field="company.partner_id.street2"/></p>
+                                <p><span t-field="company.partner_id.city"/></p>
+                                <p><span t-field="company.partner_id.state_id.name"/>,<span t-field="company.partner_id.country_id.name"/>,Tel:<span t-field="company.partner_id.phone"/></p>
+<!--                                 <p><span t-field="company.partner_id.country_id.name"/></p>
+ -->                               <!--  <p>Tel <span t-field="company.partner_id.phone"/></p> -->
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6" style="right">
+                            <div>
+                             <img t-if="company.logo" align="right" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 60px;"/>   
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                                          
+        
+<!--       					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+ -->  					</div>
+  				</div>
+  			</xpath>
+  		</template>
+ 			<div class="page" style="border: 1px solid black;font-size:15px;padding:10px;">
+				<div class="oe_structure"/>
+					<div class="row">
+						<p class="account_payment_report" align="center" style="font-size:25px">
+							<b>Journal Voucher</b>
+						</p>                     
+						<br/><br/>                
+					</div>
+							
+					<div>
+						<p  align="left">
+							<strong>Journal.No:</strong>
+							<span t-field="doc.name"></span>
+						</p>						
+						<p  align="left">
+							<strong>Date:</strong> 
+							<span t-field="doc.date"></span>
+						</p> 
+						<p  align="left">
+							<strong>Narration:</strong>
+								<span t-field="doc1.narration"/>												
+						</p> 
+						
+						<table class="table table-bordered"  style="line: 1px solid black;margin-left: -10px;">
+							<thead>  
+							 	<th style="text-align:left;line: 1px solid black;">Sr#</th> 
+							 	<th style="text-align:left;line: 1px solid black;">Account Name <![CDATA[&]]> Code</th>
+							 	<th style="text-align:left;line: 1px solid black;">Description</th>
+							 	<th style="text-align:right;line: 1px solid black;">Debit</th>
+							 	<th style="text-align:right;line: 1px solid black;">Credit</th>                      
+							</thead>
+								<tbody class="account_tbody" style="border: 1px solid black;">
+								<t t-set="i" t-value="1"/>
+					 			<tr t-foreach="doc.line_ids" t-as="l">
+					 				<td style="text-align:left;line: 1px solid black;">
+                         				<span t-esc="i"/>
+                         					<t t-set="i" t-value="i+1"/>
+                        			</td>
+									<td style="text-align:left;line: 1px solid black;">
+										<span t-field="l.account_id.name"/>-<span t-field="l.account_id.code"/><br/>
+									</td>							
+									<td style="text-align:left;line: 1px solid black;">
+									  	<span t-if="l.partner_id"> 
+											<span t-field="l.partner_id"/>,<br/>
+										</span>
+										<span t-if="l.name"> 
+											<span t-field="l.name"/>,<br/>
+										</span>
+										<span t-if="l.analytic_account_id"> 
+											<span t-field="l.analytic_account_id"/><br/>
+										</span>
+										<span t-if="doc1.vendor_invoice"> 
+											<span t-field="doc1.vendor_invoice"/>
+										</span>
+									</td>
+									<td style="text-align:right;line: 1px solid black;">
+										<span  t-field="l.debit"/>
+									</td>
+
+									<td style="text-align:right;line: 1px solid black;">
+										<span  t-field="l.credit"/>
+									</td>
+									
+								</tr>
+								<tr>
+									<td align="right" >
+										<span style="font-weight:bold;line: 1px solid black;"/>
+									</td>
+									<td align="right" >
+										<span style="font-weight:bold;line: 1px solid black;"/>
+									</td>	
+									<td align="right">
+										<strong>Total Amount: </strong> 
+										<span style="font-weight:bold;line: 1px solid black;"/>
+									</td>
+									<td align="right">
+										<strong>
+											<span style="font-weight:bold;line: 1px solid black;" t-field="doc.amount"/>
+										</strong>
+									</td>
+									<td align="right">
+										<strong>
+											<span style="font-weight:bold;line: 1px solid black;" t-field="doc.amount"/>
+										</strong>
+									</td>
+								</tr>
+							</tbody>
+						</table> 
+
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+						<tr>
+							<td align="left">
+								<strong>Prepared By: </strong>
+								<span t-field="doc.create_uid"/>
+							</td>
+							<td align="left">
+								<strong>
+									<span t-field="doc.state"/>
+								</strong>
+							</td>
+						</tr>
+					</table> 
+					</div>
+					<br/>
+					<br/>
+					<br/>
+					<br/>
+					<br/>	
+					<div>
+						<div class="col-xs-4" style="left">
+							<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Prepared By</p>
+						</div>
+						<div class="col-xs-4" style="center">
+							
+						</div>
+						<div class="col-xs-4" style="right">
+							<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Finance Manager</p>
+						</div>
+					</div>
+					<br/>
+					<br/>
+					<br/>
+					<br/>
+					<br/>                 
+				</div>
+				<template>
+            <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+        <div class="footer">
+        <div style="border-top: 1px solid black;">
+            <div class="col-lg-2 text-center" name="company_address">
+               <ul t-if="not company.custom_footer" class="list-inline">
+                <li t-if="company.name"> <span t-field="company.name"/></li>
+                <li t-if="company.vat">TRN: <span t-field="company.vat"/></li>
+                <li t-if="company.partner_id.street"><span t-field="company.partner_id.street"/></li>
+                <li t-if="company.partner_id.street2"><span t-field="company.partner_id.street2"/></li>
+                <li t-if="company.partner_id.city"><span t-field="company.partner_id.city"/></li>
+                <li t-if="company.partner_id.state_id"><span t-field="company.partner_id.state_id.name"/></li>
+                <li t-if="company.partner_id.country_id"><span t-field="company.partner_id.country_id.name"/></li>
+              </ul>
+            </div>
+            <div  align="center">
+                <ul class="list-inline">
+                            <li>Page:</li>
+                            <li><span class="page"/></li>
+                            <li>/</li>
+                            <li><span class="topage"/></li>
+                </ul> 
+            </div>
+        </div>
+        </div> 
+    </template>
+		<!-- 	</t> -->
+	</template>
+
+	<template id="report_account_voucher_details">
+		<t t-call="report.html_container">
+			<t t-foreach="docs" t-as="doc1">
+				<t t-foreach="doc1.move_id" t-as="doc">
+					<t t-call="bi_account_journal.report_account_voucher_bi"/>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<odoo>
+<data>
+	<template id="student_invoice_bi">
+		<template id="report_student_invoice" inherit_id="account.report_invoice_document">
+			<xpath expr="//field[@name='name']" position="after">
+				<div class="col-xs-12" align="right">
+					<span>
+						<b>Application No.: </b>
+						<b t-field="o.sudo().student_id.reg_code"></b>
+					</span>
+				</div>
+				<div class="col-xs-12" align="right">
+					<span>
+						<b>Student ID: </b>
+						<b t-field="o.sudo().student_id"></b>
+					</span>
+				</div>
+				<div class="col-xs-12" align="right">
+					<span>
+						<b>Father's Name: </b>
+						<b t-field="o.sudo().student_id.parent_id"></b>
+					</span>
+				</div>
+				<div class="col-xs-12" align="right">
+					<span>
+						<b>Program ID: </b>
+						<b t-field="o.sudo().student_id.program_id"></b>
+					</span>
+				</div>
+				<div class="col-xs-12" align="right">
+					<span>
+						<b>Semester: </b>
+						<b t-field="o.sudo().student_id.semester_id"></b>
+					</span>
+				</div>
+			</xpath>
+		</template>
+	</template>
+</data>
+</odoo>

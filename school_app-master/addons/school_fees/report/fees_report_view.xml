@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="school_fees.type_wise">
+   <t t-call="report.external_layout">
+         <t t-foreach="docs" t-as="result">
+            <div class="page">
+               
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 style="text-align:center;">
+                                <span>Income Report</span>
+                            </h2>
+
+
+
+
+
+
+
+
+
+                              <br/>
+                              <br/>
+                              <br/>
+
+
+                              <div class="col-xs-12" align="left">
+                <span>
+                    <b>Start date.: </b>
+                 
+                    <b t-field="result.start_date"></b>
+                </span>
+                           </div>
+                       
+                      <div class="col-xs-12" align="left">
+                <span>
+                    <b>End Date.: </b>
+                 
+                    <b t-field="result.end_date"></b>
+                </span>
+                           </div>
+                             <div class="col-xs-12" align="left">
+                <span>
+                    
+                
+                     <b t-if="result.school_id">Campus: <span t-field="result.school_id"/></b>
+
+                </span>
+                           </div>
+                       
+                       
+
+
+
+                            <head> 
+                        <style>
+                            table {
+                                font-family: Courier New, Times New Roman;
+                                border-collapse: collapse;
+                                width: 100%;
+                            }
+
+                            td, th {
+                                border: 1px solid #000000;
+                                text-align: center;
+                                padding: 8px;
+                            }
+                        </style>
+                    </head>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-condensed" style="border-top: 1px solid black;">
+                                <colgroup>
+                                    <col width="5%"/>
+                                    <col width="15%"/>
+                                    <col width="15%"/>
+                                    <col width="15%"/>
+                                    <col width="10%"/>
+                                    <col width="10%"/>
+                                    <col width="10%"/>
+                                    <col width="10%"/>
+                                    <col width="10%"/>
+                                    <col width="15%"/>
+                                    <col width="10%"/>
+                                    <col width="15%"/>
+                                    <col width="15%"/>
+                                </colgroup>
+                                <thead>
+                                    <tr>
+										<th style="text-align:left">Sl No</th>
+                                        <th style="text-align:center">Semester</th>
+								    	                 <th style="text-align:center">Course Level</th>
+                                        <th style="text-align:center">Tuition Fee</th> 
+                                        <th style="text-align:center">Book</th>
+                                        <th style="text-align:center">Card</th>
+                                        <th style="text-align:center">Exam</th>
+                                        <th style="text-align:center">Late Exam</th>
+                                        <th style="text-align:center">Repeat Sem</th>
+                                        <th style="text-align:center">Refund Amount</th>
+                                        <th style="text-align:center">Other</th>
+                                        <th style="text-align:center">Discount</th>
+                                        <th style="text-align:center">Total</th>
+								  	</tr>
+                               </thead>
+                               <tbody>
+                                    <t t-set="i" t-value="1" /> 
+                                    <t t-set="j" t-value="0" /> 
+                                    <t t-set="k" t-value="0" /> 
+                                    <t t-set="l" t-value="0" /> 
+                                    <t t-set="m" t-value="0" /> 
+                                    <t t-set="n" t-value="0" />
+                                    <t t-set="o" t-value="0" /> 
+                                    <t t-set="p" t-value="0" />
+                                    <t t-set="q" t-value="0" />
+                                    <t t-set="r" t-value="0" />
+                                    <t t-set="s" t-value="0" />
+                                    <t t-set="t" t-value="0" />
+
+                                    <tr t-foreach="line_ids" t-as="line">
+                                        <tr>
+                                        	<td style="text-align:left">
+												<span t-esc="i"/>
+				                        		<t t-set="i" t-value="i+1"/>
+                                        	</td>
+                                            <td style="text-align:center">
+                                              <span t-esc="line['sem']"/>
+                                            </td>
+                                            <td style="text-align:center">
+                                              <span t-esc="line['amount']"/>
+                                            </td>
+                                            <td style="text-align:right">
+                                               <span t-esc="line['tuitionamount']"/>
+                                            </td>
+                                             <td style="text-align:right">
+                                               <span t-esc="line['bookprice']"/>
+                                            </td>
+                                            <td style="text-align:center">
+                                               <span t-esc="line['cardprice']"/>
+                                            </td>
+                                             <td style="text-align:center">
+                                              <span t-esc="line['examamt']"/>
+                                            </td>
+                                            <td style="text-align:center">
+                                              <span t-esc="line['lateexamamt']"/>
+                                            </td>
+                                            <td style="text-align:center">
+                                               <span t-esc="line['rptamount']"/>
+                                            </td>
+                                             <td style="text-align:center">
+                                               <span t-esc="line['rfamount']"/>
+                                            </td>
+                                            <td style="text-align:center">
+                                               <span t-esc="line['otherprice']"/>
+                                            </td>
+                                            <td style="text-align:center">
+                                               <span t-esc="line['discount']"/>
+                                            </td>
+                                            <td style="text-align:center">
+                                               <span t-esc="line['total']"/>
+                                            </td>
+                                           
+                                        </tr>
+                                         <t t-set="j" t-value="j+line['amount']"/>
+                                          <t t-set="k" t-value="k+line['tuitionamount']"/>
+                                            <t t-set="l" t-value="l+line['bookprice']"/>
+                                             <t t-set="m" t-value="m+line['cardprice']"/>
+                                            <t t-set="n" t-value="n+line['examamt']"/>
+                                            <t t-set="o" t-value="o+line['lateexamamt']"/>
+                                            <t t-set="p" t-value="p+line['rptamount']"/>
+                                            <t t-set="q" t-value="q+line['rfamount']"/>
+                                            <t t-set="r" t-value="r+line['otherprice']"/>
+                                             <t t-set="s" t-value="s+line['discount']"/>
+                                            <t t-set="t" t-value="t+line['total']"/>
+                                    </tr>
+                                   
+                                </tbody>
+        
+                           <!--  </table> -->
+                        <!-- </div> -->
+                        
+                        <colgroup>
+                           <!-- <col width="5%"/>
+                            <col width="15%"/>
+                            <col width="15%"/>
+                            <col width="15%"/>
+                            <col width="10%"/>
+                            <col width="10%"/>
+                            <col width="10%"/>
+                            <col width="10%"/>
+                            <col width="10%"/>
+                            <col width="10%"/>
+                            <col width="15%"/>
+                            <col width="15%"/> -->
+                              <col width="5%"/>
+                                    <col width="15%"/>
+                                    <col width="15%"/>
+                                    <col width="15%"/>
+                                    <col width="10%"/>
+                                    <col width="10%"/>
+                                    <col width="10%"/>
+                                    <col width="10%"/>
+                                    <col width="10%"/>
+                                    <col width="15%"/>
+                                    <col width="10%"/>
+                                    <col width="15%"/>
+                                    <col width="15%"/>
+                            
+                            
+                        </colgroup>
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td style="font-weight: bold;text-align:center;">
+                                 <span t-esc="j"/>
+                                
+                            </td>
+                            <td style="font-weight: bold;text-align:right;">
+                                 <span t-esc="k"/>
+                            </td>
+                            <td style="font-weight: bold;text-align:right">
+                                 <span t-esc="l"/>
+                                
+                           
+                            </td>
+                            <td style="font-weight: bold;text-align:center">
+                                 <span t-esc="m"/>
+                                
+                            </td>
+                            <td style="font-weight: bold;text-align:center">
+                                 <span t-esc="n"/>
+                            </td>
+                             <td style="font-weight: bold;text-align:center">
+                                 <span t-esc="o"/>
+                                
+                            </td>
+                            <td style="font-weight: bold;text-align:center">
+                                 <span t-esc="p"/>
+                            </td>
+                             <td style="font-weight: bold;text-align:center">
+                                 <span t-esc="q"/>
+                                
+                            </td>
+                              <td style="font-weight: bold;text-align:center">
+                                 <span t-esc="r"/>
+                                
+                            </td>
+
+                        
+                              <td style="font-weight: bold;text-align:center">
+                                 <span t-esc="s"/>
+                                
+                            </td>
+                              <td style="font-weight: bold;text-align:center">
+                                 <span t-esc="t"/>
+                                
+                            </td>
+                        </tr>
+                        </table>
+                        
+                    </div>          
+
+                </div>
+
+                </div>
+            </t>
+        </t>
+</template>
+
+</odoo>

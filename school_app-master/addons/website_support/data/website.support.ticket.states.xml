@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="website_ticket_state_open" model="website.support.ticket.states">
+            <field name="name">New</field>
+            <field name="mail_template_id" ref="support_ticket_new"/>
+        </record>
+
+        <record id="website_ticket_state_staff_replied" model="website.support.ticket.states">
+            <field name="name">Staff Replied</field>
+        </record>
+
+        <record id="website_ticket_state_customer_replied" model="website.support.ticket.states">
+            <field name="name">Customer Replied</field>
+        </record>
+
+        <record id="website_ticket_state_approval_admitted" model="website.support.ticket.states">
+            <field name="name">Admitted </field>
+            <field name="mail_template_id" ref="support_ticket_admitted"/>
+        </record>
+
+        <record id="website_ticket_state_cancel" model="website.support.ticket.states">
+            <field name="name">Cancelled</field>
+        </record>
+        
+    </data>     
+</odoo>

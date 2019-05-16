@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="report_employee_new">
+		<t t-call="report.html_container">
+			<t t-foreach="docs" t-as="result">
+            	<t t-call="report.external_layout">
+			<!-- <t t-call="report.external_layout"> -->
+			<!-- <div class="header">
+				<div class="oe_structure"/>
+				<div class="row">
+					<t t-set="docs" t-as="doc">
+					<div class="col-xs-4" style="left">
+					   <img t-if="doc.company_id.logo" align="right" t-att-src="'data:image/png;base64,%s' % doc.company_id.logo" style="max-height: 75px; text-align: right;"/>
+					</div>
+					<div class="col-xs-8" style="right">
+						 <strong><span style="font-size:17px; font-weight: bold;" align="center" t-field="doc.company_id.partner_id"        t-field-options='{"widget": "contact", "fields": ["name"], "no_marker": true}'/></strong>
+						<div align="center">
+								<t t-if="doc.company_id.street"><span style="font-size:14px;" t-field="doc.company_id.street"/>,</t>
+								<t t-if="doc.company_id.city"><span style="font-size:14px;" t-field="doc.company_id.city"/>,</t>
+								<t t-if="doc.company_id.state_id"><span style="font-size:14px;" t-field="doc.company_id.state_id.name"/>,</t>
+								<t t-if="doc.company_id.country_id"><span style="font-size:14px;" t-field="doc.company_id.country_id.name"/></t>
+						</div>
+						<div align="center">
+						<span style="font-size:14px; text-align: center;"><strong>Tel: </strong><span  t-field="doc.company_id.phone"></span></span>              
+						<span style="font-size:14px; text-align: center;"><strong>Email: </strong><span  t-field="doc.company_id.email"></span></span></div>
+					</div> 
+					</t> 
+				</div>
+			</div> -->
+			<div class="page" style="font-size:14px;width:100%">
+				<div class="oe_structure"/>
+				<div class="row">  
+					<head> 
+						<style>
+							table {
+								font-family: Courier New, Times New Roman;
+								border-collapse: collapse;
+								width: 100%;
+							}
+
+							td, th {
+								border: 1px solid #000000;
+								text-align: center;
+								padding: 8px;
+							}
+						</style>
+					</head>
+					<body>
+						<h2 style="text-align:center">Complete Employee Details</h2>
+						<br/>
+						<table>
+							<tr style="background-color: #0e9e21;">
+								<th>Employee Code</th>
+								<th>Employee Name</th>
+								<th>Current Address</th>
+								<th>Permanent Address</th>
+								<th>DOB</th>
+								<th>Email</th>
+								<th>Nationality</th>
+								<th>NIC/Tazkira No</th>
+								<th>Passport No</th>
+								<th>Branch/Campus</th>
+								<th>Department</th>
+								<th>Position</th>
+								<th>Degree</th>
+								<th>Concentration</th>
+								<th>Salary</th>
+								<th>Appointment Date</th>
+							</tr>
+							<tr t-foreach="docs" t-as="doc">
+								<td>
+									<span t-if="doc.code" t-field="doc.code"/>
+								</td>
+								
+								<td> 
+									<span t-if="doc.name" t-field="doc.name"/>
+								</td>
+									
+								<td>
+									<span t-if="doc.address_id" t-field="doc.address_id"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.home_address" t-field="doc.home_address"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.birthday" t-field="doc.birthday"/>
+								</td>
+									
+								<td>
+									<span t-if="doc.email" t-field="doc.email"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.country_id" t-field="doc.country_id"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.identification_id" t-field="doc.identification_id"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.passport_id" t-field="doc.passport_id"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.school_id" t-field="doc.school_id"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.department_id" t-field="doc.department_id"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.job_id" t-field="doc.job_id"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.qualification_id" t-field="doc.qualification_id"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.subject" t-field="doc.subject"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.offered_salary" t-field="doc.offered_salary"/>
+								</td>
+								
+								<td>
+									<span t-if="doc.date_of_join" t-field="doc.date_of_join"/>
+								</td>
+							</tr>
+						</table>
+					</body>
+				</div>
+			</div>
+			</t>
+		</t>
+	</t>
+	</template>
+</odoo>
+
+							

@@ -1,0 +1,77 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+base.access_group_user1,ir_attachment group_user,base.model_ir_attachment,base.group_user_student,1,0,0,0
+base.access_group_user2,ir_exports group_system,base.model_ir_exports,base.group_user_student,1,0,0,0
+base.access_group_user3,ir_exports_line group_system,base.model_ir_exports_line,base.group_user_student,1,0,0,0
+base.access_group_user4,ir_model_data user,base.model_ir_model_data,base.group_user_student,1,0,0,0
+base.access_group_user5,ir_sequence group_user,base.model_ir_sequence,base.group_user_student,1,0,0,0
+base.access_group_user6,ir_sequence_date_range group_user,base.model_ir_sequence_date_range,base.group_user_student,1,0,0,0
+base.access_group_user7,ir_translation all,base.model_ir_translation,base.group_user_student,1,0,0,0
+base.access_group_user8,ir_ui_menu group_user,base.model_ir_ui_menu,base.group_user_student,1,0,0,0
+base.access_group_user9,res_groups group_user,base.model_res_groups,base.group_user_student,1,0,0,0
+base.access_group_user10,res_partner group_user,account.model_res_partner,base.group_user_student,1,0,0,0
+base.access_group_user11,res_partner_bank group_user,account.model_res_partner_bank,base.group_user_student,1,0,0,0
+base.access_group_user12,res_partner_category group_user,base.model_res_partner_category,base.group_user_student,1,0,0,0
+base.access_group_user13,res_bank user,base.model_res_bank,base.group_user_student,1,0,0,0
+base.access_group_user14,res_res_font group_user,base.model_res_font,base.group_user_student,1,0,0,0
+base.access_group_user15,planner.planner.emp,account.model_web_planner,base.group_user_student,1,0,0,0
+base.access_group_user16,resource.resource all,resource.model_resource_resource,base.group_user_student,1,0,0,0
+base.access_group_user17,resource.calendar.leaves,hr_holidays.model_resource_calendar_leaves,base.group_user_student,1,0,0,0
+base.access_group_user18,bus.presence,bus.model_bus_presence,base.group_user_student,1,0,0,0
+base.access_group_user19,mail.message.user,bi_hr.model_mail_message,base.group_user_student,1,0,0,0
+base.access_group_user20,mail.mail.user,fetchmail.model_mail_mail,base.group_user_student,1,0,0,0
+base.access_group_user21,mail.followers.user,mail.model_mail_followers,base.group_user_student,1,0,0,0
+base.access_group_user22,mail.notification.user,mail.model_mail_notification,base.group_user_student,1,0,0,0
+base.access_group_user23,mail.group.user,mail.model_mail_channel,base.group_user_student,1,0,0,0
+base.access_group_user24,mail.channel.partner.user,mail.model_mail_channel_partner,base.group_user_student,1,0,0,0
+base.access_group_user25,mail.alias.user,hr.model_mail_alias,base.group_user_student,1,0,0,0
+base.access_group_user26,mail.message.subtype.user,mail.model_mail_message_subtype,base.group_user_student,1,0,0,0
+base.access_group_user27,mail.tracking.value.user,mail.model_mail_tracking_value,base.group_user_student,1,0,0,0
+base.access_group_user29,mail.shortcode,mail.model_mail_shortcode,base.group_user_student,1,0,0,0
+base.access_group_user30,mail.test.all,mail.model_mail_test,base.group_user_student,1,0,0,0
+base.access_group_user34,product.uom.categ.user,product.model_product_uom_categ,base.group_user_student,1,0,0,0
+base.access_group_user35,product.uom.user,product.model_product_uom,base.group_user_student,1,0,0,0
+base.access_group_user36,product.category.user,account.model_product_category,base.group_user_student,1,0,0,0
+base.access_group_user37,product.template.user,account.model_product_template,base.group_user_student,1,0,0,0
+base.access_group_user38,product.packaging.user,product.model_product_packaging,base.group_user_student,1,0,0,0
+base.access_group_user39,product.supplierinfo.user,product.model_product_supplierinfo,base.group_user_student,1,0,0,0
+base.access_group_user40,product.pricelist.user,product.model_product_pricelist,base.group_user_student,1,0,0,0
+base.access_group_user41,product.pricelist.item.user,product.model_product_pricelist_item,base.group_user_student,1,0,0,0
+base.access_group_user42,product.product employee,account.model_product_product,base.group_user_student,1,0,0,0
+base.access_group_user43,prices.history employee,product.model_product_price_history,base.group_user_student,1,0,0,0
+base.access_group_user44,product.attribute,product.model_product_attribute,base.group_user_student,1,0,0,0
+base.access_group_user45,product.attribute value,product.model_product_attribute_value,base.group_user_student,1,0,0,0
+base.access_group_user46,product.attribute price,product.model_product_attribute_price,base.group_user_student,1,0,0,0
+base.access_group_user47,product.attribute line,product.model_product_attribute_line,base.group_user_student,1,0,0,0
+base.access_group_user48,account.tax internal user,account.model_account_tax,base.group_user_student,1,0,0,0
+base.access_group_user49,account.account user,account.model_account_account,base.group_user_student,1,0,0,0
+base.access_group_user50,account.analytic.account,account_budget.model_account_analytic_account,base.group_user_student,1,0,0,0
+base.access_group_user51,account.invoice.line user,account.model_account_invoice_line,base.group_user_student,1,0,0,0
+base.access_group_user52,account.payment.term partner manager,account.model_account_payment_term,base.group_user_student,1,0,0,0
+base.access_group_user53,account.payment.term.line partner manager,account.model_account_payment_term_line,base.group_user_student,1,0,0,0
+base.access_group_user54,account.fiscal.position all,account.model_account_fiscal_position,base.group_user_student,1,0,0,0
+base.access_group_user55,account.fiscal.position.tax all,account.model_account_fiscal_position_tax,base.group_user_student,1,0,0,0
+base.access_group_user56,account.fiscal.position all,account.model_account_fiscal_position_account,base.group_user_student,1,0,0,0
+base.access_group_user57,account.tax.group internal user,account.model_account_tax_group,base.group_user_student,1,0,0,0
+base.access_group_user58,procurement.order,procurement.model_procurement_order,base.group_user_student,1,0,0,0
+base.access_group_user59,procurement.group,procurement.model_procurement_group,base.group_user_student,1,0,0,0
+base.access_group_user60,procurement.rule,procurement.model_procurement_rule,base.group_user_student,1,0,0,0
+base.access_group_user61,payment.acquirer.user,payment.model_payment_acquirer,base.group_user_student,1,0,0,0
+base.access_group_user62,payment.transaction.user,payment.model_payment_transaction,base.group_user_student,1,0,0,0
+base.access_group_user63,payment.token.user,payment.model_payment_token,base.group_user_student,1,0,0,0
+base.access_group_user64,access_utm_campaign_user,utm.model_utm_campaign,base.group_user_student,1,0,0,0
+base.access_group_user65,access_utm_medium_user,utm.model_utm_medium,base.group_user_student,1,0,0,0
+base.access_group_user66,access_utm_source_user,utm.model_utm_source,base.group_user_student,1,0,0,0
+base.access_group_user67,barcode.nomenclature.user,barcodes.model_barcode_nomenclature,base.group_user_student,1,0,0,0
+base.access_group_user68,barcode.rule.user,barcodes.model_barcode_rule,base.group_user_student,1,0,0,0
+base.access_group_user69,crm.team,sale.model_crm_team,base.group_user_student,1,0,0,0
+base.access_group_user70,calendar.attendee_employee,calendar.model_calendar_attendee,base.group_user_student,1,0,0,0
+base.access_group_user71,calendar.alarm,calendar.model_calendar_alarm,base.group_user_student,1,0,0,0
+base.access_group_user72,calendar.event_all_employee,calendar.model_calendar_event,base.group_user_student,1,0,0,0
+base.access_group_user73,calendar.event.type.all,calendar.model_calendar_event_type,base.group_user_student,1,0,0,0
+base.access_group_user74,access_calendar_alarm_manager,calendar.model_calendar_alarm_manager,base.group_user_student,1,0,0,0
+base.access_group_user75,access_calendar_contacts_all,calendar.model_calendar_contacts,base.group_user_student,1,0,0,0
+base.access_group_user80,hr.holidays.employee,bi_hr.model_hr_holidays,base.group_user_student,1,0,0,0
+base.access_group_user81,hr.holidays.status employee,bi_hr.model_hr_holidays_status,base.group_user_student,1,0,0,0
+base.access_group_user82,account.account.analytic.line employee,account.model_account_analytic_line,base.group_user_student,1,0,0,0
+base.access_group_user83,school.teacher,school.model_school_teacher,base.group_user_student,1,0,0,0
+base.access_group_user84,school.school,school.model_school_school,base.group_user_student,1,0,0,0

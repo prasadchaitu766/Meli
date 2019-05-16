@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_notification_msg_admin,bi.notification.msg,model_bi_notification_msg,school.group_school_administration,1,1,1,1
+access_notification_msg_school_student,bi.notification.msg,model_bi_notification_msg,school.group_school_student,1,1,1,1
+access_notification_msg_school_teacher,bi.notification.msg,model_bi_notification_msg,school.group_school_teacher,1,1,1,1
+access_notification_msg_screen,bi.notification.msg,model_bi_notification_msg,school.module_category_tv_user,1,1,1,1

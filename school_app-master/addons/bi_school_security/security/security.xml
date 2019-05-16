@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ 	<record id="school.group_school_academic_director" model="res.groups">
+        <field name="name">Academic Director</field>
+        <field name="category_id" ref="school.module_category_main_campus"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('school.group_school_administration')), (4, ref('bi_material_request_form.group_approve')),(4, ref('hr_expense.group_hr_expense_manager')),(4, ref('bi_employee_advance.group_approved_user')),(4, ref('hr_resignation.group_resignation_user')),(4, ref('hr_loan.group_loan_user')),(4,ref('exam_test_quiz.exam_master')),(4,ref('bi_queue_management.group_counter_manager')),(4,ref('bi_queue_management.group_queue_manager')),(4, ref('hr_holidays.group_hr_holidays_manager'))]"/>
+    </record>
+    <record id="school.group_school_attendance_officer" model="res.groups">
+        <field name="name">Attendance Officer</field>
+        <field name="category_id" ref="school.module_category_main_campus"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+         <field name="implied_ids" eval="[(4, ref('base.group_user')),(4,ref('bi_material_request_form.group_location')),(4,ref('bi_material_request_form.group_mat_user'))]"/>
+    </record>
+     <record id="school.group_school_academic_officer" model="res.groups">
+        <field name="name">Academic Officer</field>
+        <field name="category_id" ref="school.module_category_main_campus"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')),(4,ref('bi_material_request_form.group_mat_user'))]"/>
+    </record>
+    <record id="school.group_school_finance_officer" model="res.groups">
+        <field name="name">Finance Officer</field>
+        <field name="category_id" ref="school.module_category_main_campus"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')),(4, ref('purchase.group_purchase_manager')),(4, ref('sales_team.group_sale_manager')),(4,ref('account.group_account_invoice')),(4,ref('bi_material_request_form.group_mat_user')), (4,ref('bi_queue_management.group_counter_manager'))]"/>
+    </record>
+    <record id="school.group_school_finance_admin" model="res.groups">
+        <field name="name">Finance Admin</field>
+        <field name="category_id" ref="school.module_category_finance"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_manager')), (4, ref('purchase.group_purchase_manager')),(4, ref('account.group_account_manager')),(4, ref('bi_employee_advance.group_approved_user')),(4, ref('hr_expense.group_hr_expense_manager')),(4, ref('hr_payroll.group_hr_payroll_manager')),(4, ref('hr.group_hr_manager')),(4, ref('bi_material_request_form.group_approve')),(4, ref('hr_resignation.group_resignation_user')),(4, ref('hr_loan.group_loan_user')),(4, ref('hr_holidays.group_hr_holidays_manager'))]"/>
+    </record>
+    <record id="school.group_school_finance_assistant" model="res.groups">
+        <field name="name">Finance Assistant</field>
+        <field name="category_id" ref="school.module_category_finance"/>
+        <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_manager')), (4, ref('purchase.group_purchase_manager')),(4, ref('account.group_account_user')),(4, ref('hr_expense.group_hr_expense_manager')),(4,ref('bi_material_request_form.group_mat_user')),(4, ref('stock.group_stock_user'))]"/>
+    </record>
+    <record id="school.group_school_inventory" model="res.groups">
+        <field name="name">Inventory Officer</field>
+        <field name="category_id" ref="school.module_category_inventory_1"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('stock.group_stock_manager')),(4, ref('base.group_user')),(4, ref('bi_material_request_form.group_location')),(4,ref('project.group_project_manager')),(4, ref('bi_material_request_form.group_approve')),(4, ref('bi_material_request_form.group_transfer')),]"/>
+    </record>
+	<record id="school.group_school_operation_manger" model="res.groups">
+        <field name="name">Operation Manager</field>
+        <field name="category_id" ref="school.module_category_operation"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('bi_material_request_form.group_approve')),(4, ref('hr_expense.group_hr_expense_manager')),(4, ref('hr_holidays.group_hr_holidays_manager')),(4, ref('bi_employee_advance.group_approved_user')),(4, ref('hr_resignation.group_resignation_user')),(4, ref('hr_loan.group_loan_user')),(4,ref('project.group_project_manager'))]"/>
+    </record>
+    <record id="school.module_category_purchase_user" model="res.groups">
+        <field name="name">Procurement Officer</field>
+        <field name="category_id" ref="school.module_category_purchase"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_manager')),(4, ref('base.group_user')),(4, ref('bi_material_request_form.group_approve')),(4,ref('bi_material_request_form.group_mat_user')),(4,ref('project.group_project_manager'))]"/>
+    </record>
+    <record id="school.module_category_it_manager" model="res.groups">
+        <field name="name">IT Manager</field>
+        <field name="category_id" ref="school.module_category_it"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('hr_expense.group_hr_expense_manager')),(4, ref('bi_material_request_form.group_approve')),(4, ref('bi_employee_advance.group_approved_user')),(4, ref('hr_holidays.group_hr_holidays_manager')),(4, ref('hr_resignation.group_resignation_user')),(4, ref('hr_loan.group_loan_user')),(4,ref('project.group_project_manager'))]"/>
+    </record>
+    <record id="school.module_category_it_assistant" model="res.groups">
+        <field name="name">IT Assistant</field>
+        <field name="category_id" ref="school.module_category_it"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')),(4,ref('bi_material_request_form.group_mat_user')),(4,ref('project.group_project_manager'))]"/>
+    </record>
+  	<record id="school.module_category_hr_manager" model="res.groups">
+        <field name="name">HR Admin</field>
+        <field name="category_id" ref="school.module_category_hr"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('hr_expense.group_hr_expense_manager')),(4, ref('bi_material_request_form.group_approve')),(4, ref('bi_employee_advance.group_approved_user')),(4, ref('hr_holidays.group_hr_holidays_manager')),(4, ref('hr.group_hr_manager')),(4, ref('hr_payroll.group_hr_payroll_manager')),(4, ref('hr_resignation.group_resignation_user')),(4, ref('hr_loan.group_loan_user')),(4, ref('hr_recruitment.group_hr_recruitment_manager')),(4, ref('oh_appraisal.group_appraisal_manager')),(4,ref('hr_attendance.group_hr_attendance_manager')),(4,ref('project.group_project_manager')),(4,ref('bi_hr.group_gratuity_manager')),(4,ref('stock.group_stock_user'))]"/>
+    </record>
+    <record id="school.module_category_hr_assistant" model="res.groups">
+        <field name="name">HR Assistant</field>
+        <field name="category_id" ref="school.module_category_hr"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')),(4,ref('hr_holidays.group_hr_holidays_user')),(4,ref('bi_material_request_form.group_mat_user')),(4,ref('bi_employee_advance.group_approved_user')),(4,ref('hr_attendance.group_hr_attendance_user')),(4,ref('project.group_project_user'))]"/>
+    </record>
+    <record id="school.module_category_vc_user" model="res.groups">
+        <field name="name">VC</field>
+        <field name="category_id" ref="school.module_category_vc"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('school.group_school_administration')),(4, ref('hr_holidays.group_hr_holidays_manager')),(4, ref('hr_expense.group_hr_expense_manager')),(4, ref('bi_material_request_form.group_approve')),(4, ref('hr_resignation.group_resignation_user')),(4, ref('hr_loan.group_loan_user')),(4,ref('exam_test_quiz.exam_master')),(4,ref('hr_attendance.group_hr_attendance_manager')),(4,ref('school.group_school_academic_director')),(4,ref('project.group_project_manager'))]"/>
+    </record>
+     <record id="student_exam_eligible_rule_director" model="ir.rule">
+            <field name="name">Student Request Record Rule</field>
+            <field name="model_id" ref="school.model_exam_eligible"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('student_name_id.school_id','=',False),('student_name_id.school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('school.group_school_academic_director'))]"/>
+       </record>
+    <record id="school.group_school_registrar_officer" model="res.groups">
+        <field name="name">Registrar Officer</field>
+        <field name="category_id" ref="school.module_category_main_campus"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user')),(4, ref('website_support.group_enquiry_user')),(4,ref('bi_material_request_form.group_mat_user')),(4,ref('bi_queue_management.group_counter_manager'))]"/>
+    </record>
+    <record id="hr_resignation_personal_rule" model="ir.rule">
+        <field name="name">Employee Resignation</field>
+        <field ref="hr_resignation.model_hr_resignation" name="model_id"/>
+        <field name="domain_force">['|',('employee_id.user_id','=',user.id),('employee_id.user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('school.module_category_hr_personal_rule'))]"/>
+    </record>
+    <record id="hr_advance_personal_rule" model="ir.rule">
+        <field name="name">Employee Advance</field>
+        <field ref="bi_employee_advance.model_bi_employee_salary" name="model_id"/>
+        <field name="domain_force">['|',('employee_id.user_id','=',user.id),('employee_id.user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('school.module_category_hr_personal_rule'))]"/>
+    </record>
+    <record id="hr_loan_personal_rule" model="ir.rule">
+        <field name="name">Employee Loan</field>
+        <field ref="hr_loan.model_hr_loan" name="model_id"/>
+        <field name="domain_force">['|',('employee_id.user_id','=',user.id),('employee_id.user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('school.module_category_hr_personal_rule'))]"/>
+    </record>
+    <record id="base.group_user_student" model="res.groups">
+        <field name="name">Student User</field>
+        <field name="category_id" ref="school.module_category_main_campus"/>
+<!--          <field name="implied_ids" eval="[(4, ref('school.group_school_student'))]"/>
+ -->    </record>
+</odoo>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+        <menuitem
+            id="hr.menu_hr_root"
+            name="HR"           
+            sequence="20"
+            groups="hr.group_hr_user,hr.group_hr_manager,base.group_user"/>
+
+        <menuitem
+            name="Recruitment"
+            id="hr_recruitment.menu_hr_recruitment_root"
+            parent="hr.menu_hr_root"
+            groups="hr_recruitment.group_hr_recruitment_user"
+            sequence="0"
+            />	
+
+        <menuitem
+            id="hr_employee_menu_main"
+            name="Employees"
+            parent="hr.menu_hr_root"
+            sequence="1"
+            />
+
+        <menuitem
+            id="hr_contract.hr_menu_contract"
+            name="Employee Contracts"
+            action="hr_contract.action_hr_contract"
+            parent="hr_employee_menu_main"
+            sequence="4"
+            groups="hr.group_hr_manager"/>
+
+        <menuitem
+            id="hr.menu_open_view_employee_list_my"
+            name="Active Employees"
+            action="open_view_employee_list_my_1"
+            parent="hr_employee_menu_main"
+            sequence="1"
+            />     
+
+        <menuitem
+            id="menu_deactive_employee_list"
+            name="Deactive Employees"
+            parent="hr_employee_menu_main"
+            action="open_view_employee_list_my_2"
+            sequence="2"
+            />
+<!-- 
+        <menuitem 
+            name="Loans"
+            id="hr_loan.menu_hr_loans"
+            parent="hr.menu_hr_root"
+            sequence="3"/> -->
+
+        <menuitem
+            id="bi_menu_employee_main"
+            name="Advanced Salary"
+            parent="hr.menu_hr_root"
+            sequence="4"
+            />
+
+        <menuitem 
+         	id="hr_attendance.menu_hr_attendance_root" 
+         	name="Attendances" 
+         	parent="hr.menu_hr_root"
+         	groups="hr.group_hr_attendance" 
+         	sequence="15" 
+         	/>
+
+        <menuitem
+            name="Leaves"
+            id="hr_holidays.menu_hr_holidays_root" 
+            parent="hr.menu_hr_root"
+            groups="base.group_user"
+            sequence="20"
+            />
+
+        <menuitem
+            name="Requests"
+            id="hr_requests_menu_main" 
+            parent="hr.menu_hr_root"
+            sequence="56"
+            />
+
+        <menuitem
+            name="Approve"
+            id="hr_approve_menu_main" 
+            parent="hr.menu_hr_root"
+            sequence="57"
+            />
+
+        <menuitem
+            id="hr_holidays.menu_hr_holidays_approvals"
+            name="Leaves to Approve"
+            parent="hr_approve_menu_main"
+            sequence="3"
+            groups="hr_holidays.group_hr_holidays_manager,hr_holidays.group_hr_holidays_user"/>
+
+
+        <menuitem id="hr_recruitment.menu_hr_recruitment_configuration" name="Recruitment Configuration" parent="hr.menu_human_resources_configuration" sequence="100"/>
+            
+        <menuitem id="hr_attendance.menu_hr_attendance_settings" name="Attendance Configuration" parent="hr.menu_human_resources_configuration"/>
+
+        <menuitem
+            id="hr_holidays.menu_hr_holidays_configuration"
+            name="Leaves Configuration"
+            parent="hr.menu_human_resources_configuration"
+            sequence="100"
+            groups="hr_holidays.group_hr_holidays_manager"
+            action="hr_holidays.open_view_holiday_status"/>
+
+        <menuitem 
+            id="menu_staff_transfer_request" 
+            name="Employee Transfer Request" 
+            parent="bi_hr.hr_employee_menu_main" 
+            action="school.action_staff_transfer_request_form" 
+            sequence="3"
+            groups="school.module_category_hr_manager"/>
+
+        <menuitem name="Recruitment Reports" id="hr_recruitment.report_hr_recruitment" parent="hr.menu_hr_reporting_timesheet" sequence="99" action="hr_recruitment.action_hr_recruitment_report_all"/>
+        <menuitem id="hr_attendance.menu_hr_attendance_report" name="Attendance Reports" parent="hr.menu_hr_reporting_timesheet" sequence="30" groups="hr_attendance.group_hr_attendance_user" action="hr_attendance.hr_attendance_action_graph"/>
+        <menuitem
+            id="hr_holidays.menu_hr_holidays_report"
+            name="Leave Reports"
+            parent="hr.menu_hr_reporting_timesheet"
+            sequence="99"
+            groups="hr_holidays.group_hr_holidays_manager,hr_holidays.group_hr_holidays_user"/>
+        <menuitem 
+            id="hr_attendance.menu_hr_attendance_view_employees_kanban" 
+            name="Employees" 
+            parent="hr_attendance.menu_hr_attendance_manage_attendances" 
+            sequence="15" 
+            groups="school.group_invisible" 
+            action="hr.open_view_employee_list_my"/>
+        
+	</data>
+</odoo>

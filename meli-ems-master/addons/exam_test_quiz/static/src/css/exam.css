@@ -1,0 +1,14 @@
+@media print {
+    .js_examform {
+        font-size: 13px;
+    }
+    .js_examform textarea.form-control {
+        height: 10em;
+    }
+    .js_examform h1 {
+        font-size: 28px;
+    }
+    .js_examform h2 {
+        font-size: 20px;
+    }
+}

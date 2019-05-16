@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+		<record id="view_ctc_form" model="ir.ui.view">
+			<field name="name">bi.ctc.form</field>
+			<field name="model">bi.ctc</field>
+			<field name="arch" type="xml">
+				<form string="Employee">
+					<sheet>                      
+						<group>
+							<group>
+								<field name="employee_id"/>  
+								<field name="school_id"/>
+							</group>
+							<group>                             
+								<field name="date_from"/>                           
+								<field name="date_to"/>                            
+							</group>
+							<footer>
+								<button name="show_ctc" string="Show CTC" type="object" class="oe_highlight"/>	
+							</footer>
+						</group>  
+						<notebook>
+								<page string="CTC">
+								<field name="line_ids">
+									<tree string="CTC" edit="false" create="false">
+										<field name="name"/>
+										<field name="net" sum="net"/>
+										<field name="epf" sum="epf"/>
+										<field name="esi" sum="esi"/>
+										<field name="ctc" sum="ctc"/>
+									</tree>
+								</field>
+								</page>
+						</notebook>
+						<!--  <group class="oe_subtotal_footer oe_right" colspan="2" name="Total">
+							<field name="sum_ctc" class="oe_subtotal_footer_separator" widget="monetary"/>
+						</group> -->
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		
+	 <record model="ir.actions.act_window" id="action_ctc">
+      <field name="name">CTC Details</field>
+      <field name="res_model">bi.ctc</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+      </record> 
+
+		<menuitem name="CTC Calculation" id="details_ctc" parent="hr_payroll.menu_hr_payroll_root" action="action_ctc"/>
+
+
+</odoo>

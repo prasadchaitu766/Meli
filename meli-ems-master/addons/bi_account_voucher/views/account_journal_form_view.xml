@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- FORM VIEW --> 
+    <data>
+        <record id="account_journal_form" model="ir.ui.view">
+            <field name="name">account.journal.form</field>
+            <field name="model">account.petty.journal.cash</field>
+            <field name="arch" type="xml">
+                <form string="Account Entry">
+                    <header>
+                        <button name="initialize_fund" type="object" string="Create Fund" class="oe_highlight" attrs="{'invisible': [('state','in',('posted'))]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                    </header>
+                    <sheet>    
+                        <group>
+                            <group>
+                             
+                                <field name="custodian_id"/>
+                                <field name="school_id" required="1"/>
+                                <field name="journal_id"/>
+                                <field name="close_balance"/>
+
+                            </group>
+                            <group>
+                                <field name="date"/>
+                                <field name="fund_amount"/>
+                                <field name="account_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="journal_ref" attrs="{'invisible':[('state','!=','posted')]}"/> 
+                            
+                            </group>
+                        </group>
+                                <field name="payment_ids"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+         <!-- TREE VIEW --> 
+
+        <record id="account_petty_cash_journal_tree" model="ir.ui.view">
+            <field name="name">Petty Cash journal Tree View new</field>
+            <field name="model">account.petty.journal.cash</field>
+            <field name="arch" type="xml">
+                <tree string="Petty Cash Fund" >
+              
+                    <field name="date"/>
+                    <field name="custodian_id"/>
+                    <field name="journal_id"/>
+                    <field name="fund_amount" sum="Total"/>
+                    <field name="close_balance"/>
+                    <field name="state"/>   
+                </tree>
+            </field>
+        </record>
+        
+
+
+        <record id="action_account_petty_cash_journal_mgmt_new" model="ir.actions.act_window">
+            <field name="name">Petty Cash Journal Management</field>
+            <field name="res_model">account.petty.journal.cash</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="account_petty_cash_journal_tree"/>
+        </record>
+
+       
+        <menuitem id="menu_finance_petty_sub_journal" name="Petty Cash Box" parent="menu_finance_petty" action="action_account_petty_cash_journal_mgmt_new"  groups="account.group_account_manager"/>      
+   
+    </data>
+</odoo>

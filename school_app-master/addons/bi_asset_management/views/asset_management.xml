@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add "Asset Category" to supplier invoices -->
+    <record model="ir.ui.view" id="inherit_account_invoice">
+        <field name="name">account.account.invoice</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="after">
+                <field name="split"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="inherit_asset_management">
+        <field name="name">account.asset.asset.inherit</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/div[@name='button_box']" position="inside">
+                    <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                        <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                    </button>
+            </xpath>
+            <label for="name" position="before" >  
+                <div class="oe_title">
+                    <label for="seq" class="oe_edit_only"/>
+                    <h1>
+                        <field name="seq"/>
+                    </h1>
+                </div>               
+            </label>
+            <field name="category_id" position="before" >  
+                    <field name="serial_no"/>
+                    <field name="employee_id" domain="[('state', '=', 'draft')]"/>
+                    <field name="custodian"/>
+                    <field name="school_id"/>
+            </field>
+            <field name="value" position="replace">
+                    <field name="value" groups="stock.group_stock_manager" widget="monetary" options="{'currency_field': 'currency_id'}" help="Gross value of asset"/>
+            </field>
+            <field name="salvage_value" position="replace">
+                    <field name="salvage_value" groups="stock.group_stock_manager" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible': [('type','=','sale')]}"/>
+            </field>
+            <field name="value_residual" position="replace">
+                    <field name="value_residual" groups="stock.group_stock_manager" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+
+            </field>
+            <field name="partner_id" position="replace">
+                    <field name="partner_id" domain="[('supplier', '=', True)]" groups="stock.group_stock_manager"/>
+            </field>
+            <field name="invoice_id" position="replace">
+                    <field name="invoice_id" groups="stock.group_stock_manager" options="{'no_create': True}"/>
+            </field>
+            <xpath expr="//page[1]" position="replace">
+                <page string="Depreciation Board" groups="stock.group_stock_manager">
+                    <field name="depreciation_line_ids" mode="tree" options="{'reload_whole_on_button': true}" groups="stock.group_stock_manager">
+                            <tree string="Depreciation Lines" decoration-info="(move_check == False)" create="false">
+                                <field name="depreciation_date"/>
+                                <field name="depreciated_value" readonly="1"/>
+                                <field name="amount" widget="monetary" string="Depreciation"/>
+                                <field name="remaining_value" readonly="1" widget="monetary" string="Residual"/>
+                                <field name="move_check" invisible="1"/>
+                                <field name="move_posted_check" invisible="1"/>
+                                <field name="parent_state" invisible="1"/>
+                                <button name="create_move" type="object" widget="widgetonbutton"/>
+                            </tree>
+                            <form string="Depreciation Lines"> 
+                                <group>
+                                    <group>
+                                        <field name="parent_state" invisible="1"/>
+                                        <field name="name"/>
+                                        <field name="sequence"/>
+                                        <field name="move_id"/>
+                                        <field name="move_check"/>
+                                        <!-- <field name="school_id" invisible="1"/> -->
+                                        <field name="parent_state" invisible="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="amount" widget="monetary"/>
+                                        <field name="depreciation_date"/>
+                                        <field name="depreciated_value"/>
+                                        <field name="remaining_value"/>
+                                    </group>
+                                </group>
+                            </form>
+                    </field>
+                </page>    
+            </xpath>
+            <xpath expr="//page[2]" position="replace">
+                <page string="Depreciation Information" groups="stock.group_stock_manager">
+                    <group>
+                        <field name="method" widget="radio" attrs="{'invisible': [('type','=','sale')]}"/>
+                        <field name="method_progress_factor" attrs="{'invisible':[('method','=','linear')], 'required':[('method','=','degressive')]}"/>
+                        <field name="method_time" string="Time Method Based On" widget="radio" attrs="{'invisible': [('type','!=','purchase')]}"/>
+                        <field name="prorata" attrs="{'invisible': [('method_time','=','end')]}"/>
+                    </group>
+                    <group>
+                        <field name="method_number" attrs="{'invisible':[('method_time','=','end')], 'required':[('method_time','=','number')]}"/>
+                        <field name="method_period"/>
+                        <field name="method_end" attrs="{'required': [('method_time','=','end')], 'invisible':[('method_time','=','number')]}"/>
+                    </group>
+                </page>
+            </xpath>                                
+        </field>
+    </record>
+
+
+
+    <record model="ir.ui.view" id="inherit_view_account_asset_search">
+        <field name="name">account.asset.search.inherit</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_search"/>
+        <field name="arch" type="xml">
+            <search string="Asset Account">
+                <field name="employee_id" string="Employee"/>
+                <field name="school_id" string="Campus"/>
+                <field name="custodian" string="Custodian"/>
+                <group expand="0" string="Group By...">
+                        <filter string="Employee" domain="[]" context="{'group_by':'employee_id'}"/>
+                        <filter string="Campus" domain="[]" context="{'group_by':'school_id'}"/>
+                        <filter string="Custodian" domain="[]" context="{'group_by':'custodian'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="inherit_product_template">
+        <field name="name">product.template.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='list_price']" position="after">
+                <field name="asset"/>
+            
+            </xpath>
+        </field>
+    </record>
+   <!--  <record model="ir.ui.view" id="inherit_product_template_form_view_procurement_button">
+            <field name="name">product.template_procurement.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+
+                 <xpath expr="//button[@string='Update Qty On Hand']" position="attributes">            
+        <attribute name="invisible">1</attribute>        
+    </xpath> 
+     <xpath expr="//button[@string='Procurement Request']" position="attributes">            
+        <attribute name="invisible">1</attribute>        
+    </xpath> -->
+               <!--  <data>
+                    <header position="inside" >
+                        <button name="%(action_view_change_product_quantity)d" string="Update Qty On Hand" type="action" attrs="{'invisible': [('type', '!=', 'product')]}"/>
+                        <button string="Procurement Request" name="%(stock.act_make_procurement)d" type="action" attrs="{'invisible': [('type', '!=', 'product')]}"/>
+                    </header>
+ -->
+  <record id="product_template_view_form_procurement_button_inherit" model="ir.ui.view">
+            <field name="name">product.template.stock.stat.button.group</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='%(stock.action_view_change_product_quantity)d']" position="replace">
+                  <button name="%(stock.action_view_change_product_quantity)d" string="Update Qty On Hand" type="action" attrs="{'invisible': [('type', '!=', 'product')]}" invisible="1"/>
+                </xpath>
+            <xpath expr="//button[@name='%(stock.act_make_procurement)d']" position="replace">
+                <button name="%(stock.act_make_procurement)d" string="Procurement Request" type="action" attrs="{'invisible': [('type', '!=', 'product')]}" invisible="1"/>
+            </xpath>
+            </field>
+        </record>
+
+        <record id="product_template_kanban_view_inherit" model="ir.ui.view">
+        <field name="name">Product.template.product.kanban</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_kanban_view"/>
+        <field name="arch" type="xml">
+           
+
+            <xpath expr="//t[@t-name='kanban-box']//field[@name='lst_price']" position="after">
+                <ul>
+                    <li>Cost Price: <field name="standard_price" widget="monetary"></field></li>
+                </ul>
+            </xpath>  
+        </field>
+    </record>
+  
+</odoo>
+
+
+
+
+
+    

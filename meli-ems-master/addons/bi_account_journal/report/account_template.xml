@@ -1,0 +1,958 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_multi_receipt_voucher_new">
+<!-- 			 <t t-call="report.external_layout">
+ -->				
+
+ 					<template id="report_header_custom_one" inherit_id="report.external_layout_header">
+                <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+                <xpath expr="//div[@class='header']" position="replace">
+                <div class="header">
+                <div class="row">
+                        <br/>
+                        <div class="col-xs-6">
+                            <p><strong> <span style="left;font-size:25px;" t-field="company.name"/></strong></p>
+                            <div style="left;font-size:15px;line-height:9pt;">
+                                <p>TRN: <span t-field="company.vat"/></p>
+                                <p><span t-field="company.partner_id.street"/></p>
+                                <p><span t-field="company.partner_id.street2"/></p>
+                                <p><span t-field="company.partner_id.city"/></p>
+                                <p><span t-field="company.partner_id.state_id.name"/>,<span t-field="company.partner_id.country_id.name"/>,Tel:<span t-field="company.partner_id.phone"/></p>
+<!--                                 <p><span t-field="company.partner_id.country_id.name"/></p>
+ -->                                <!-- <p>Tel <span t-field="company.partner_id.phone"/></p> -->
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6" style="right">
+                            <div>
+                             <img t-if="company.logo" align="right" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 60px;"/>   
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                                          
+        
+<!--       					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+ -->  					</div>
+  				</div>
+  			</xpath>
+  		</template>
+ 					<div class="page" style="border: 1px solid black;font-size:15px;padding:10px;">
+						
+						<div class="oe_structure"/>
+						<div class="row">
+								 <p class="account_payment_report" align="center" style="font-size:25px"><b>RECEIPT VOUCHER</b>
+								</p>        
+						 <br/><br/>                
+						</div>
+							<!-- <div class="col-xs-6"> -->
+										<div>
+												<p  align="left"><strong>No:</strong> <span t-field="doc.name"></span></p>
+
+												
+												<div class="col-xs-6" style="margin-left:-15px">
+													<p  align="left"><strong>Date:</strong> <span t-field="doc.receipt_date"  t-field-options='{"format": "d/MM/y"}'></span></p>
+													<p  align="left"><strong>Status: </strong>Paid</p>
+												</div>
+												<div class="col-xs-6" style="margin-left:15px">
+													<p>
+														<span t-if="doc.bank_type == 'cheque'"><strong>Cheque Number:</strong></span>
+										                <span t-field="doc.cheque_no"/>
+									                </p>
+													<span t-if="doc.bank_type == 'cheque'"><strong>Cheque Date:</strong></span>
+									                <span t-field="doc.Cheque_date"/>
+												</div>
+										</div>
+
+						<!--   </div> -->
+				 
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+						<thead>            
+								          
+								 <th style="text-align:left;line: 1px solid black;">Sr#</th> 
+								 <th style="text-align:left;line: 1px solid black;">Account</th>
+								 <th style="text-align:left;line: 1px solid black;">Description</th>
+								 <th style="text-align:right;line: 1px solid black;">Debit</th>
+								 <th style="text-align:right;line: 1px solid black;">Credit</th>
+								                                        
+						</thead>
+					<t t-set="i" t-value="1"/>
+					<tbody class="account_tbody" style="border: 1px solid black;">
+					 
+					 <tr t-foreach="doc.move_id.line_ids" t-as="l">
+
+					 	<td>
+					 		
+							<span t-esc="i"/>
+							<t t-set="i" t-value="i+1"/>
+							
+						</td>
+							<td style="text-align:left;line: 1px solid black;">
+								<span t-field="l.account_id.name"/>-<span t-field="l.account_id.code"/><br/>
+							</td>
+							<td style="text-align:left;line: 1px solid black;">
+						    	<span t-if="l.name"> 
+									<span t-field="l.name"/>,<br/>
+								</span>
+								<span t-if="l.analytic_account_id"> 
+									<span t-field="l.analytic_account_id"/><br/>
+								</span>
+							</td>
+
+							<td style="text-align:right;line: 1px solid black;">
+							<span  t-field="l.debit"/>
+						</td>
+
+							<td style="text-align:right;line: 1px solid black;">
+								<span  t-field="l.credit"/>
+							</td>
+						</tr>
+
+						<!-- <tr>
+
+							<td align="right" ><strong></strong> <span style="font-weight:bold;line: 1px solid black;"/></td>
+							<td align="right" ><strong></strong> <span style="font-weight:bold;line: 1px solid black;"/></td>		
+							<td align="right"><strong>Total Amount (AED): </strong> <span style="font-weight:bold;line: 1px solid black;"/></td>
+
+							<td align="right"><strong><span style="font-weight:bold;line: 1px solid black;" t-field="doc.total"/></strong></td>
+
+							<td align="right"><strong><span style="font-weight:bold;line: 1px solid black;" t-field="doc.total"/></strong></td>
+
+						</tr> -->
+
+						
+
+					</tbody>
+					</table>
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+	                 	<t t-set="credit" t-value="0" /> 
+	                    <tr t-foreach="doc.move_id.line_ids" t-as="line">
+	                        <t t-set="credit" t-value="credit+line.credit"/>
+	                     </tr>
+	                     <t t-set="debit" t-value="0" /> 
+	                    <tr t-foreach="doc.move_id.line_ids" t-as="line">
+	                        <t t-set="debit" t-value="debit+line.debit"/>
+	                     </tr>
+	                    <tr>
+	                        <td colspan="3" style="width: 5px;" class="text-left">
+	                           Total                    
+	                        </td>                   
+	                        <td style="width: 5px;width:20%;" class="text-right">
+	                            <span t-esc="debit" t-options='{"widget": "monetary", "display_currency":
+	                                        doc.company_id.currency_id}'/>
+	                        </td> 
+	                         <td style="width: 5px;width:20%;" class="text-right">
+	                            <span t-esc="credit" t-options='{"widget": "monetary", "display_currency":
+	                                        doc.company_id.currency_id}'/>
+	                        </td>                   
+	                    </tr>
+            		</table>
+
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+
+						<tr>
+
+							<td align="left"><strong>Prepared By: </strong><span t-field="doc.create_uid"/></td>
+
+							<td align="left"><strong><span t-field="doc.move_id.state"/></strong></td>
+
+						</tr>
+
+					</table>	
+			
+					<!-- <div class="col-xs-10">
+						<p align="right" style="font size: 25px"><b><span t-field="doc.account_id.name"/> :  <span t-field="doc.total"/></b></p>
+					</div> -->   
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				
+				<div>
+					<div class="col-xs-4" style="left">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Prepared By</p>
+					</div>
+					<div class="col-xs-4" style="center">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Received By</p>
+					</div>
+					<div class="col-xs-4" style="right">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Finance Manager</p>
+					</div>
+				</div>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>           
+					
+					              
+			</div>
+<template>
+            <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+        <div class="footer">
+        <div style="border-top: 1px solid black;">
+            <div class="col-lg-2 text-center" name="company_address">
+               <ul t-if="not company.custom_footer" class="list-inline">
+                <li t-if="company.name"> <span t-field="company.name"/></li>
+                <li t-if="company.vat">TRN: <span t-field="company.vat"/></li>
+                <li t-if="company.partner_id.street"><span t-field="company.partner_id.street"/></li>
+                <li t-if="company.partner_id.street2"><span t-field="company.partner_id.street2"/></li>
+                <li t-if="company.partner_id.city"><span t-field="company.partner_id.city"/></li>
+                <li t-if="company.partner_id.state_id"><span t-field="company.partner_id.state_id.name"/></li>
+                <li t-if="company.partner_id.country_id"><span t-field="company.partner_id.country_id.name"/></li>
+              </ul>
+            </div>
+            <div  align="center">
+                <ul class="list-inline">
+                            <li>Page:</li>
+                            <li><span class="page"/></li>
+                            <li>/</li>
+                            <li><span class="topage"/></li>
+                </ul> 
+            </div>
+        </div>
+        </div> 
+    </template>
+			
+<!-- </t> -->
+</template>
+
+
+<template id="report_multi_receipt_voucher_details">
+		<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="doc">
+						<t t-call="bi_account_journal.report_multi_receipt_voucher_new"/>
+				</t>
+		</t>
+</template>
+ 
+<template id="report_multi_payment_voucher_new">
+<!-- 			 <t t-call="report.external_layout">
+ -->				
+
+ 					<template id="report_header_custom_one" inherit_id="report.external_layout_header">
+                <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+                <xpath expr="//div[@class='header']" position="replace">
+                <div class="header">
+                <div class="row">
+                        <br/>
+                        <div class="col-xs-6">
+                            <p><strong> <span style="left;font-size:25px;" t-field="company.name"/></strong></p>
+                            <div style="left;font-size:15px;line-height:9pt;">
+                                <p>TRN: <span t-field="company.vat"/></p>
+                                <p><span t-field="company.partner_id.street"/></p>
+                                <p><span t-field="company.partner_id.street2"/></p>
+                                <p><span t-field="company.partner_id.city"/></p>
+                                <p><span t-field="company.partner_id.state_id.name"/>,<span t-field="company.partner_id.country_id.name"/>,Tel:<span t-field="company.partner_id.phone"/></p>
+<!--                                 <p><span t-field="company.partner_id.country_id.name"/></p>
+                             <p>Tel <span t-field="company.partner_id.phone"/></p> -->
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6" style="right">
+                            <div>
+                             <img t-if="company.logo" align="right" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 60px;"/>   
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                                          
+        
+<!--       					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+ -->  					</div>
+  				</div>
+  			</xpath>
+  		</template>
+ 					<div class="page" style="border: 1px solid black;font-size:15px;padding:10px;">
+					
+						<div class="oe_structure"/>
+						<div class="row">
+
+								 <p class="account_payment_report" align="center" style="font-size:25px"><b><span t-field="doc.journal_id.name"/></b>
+								</p>  
+						 <br/><br/>                
+						</div>
+							<!-- <div class="col-xs-6"> -->
+										<div>
+												<p  align="left"><strong>No:</strong> <span t-field="doc.name"></span></p>
+
+												
+												<div class="col-xs-6" style="margin-left:-15px">
+													<p  align="left"><strong>Date:</strong> <span t-field="doc.payment_date"  t-field-options='{"format": "d/MM/y"}'></span></p>
+													<p  align="left"><strong>Status: </strong>Paid </p>
+												</div>
+												<div class="col-xs-6" style="margin-left:15px">
+													<p>
+														<span t-if="doc.bank_type == 'cheque'"><strong>Cheque Number:</strong></span>
+										                <span t-field="doc.cheque_no"/>
+									                </p>
+													<span t-if="doc.bank_type == 'cheque'"><strong>Cheque Date:</strong></span>
+									                <span t-field="doc.Cheque_date"/>
+												</div>
+										</div>
+						<!--   </div> -->
+				 
+					<table class="table table-bordered"  style="line: 1px solid black;margin-left: -10px;">
+						<thead>  
+
+							 <th style="text-align:left;line: 1px solid black;">Sr#</th> 
+							 <th style="text-align:left;line: 1px solid black;">Account</th>
+							 <th style="text-align:left;line: 1px solid black;">Description</th>
+							 <th style="text-align:right;line: 1px solid black;">Debit</th>
+							 <th style="text-align:right;line: 1px solid black;">Credit</th>                      
+						</thead>
+					<t t-set="i" t-value="1"/>
+					<tbody class="account_tbody" style="border: 1px solid black;">
+					  
+					 <tr t-foreach="doc.move_id.line_ids" t-as="l">
+
+					 		<td>
+					 		
+							<span t-esc="i"/>
+							<t t-set="i" t-value="i+1"/>
+							
+						</td>
+							<td style="text-align:left;line: 1px solid black;">
+
+								<span t-field="l.account_id.name"/>-<span t-field="l.account_id.code"/><br/>
+							</td>
+							<td style="text-align:left;line: 1px solid black;">
+						    	<span t-if="l.name"> 
+									<span t-field="l.name"/>,<br/>
+								</span>
+								<span t-if="l.analytic_account_id"> 
+									<span t-field="l.analytic_account_id"/><br/>
+								</span>
+							</td>
+														
+
+							<td style="text-align:right;line: 1px solid black;">
+								<span  t-field="l.debit"/>
+							</td>
+
+							<td style="text-align:right;line: 1px solid black;">
+								<span  t-field="l.credit"/>
+							</td>
+							<td style="text-align:right;line: 1px solid black;">
+							<span/>
+						</td>
+
+						</tr>
+
+						<!-- <tr>
+							<td align="right" ><strong></strong> <span style="font-weight:bold;line: 1px solid black;"/></td>	
+
+							<td align="right" ><strong></strong> <span style="font-weight:bold;line: 1px solid black;"/></td>	
+							<td align="right"><strong>Total Amount (AED): </strong> <span style="font-weight:bold;line: 1px solid black;"/></td>
+
+							<td align="right"><strong><span style="font-weight:bold;line: 1px solid black;" t-field="doc.total"/></strong></td>
+
+							<td align="right"><strong><span style="font-weight:bold;line: 1px solid black;" t-field="doc.total"/></strong></td>
+
+						</tr> -->
+
+					</tbody>
+					</table>
+
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+	                 	<t t-set="credit" t-value="0" /> 
+	                    <tr t-foreach="doc.move_id.line_ids" t-as="line">
+	                        <t t-set="credit" t-value="credit+line.credit"/>
+	                     </tr>
+	                     <t t-set="debit" t-value="0" /> 
+	                    <tr t-foreach="doc.move_id.line_ids" t-as="line">
+	                        <t t-set="debit" t-value="debit+line.debit"/>
+	                     </tr>
+	                    <tr>
+	                        <td colspan="3" style="width: 5px;" class="text-left">
+	                           Total                    
+	                        </td>                   
+	                        <td style="width: 5px;width:20%;" class="text-right">
+	                            <span t-esc="debit" t-options='{"widget": "monetary", "display_currency":
+	                                        doc.company_id.currency_id}'/>
+	                        </td> 
+	                         <td style="width: 5px;width:20%;" class="text-right">
+	                            <span t-esc="credit" t-options='{"widget": "monetary", "display_currency":
+	                                        doc.company_id.currency_id}'/>
+	                        </td>                   
+	                    </tr>
+            		</table> 
+
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+
+						<tr>
+
+							<td align="left"><strong>Prepared By: </strong><span t-field="doc.create_uid"/></td>
+
+						<td align="left"><strong><span t-field="doc.move_id.state"/></strong></td>
+						</tr>
+
+					</table>
+
+				 
+					<!-- <div class="col-xs-10">
+						<p align="right" style="font size: 25px"><b><span t-field="doc.account_id.name"/> :  <span t-field="doc.total"/></b></p>
+					</div> -->   
+					 <br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				
+				<div>
+					<div class="col-xs-4" style="left">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Prepared By</p>
+					</div>
+					<div class="col-xs-4" style="center">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Received By</p>
+					</div>
+					<div class="col-xs-4" style="right">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Finance Manager</p>
+					</div>
+				</div>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>                 
+			</div>
+			<template>
+            <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+        <div class="footer">
+        <div style="border-top: 1px solid black;">
+            <div class="col-lg-2 text-center" name="company_address">
+               <ul t-if="not company.custom_footer" class="list-inline">
+                <li t-if="company.name"> <span t-field="company.name"/></li>
+                <li t-if="company.vat">TRN: <span t-field="company.vat"/></li>
+                <li t-if="company.partner_id.street"><span t-field="company.partner_id.street"/></li>
+                <li t-if="company.partner_id.street2"><span t-field="company.partner_id.street2"/></li>
+                <li t-if="company.partner_id.city"><span t-field="company.partner_id.city"/></li>
+                <li t-if="company.partner_id.state_id"><span t-field="company.partner_id.state_id.name"/></li>
+                <li t-if="company.partner_id.country_id"><span t-field="company.partner_id.country_id.name"/></li>
+              </ul>
+            </div>
+            <div  align="center">
+                <ul class="list-inline">
+                            <li>Page:</li>
+                            <li><span class="page"/></li>
+                            <li>/</li>
+                            <li><span class="topage"/></li>
+                </ul> 
+            </div>
+        </div>
+        </div> 
+    </template>
+<!-- </t> -->
+</template>
+
+<template id="report_multi_payment_voucher_details">
+		<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="doc">
+						<t t-call="bi_account_journal.report_multi_payment_voucher_new"/>
+				</t>
+		</t>
+</template>
+
+<template id="report_receipt_voucher_new">
+<!-- 			 <t t-call="report.external_layout">
+ -->				
+ 					<template id="report_header_custom_one" inherit_id="report.external_layout_header">
+                <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+                <xpath expr="//div[@class='header']" position="replace">
+                <div class="header">
+                <div class="row">
+                        <br/>
+                        <div class="col-xs-6">
+                            <p><strong> <span style="left;font-size:25px;" t-field="company.name"/></strong></p>
+                            <div style="left;font-size:15px;line-height:9pt;">
+                                <p>TRN: <span t-field="company.vat"/></p>
+                                <p><span t-field="company.partner_id.street"/></p>
+                                <p><span t-field="company.partner_id.street2"/></p>
+                                <p><span t-field="company.partner_id.city"/></p>
+                                <p><span t-field="company.partner_id.state_id.name"/>,<span t-field="company.partner_id.country_id.name"/>,Tel:<span t-field="company.partner_id.phone"/></p>
+<!--                                 <p><span t-field="company.partner_id.country_id.name"/></p>
+ -->                                <!-- <p>Tel <span t-field="company.partner_id.phone"/></p> -->
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6" style="right">
+                            <div>
+                             <img t-if="company.logo" align="right" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 60px;"/>   
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                                          
+        
+<!--       					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+ -->  					</div>
+  				</div>
+  			</xpath>
+  		</template>
+ 					<div class="page" style="border: 1px solid black;font-size:15px;padding:10px;">				
+						<div class="oe_structure"/>
+						<div class="row">
+								<p class="account_payment_report" align="center" style="font-size:25px"><b>RECEIPT VOUCHER</b></p>                   
+						             
+						</div>
+							<!-- <div class="col-xs-6"> -->
+										<div>
+												<p  align="left"><strong>VCH No:</strong> <span t-field="doc.name"></span></p>
+
+												<p  align="left"><strong>V Date:</strong> <span t-field="doc.receipt_date"  t-field-options='{"format":"d/MM/y"}'></span></p>
+												
+												<div class="col-xs-6" style="margin-left:-15px">
+													<p  align="left"><strong>Status: </strong>Received </p>
+													<p  align="left"><strong>Amount In Words:</strong> <span t-esc="doc.get_check_amount_in_words(doc.total)"/></p>
+												</div>
+												<div class="col-xs-6" style="margin-left:15px">
+													<p>
+														<span t-if="doc.bank_type == 'cheque'"><strong>Cheque Number:</strong></span>
+										                <span t-field="doc.cheque_no"/>
+									                </p>
+													<span t-if="doc.bank_type == 'cheque'"><strong>Cheque Date:</strong></span>
+									                <span t-field="doc.Cheque_date"/>
+												</div>
+										</div>
+						
+				
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+						<thead>            
+								 <th style="text-align:left;line: 1px solid black;">Sr#</th> 
+								 <th style="text-align:left;line: 1px solid black;">Account</th>
+								 <th style="text-align:left;line: 1px solid black;">Description</th>
+								 <th style="text-align:right;line: 1px solid black;">Debit</th>
+								 <th style="text-align:right;line: 1px solid black;">Credit</th>
+								                       
+						</thead>
+						<t t-set="i" t-value="1"/>
+					<tbody class="account_tbody" style="border: 1px solid black;">
+					 
+					 <tr t-foreach="doc.move_id.line_ids" t-as="l">
+
+					 		<td>
+					 		
+							<span t-esc="i"/>
+							<t t-set="i" t-value="i+1"/>
+							
+						</td>
+							<td style="text-align:left;line: 1px solid black;">
+
+								<span t-field="l.account_id.name"/>-<span t-field="l.account_id.code"/><br/>
+								<t t-if= "doc.customer and l.account_id.user_type_id.name == 'Receivable'"> - <span t-field="doc.customer.name"/></t>
+							</td>
+							<td style="text-align:left;line: 1px solid black;">
+						    	<span t-if="l.name"> 
+									<span t-field="l.name"/>,<br/>
+								</span>
+								<span t-if="l.analytic_account_id"> 
+									<span t-field="l.analytic_account_id"/><br/>
+								</span>
+							</td>
+
+							<td style="text-align:right;line: 1px solid black;">
+							<span  t-field="l.debit"/>
+						</td>
+
+							<td style="text-align:right;line: 1px solid black;">
+								<span  t-field="l.credit"/>
+							</td>
+						</tr>
+
+						<!-- <tr>
+
+							<td align="right" ><strong></strong> <span style="font-weight:bold;line: 1px solid black;"/></td>	
+							<td align="right" ><strong></strong> <span style="font-weight:bold;line: 1px solid black;"/></td>
+							<td align="right"><strong>Total Amount (AED): </strong> <span style="font-weight:bold;line: 1px solid black;"/></td>
+
+							<td align="right"><strong><span style="font-weight:bold;line: 1px solid black;" t-field="doc.total"/></strong></td>
+
+							<td align="right"><strong><span style="font-weight:bold;line: 1px solid black;" t-field="doc.total"/></strong></td>
+
+						</tr>
+ -->
+						
+
+					</tbody>
+					</table>
+
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+	                 	<t t-set="credit" t-value="0" /> 
+	                    <tr t-foreach="doc.move_id.line_ids" t-as="line">
+	                        <t t-set="credit" t-value="credit+line.credit"/>
+	                     </tr>
+	                     <t t-set="debit" t-value="0" /> 
+	                    <tr t-foreach="doc.move_id.line_ids" t-as="line">
+	                        <t t-set="debit" t-value="debit+line.debit"/>
+	                     </tr>
+	                    <tr>
+	                        <td colspan="3" style="width: 5px;" class="text-left">
+	                           Total                    
+	                        </td>                   
+	                        <td style="width: 5px;width:20%;" class="text-right">
+	                            <span t-esc="debit" t-options='{"widget": "monetary", "display_currency":
+	                                        doc.company_id.currency_id}'/>
+	                        </td> 
+	                         <td style="width: 5px;width:20%;" class="text-right">
+	                            <span t-esc="credit" t-options='{"widget": "monetary", "display_currency":
+	                                        doc.company_id.currency_id}'/>
+	                        </td>                   
+	                    </tr>
+            		</table>
+
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+
+						<tr>
+
+							<td align="left"><strong>Prepared By: </strong><span t-field="doc.user_id"/></td>
+
+							<td align="left"><strong><span t-field="doc.move_id.state"/></strong></td>
+
+						</tr>
+
+					</table>	
+			
+					<!-- <div class="col-xs-10">
+						<p align="right" style="font size: 25px"><b><span t-field="doc.account_id.name"/> :  <span t-field="doc.total"/></b></p>
+					</div> -->   
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				
+				<div>
+					<div class="col-xs-4" style="left">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Prepared By</p>
+					</div>
+					<div class="col-xs-4" style="center">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Received By</p>
+					</div>
+					<div class="col-xs-4" style="right">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Finance Manager</p>
+					</div>
+				</div>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>           
+					
+					              
+			</div>
+
+			
+<!-- </t>
+ -->
+ 		<template>
+            <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+        <div class="footer">
+        <div style="border-top: 1px solid black;">
+            <div class="col-lg-2 text-center" name="company_address">
+               <ul t-if="not company.custom_footer" class="list-inline">
+                <li t-if="company.name"> <span t-field="company.name"/></li>
+                <li t-if="company.vat">TRN: <span t-field="company.vat"/></li>
+                <li t-if="company.partner_id.street"><span t-field="company.partner_id.street"/></li>
+                <li t-if="company.partner_id.street2"><span t-field="company.partner_id.street2"/></li>
+                <li t-if="company.partner_id.city"><span t-field="company.partner_id.city"/></li>
+                <li t-if="company.partner_id.state_id"><span t-field="company.partner_id.state_id.name"/></li>
+                <li t-if="company.partner_id.country_id"><span t-field="company.partner_id.country_id.name"/></li>
+              </ul>
+            </div>
+            <div  align="center">
+                <ul class="list-inline">
+                            <li>Page:</li>
+                            <li><span class="page"/></li>
+                            <li>/</li>
+                            <li><span class="topage"/></li>
+                </ul> 
+            </div>
+        </div>
+        </div> 
+    </template>
+</template>
+
+<template id="report_receipt_voucher_details">
+		<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="doc">
+						<t t-call="bi_account_journal.report_receipt_voucher_new"/>
+				</t>
+		</t>
+</template>
+ 
+<template id="report_payment_voucher_new">
+			 <!-- <t t-call="report.external_layout"> -->
+			 	<template id="report_header_custom_one" inherit_id="report.external_layout_header">
+                <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+                <xpath expr="//div[@class='header']" position="replace">
+                <div class="header">
+                <div class="row">
+                        <br/>
+                        <div class="col-xs-6">
+                            <p><strong> <span style="left;font-size:25px;" t-field="company.name"/></strong></p>
+                            <div style="left;font-size:15px;line-height:9pt;">
+                                <p>TRN: <span t-field="company.vat"/></p>
+                                <p><span t-field="company.partner_id.street"/></p>
+                                <p><span t-field="company.partner_id.street2"/></p>
+                                <p><span t-field="company.partner_id.city"/></p>
+                                <p><span t-field="company.partner_id.state_id.name"/>,<span t-field="company.partner_id.country_id.name"/>,Tel:<span t-field="company.partner_id.phone"/></p>
+<!--                                 <p><span t-field="company.partner_id.country_id.name"/></p>
+ -->                               <!--  <p>Tel <span t-field="company.partner_id.phone"/></p> -->
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6" style="right">
+                            <div>
+                             <img t-if="company.logo" align="right" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 60px;"/>   
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                                          
+        
+<!--       					<t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+ -->  					</div>
+  				</div>
+  			</xpath>
+  		</template>
+				<div class="page" style="border: 1px solid black;font-size:15px;padding:10px;">
+						<div class="oe_structure"/>
+						<div class="row">
+
+								 <p class="account_payment_report" align="center" style="font-size:25px"><b><span t-field="doc.journal_id.name"/></b>
+								</p>                     
+						 <br/><br/>                
+						</div>
+							<!-- <div class="col-xs-6"> -->
+										<div>
+												<p  align="left"><strong>Vch.No:</strong> <span t-field="doc.name"></span></p>
+
+												<p  align="left"><strong>V.Date:</strong> <span t-field="doc.payment_date"  t-field-options='{"format": "d/MM/y"}'></span></p>
+												<div class="col-xs-6" style="margin-left:-15px">
+													<p  align="left"><strong>Status: </strong>Paid </p>
+													<p  align="left"><strong>Amount In Words:</strong> <span t-esc="doc.get_check_amount_in_words(doc.total)"/></p>
+												</div>
+												<div class="col-xs-6" style="margin-left:15px">
+													<p>
+														<span t-if="doc.bank_type == 'cheque'"><strong>Cheque Number:</strong></span>
+										                <span t-field="doc.cheque_no"/>
+									                </p>
+													<span t-if="doc.bank_type == 'cheque'"><strong>Cheque Date:</strong></span>
+									                <span t-field="doc.Cheque_date"/>
+												</div>
+										</div>
+						<!--   </div> -->
+				 
+					<table class="table table-bordered"  style="line: 1px solid black;margin-left: -10px;">
+						<thead>  
+
+							 <th style="text-align:left;line: 1px solid black;">Sr#</th> 
+							 <th style="text-align:left;line: 1px solid black;">Account</th>
+							 <th style="text-align:left;line: 1px solid black;">Description</th>
+							 <th style="text-align:right;line: 1px solid black;">Debit</th>
+							 <th style="text-align:right;line: 1px solid black;">Credit</th>                      
+						</thead>
+						<t t-set="i" t-value="1"/>
+					<tbody class="account_tbody" style="border: 1px solid black;">
+					  
+					 <tr t-foreach="doc.move_id.line_ids" t-as="l">
+
+					 		<td>
+					 		<span t-esc="i"/>
+					 		<t t-set="i" t-value="i+1"/>
+							
+							
+						</td>
+							<td style="text-align:left;line: 1px solid black;">
+
+								<span t-field="l.account_id.name"/>-<span t-field="l.account_id.code"/><br/>
+								<t t-if= "doc.customer and l.account_id.user_type_id.name == 'Payable'"> - <span t-field="doc.customer.name"/></t>
+							</td>
+							<td style="text-align:left;line: 1px solid black;">
+						    	<span t-if="l.name"> 
+									<span t-field="l.name"/>,<br/>
+								</span>
+								<span t-if="l.analytic_account_id"> 
+									<span t-field="l.analytic_account_id"/><br/>
+								</span>
+							</td>
+														
+
+							<td style="text-align:right;line: 1px solid black;">
+								<span  t-field="l.debit"/>
+							</td>
+
+							<td style="text-align:right;line: 1px solid black;">
+								<span  t-field="l.credit"/>
+							</td>
+							<td style="text-align:right;line: 1px solid black;">
+							<span/>
+						</td>
+
+						</tr>
+
+						<!-- <tr>
+
+							<td align="right" ><strong></strong> <span style="font-weight:bold;line: 1px solid black;"/></td>	
+
+							<td align="right"><strong>Total Amount (AED): </strong> <span style="font-weight:bold;line: 1px solid black;"/></td>
+							<td align="right" ><strong></strong> <span style="font-weight:bold;line: 1px solid black;"/></td>
+							<td align="right"><strong><span style="font-weight:bold;line: 1px solid black;" t-field="doc.total"/></strong></td>
+
+							<td align="right"><strong><span style="font-weight:bold;line: 1px solid black;" t-field="doc.total"/></strong></td>
+
+						</tr> -->
+
+					</tbody>
+					</table> 
+
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+	                 	<t t-set="credit" t-value="0" /> 
+	                    <tr t-foreach="doc.move_id.line_ids" t-as="line">
+	                        <t t-set="credit" t-value="credit+line.credit"/>
+	                     </tr>
+	                     <t t-set="debit" t-value="0" /> 
+	                    <tr t-foreach="doc.move_id.line_ids" t-as="line">
+	                        <t t-set="debit" t-value="debit+line.debit"/>
+	                     </tr>
+	                    <tr>
+	                        <td colspan="3" style="width: 5px;" class="text-left">
+	                           Total                    
+	                        </td>                   
+	                        <td style="width: 5px;width:20%;" class="text-right">
+	                            <span t-esc="debit" t-options='{"widget": "monetary", "display_currency":
+	                                        doc.company_id.currency_id}'/>
+	                        </td> 
+	                         <td style="width: 5px;width:20%;" class="text-right">
+	                            <span t-esc="credit" t-options='{"widget": "monetary", "display_currency":
+	                                        doc.company_id.currency_id}'/>
+	                        </td>                   
+	                    </tr>
+            		</table>
+
+					<table class="table table-bordered" style="line: 2px solid black;margin-right: -10px;">
+
+						<tr>
+
+							<td align="left"><strong>Prepared By: </strong><span t-field="doc.user_id"/></td>
+
+						<td align="left"><strong><span t-field="doc.move_id.state"/></strong></td>
+						</tr>
+
+					</table>
+
+				 
+					<!-- <div class="col-xs-10">
+						<p align="right" style="font size: 25px"><b><span t-field="doc.account_id.name"/> :  <span t-field="doc.total"/></b></p>
+					</div> -->   
+					 <br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				
+				<div>
+					<div class="col-xs-4" style="left">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Prepared By</p>
+					</div>
+					<div class="col-xs-4" style="center">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Received By</p>
+					</div>
+					<div class="col-xs-4" style="right">
+					<p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Finance Manager</p>
+					</div>
+				</div>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>                 
+			</div>
+
+			<template>
+            <t t-if="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id"></t>
+                </t>
+                <t t-if="not o or not 'company_id' in o">
+                    <t t-set="company" t-value="res_company"></t>
+                </t>
+        <div class="footer">
+        <div style="border-top: 1px solid black;">
+            <div class="col-lg-2 text-center" name="company_address">
+               <ul t-if="not company.custom_footer" class="list-inline">
+                <li t-if="company.name"> <span t-field="company.name"/></li>
+                <li t-if="company.vat">TRN: <span t-field="company.vat"/></li>
+                <li t-if="company.partner_id.street"><span t-field="company.partner_id.street"/></li>
+                <li t-if="company.partner_id.street2"><span t-field="company.partner_id.street2"/></li>
+                <li t-if="company.partner_id.city"><span t-field="company.partner_id.city"/></li>
+                <li t-if="company.partner_id.state_id"><span t-field="company.partner_id.state_id.name"/></li>
+                <li t-if="company.partner_id.country_id"><span t-field="company.partner_id.country_id.name"/></li>
+              </ul>
+            </div>
+            <div  align="center">
+                <ul class="list-inline">
+                            <li>Page:</li>
+                            <li><span class="page"/></li>
+                            <li>/</li>
+                            <li><span class="topage"/></li>
+                </ul> 
+            </div>
+        </div>
+        </div> 
+    </template>
+<!-- </t> -->
+</template>
+
+<template id="report_payment_voucher_details">
+		<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="doc">
+						<t t-call="bi_account_journal.report_payment_voucher_new"/>
+				</t>
+		</t>
+</template>
+
+</odoo>

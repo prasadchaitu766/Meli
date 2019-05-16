@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="report_payment_invoice"
+            string="Payment Report"
+            model="bi.invoice.payment" 
+            report_type="qweb-pdf"
+            file="bi_invoicepayment.report_paymentinvoice" 
+            name="bi_invoicepayment.report_paymentinvoice" 
+        />
+    </data>
+</odoo>

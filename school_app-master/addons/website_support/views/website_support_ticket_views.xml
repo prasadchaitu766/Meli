@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>                    
+    
+      <record id="website_support_ticket_view_form" model="ir.ui.view">
+          <field name="name">website.support.ticket.form.view</field>
+          <field name="model">website.support.ticket</field>
+          <field name="arch" type="xml">
+      	      <form>
+                  <header>
+                      <button type="action" name="%(website_support_ticket_compose_action)d" context="{'default_ticket_id': active_id, 'default_email':email}" string="Reply" state_id="new"/>
+                      <!-- <button type="object" name="open_close_ticket_wizard" string="Close Ticket" state_id="new"/> -->
+                      <!-- <button type="object" name="button_admit" string="Send Survey" state_id="new"/> -->
+                      <button type="object" name="button_reject" string="Reject" state_ids="new,reply"/>
+                      <field name="state_id" readonly="1" statusbar_visible="new,reply,admit,cancel" widget="statusbar"/>
+                  </header>
+      	          <sheet>  
+      	              <group>
+                        <group>
+      	                  <field name="ticket_number" readonly="1" widget="Char"/>
+                        </group>
+                        <group>
+      	                  <field name="priority_id" invisible="1"/>
+                        </group>
+      	                  <field name="user_id" invisible="1"/>
+                      <group>
+            	          <field name="first_name" required="1"/>
+                        <field name="program_id" required="1"/>
+                        <field name="mobile" required="1"/>
+                        <field name="pwd" password="True" required="1"/>
+                      </group>
+                      <group>
+                        <field name="last_name" required="1"/>
+                        <field name="school_id" required="1"/>
+                        <field name="email" required="0"/>
+                      </group>
+          	          <field name="state" invisible="1"/>
+                    </group>
+
+                      <notebook>
+                            <page string="General" name="general">
+                                <group>
+                                    <group>
+                                        <field name="nid" required="1"/>
+                                        <field name="date_of_birth" widget="date" placeholder="Birthdate"/>
+                                        <field name="gender" placeholder="Gender" required="1"/>
+                                        <field name="age"/>
+                                        <field name="occupation"/>
+                                    </group>
+                                    <group>
+                                        <field name="parent_id" placeholder="Parent Name"/>
+                                        <field name="grandparent_id" placeholder="Grand Parent Name"/>
+                                        <field name="maritual_status" placeholder="Maritial Status"/>
+                                    </group>
+                                </group>                                
+                            </page>                                                
+                        </notebook>
+
+      	          </sheet>
+                  <div class="oe_chatter">
+                      <style>
+                          .o_chatter_button_new_message {
+                              display: none;
+                          }
+                      </style>
+                      <field name="message_follower_ids" widget="mail_followers"/>
+                      <field name="message_ids" widget="mail_thread"/>
+                  </div>
+      	      </form>
+      	  </field>
+      </record>
+
+      <record id="website_support_ticket_view_tree" model="ir.ui.view">
+          <field name="name">website.support.ticket.tree.view</field>
+          <field name="model">website.support.ticket</field>
+          <field name="arch" type="xml">
+      	      <tree colors="black:ticket_color==False">
+      	          <field name="ticket_color" invisible="1"/>
+      	          <field name="ticket_number_display" string="Ticket Number"/>
+      	          <!-- <field name="priority_id"/> -->
+      	          <field name="first_name"/>
+                  <field name="last_name"/>
+                  <field name="school_id"/>
+                  <field name="program_id"/>
+                  <field name="state"/>
+      	          <field name="state_id"/>
+      	          <field name="email"/>
+      	      </tree>
+      	  </field>
+      </record>
+
+      <record id="website_support_ticket_view_kanban" model="ir.ui.view">
+          <field name="name">website.support.ticket.kanban.view</field>
+          <field name="model">website.support.ticket</field>
+          <field name="arch" type="xml">
+              <kanban class="o_res_partner_kanban" default_group_by="state">
+                  <!-- <field name="priority_id"/> -->
+                  <field name="state_id"/>
+                  <templates>
+                      <t t-name="kanban-box">
+                          <div class="oe_kanban_global_click o_res_partner_kanban">
+                              <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
+                              <div class="oe_kanban_details">
+                                  <strong class="oe_partner_heading"><field name="first_name"/></strong>
+                                  <ul>
+                                      <!-- <li t-if="record.priority_id.raw_value"><field name="priority_id"/></li> -->
+                                      <li t-if="record.state.raw_value"><field name="state"/></li>
+                                  </ul>
+                                  <div class="oe_kanban_partner_links"/>
+                              </div>
+                          </div>
+                      </t>
+                  </templates>
+              </kanban>
+          </field>
+      </record>
+      
+      <record id="website_support_ticket_view_search" model="ir.ui.view">
+          <field name="name">website.support.ticket.form.search</field>
+          <field name="model">website.support.ticket</field>
+          <field name="arch" type="xml">
+      	      <search>
+                  <filter string="Unattended Tickets" name="unattended_tickets" domain="[('unattended', '=', True )]" />
+                  <filter name="group_by_user" string="User" domain="[]"  context="{'group_by':'user_id'}"/>
+      	      </search>
+      	  </field>
+      </record>
+
+      <record id="website_support_ticket_view_graph" model="ir.ui.view">
+          <field name="name">website.support.ticket.form.graph</field>
+          <field name="model">website.support.ticket</field>
+          <field name="arch" type="xml">
+              <graph stacked="False">
+                  <field name="create_date" interval="day" string="Create Date"/>
+              </graph>
+          </field>
+      </record>
+
+      <record id="website_support_ticket_action_partner" model="ir.actions.act_window">
+          <field name="name">Support Tickets</field>
+	  <field name="res_model">website.support.ticket</field>
+	  <field name="view_mode">tree,kanban,form,graph</field>
+	  <field name="help" type="html">
+	      <p>
+	          No Support Tickets found
+	      </p>
+          </field>
+      </record>
+
+      <record id="website_support_ticket_action" model="ir.actions.act_window">
+          <field name="name">Enquiries</field>
+	  <field name="res_model">website.support.ticket</field>
+	  <field name="view_mode">tree,kanban,form,graph</field>
+	  <field name="context">{"search_default_unattended_tickets":1, 'auto_refresh': 1, 'default_create_user_id': uid}</field>
+	  <field name="help" type="html">
+	      <p>
+	          No Support Tickets found
+	      </p>
+          </field>
+      </record>
+
+      <menuitem id="menu_enquiry" name="Enquiries" sequence="10" groups="group_enquiry_user"/>
+      <menuitem id="website_support_parent_menu" name="Enquiries" parent="menu_enquiry" sequence="0"/>
+      <menuitem id="website_support_ticket_menu" name="Enquiries" parent="website_support_parent_menu" action="website_support_ticket_action" sequence="10"/>
+      <menuitem id="website_support_config_menu" name="Settings" parent="menu_enquiry" sequence="1"/>
+      <menuitem id="website_support_config_parent_menu" name="Enquiries" parent="website_support_config_menu" sequence="10"/>
+ 
+    </data>
+</openerp>

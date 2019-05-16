@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bi_employee_salary_user,bi.employee.salary.user,model_bi_employee_salary,base.group_user,1,1,1,1
+access_bi_employee_salary_manager,bi.employee.salary.manager,model_bi_employee_salary,group_approved_user,1,1,1,1
+
+access_hr_employee,hr.employee,hr.model_hr_employee,base.group_user,1,1,1,0
+access_hr_job,hr.job,hr.model_hr_job,base.group_user,1,1,1,1

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<report id="fees_type_new_report"
+            model="student.payslip"
+            string="Fees Report"
+            report_type="qweb-pdf"
+            name="school_fees.type_wise"
+            file="school_fees.type_wise"
+            menu="False"
+	    />
+</odoo>

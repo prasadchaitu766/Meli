@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+    <data>  
+
+    <record id="view_material_request_tree" model="ir.ui.view">
+            <field name="name">material.request.tree</field>
+            <field name="model">material.request</field>
+            <field name="arch" type="xml">
+                <tree string="Material Request">
+                    <field name="name"/>
+                    <field name="reference" />
+                    <field name="location_id"/> 
+                    <field name="location_dest_id"/>
+                    <field name="transfer_date"/>
+                </tree>
+            </field>
+        </record>
+
+    <record id="view_material_request_form" model="ir.ui.view">
+            <field name="name">material.request.form</field>
+            <field name="model">material.request</field>
+            <field name="arch" type="xml">
+                <form string="Material Request Form">
+                    <header>
+                        <button name="do_confirm" type="object" string="Confirm" class="oe_highlight" attrs="{'invisible': [('state','!=','draft')]}"/>
+                        <button name="do_approve" type="object" string="Approve" class="oe_highlight" attrs="{'invisible': [('state','!=','waiting')]}" groups="bi_material_request_form.group_approve"/>
+                        <button name="done_transfer" type="object" string="Transfer" class="oe_highlight" attrs="{'invisible':[('state','!=','approved')]}" groups="bi_material_request_form.group_transfer"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting,approved,done"/>
+                    </header>
+                    <sheet>
+                    <h1 class="hidden-xs">
+                        <field name="name" attrs="{'invisible': [('name','=','/')]}" readonly="1"/>
+                    </h1>
+                    <group> 
+                    <group>
+                        <field name="reference" />
+                        <field name="requester" domain="[('state','=','draft')]"/>
+                        <field name="location_id" domain="[('usage','=','internal')]" groups="bi_material_request_form.group_location"/> 
+                        <field name="location_dest_id" domain="[('usage','=','internal')]" groups="bi_material_request_form.group_location"/>
+                        <field name="school_id" required="1"/>        
+                    </group>
+                    <group>
+                        <field name="transfer_date"/>
+                        <field name="transfer_reference"/>
+                        <field name="note"/>
+                        <field name="issued_by" readonly="1" widget="selection"/>
+                    </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Material Request Line">
+                        <field name="material_line_ids">
+                            <tree string="Updated Quantity" editable="bottom">
+                                <field name="product_id" domain="[('type', '=','product')]" required="1"/>
+                                <field name="quantity" required="1"/>
+                                <field name="unit_of_measure" required="1"/>
+                                <field name="product_cost" invisible="1"/>
+                                <field name="product_unit_price" invisible="1"/>
+                                <field name="state" invisible="1"/>
+                                <field name="asset_id" attrs="{'invisible':[('state', '=', 'draft')]}" domain="[('product_id','=',product_id),('state','=','open'),('active','=',True)]"/>
+
+                            </tree>
+                        </field>
+                        </page>
+                    </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record> 
+    
+
+        <record id="bi_material_request_action" model="ir.actions.act_window">
+            <field name="name">Material Request</field>
+            <field name="res_model">material.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                
+              </p>
+              <p>
+                Material Request Form
+              </p>
+            </field>
+        </record>
+
+        <record id="bi_material_request_purchase_action" model="ir.actions.act_window">
+            <field name="name">Material Request</field>
+            <field name="res_model">material.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                
+              </p>
+              <p>
+                Material Request Form
+              </p>
+            </field>
+        </record>
+         <record id="bi_material_request_action_request" model="ir.actions.act_window">
+            <field name="name">Material Request</field>
+            <field name="res_model">material.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                
+              </p>
+              <p>
+                Material Request Form
+              </p>
+            </field>
+        </record>
+
+    
+
+    <menuitem
+        id="bi_menu_stock_material_request"
+        name="Material Request"
+        action = "bi_material_request_action"
+        parent="stock.menu_stock_inventory_control"
+        sequence="11"
+            />
+
+    <menuitem
+        id="bi_menu_purchase_material_request"
+        name="Material Request"
+        action = "bi_material_request_purchase_action"
+        parent="purchase.menu_procurement_management"
+        sequence="-2"
+            />
+      <menuitem
+        id="bi_material_request_menu"
+        name="Material Request"
+        action = "bi_material_request_action_request"
+        parent="bi_hr.hr_requests_menu_main"
+        sequence="10"
+            />
+
+    <menuitem
+        id="purchase_requisition.menu_purchase_requisition_pro_mgt"
+        sequence="-1"
+        name="Purchase Requisition"
+        parent="purchase.menu_procurement_management"
+        action="purchase_requisition.action_purchase_requisition"/>
+
+
+
+
+
+          <record id="material_request_mail" model="mail.template">
+            <field name="name">Material Request Mail</field>
+            <field name="model_id" ref="bi_material_request_form.model_material_request"></field>
+            <field name="email_from"><![CDATA[${object.requester.name} <${object.requester.work_email}>]]></field>
+            <field name="email_to">${object.requester.line_manager_id.work_email|safe}</field>
+            <field name="subject">Material Request Submitted</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="built_in" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <p>Dear ${object.requester.line_manager_id.name},</p>
+                <p>${object.requester.name} have submitted material request.</p>
+                <hr/>
+            
+                
+                
+            ]]>
+            </field>
+        </record>
+
+    </data>
+</odoo>

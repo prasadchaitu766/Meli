@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<report 
+			id="report_multi_receipt_voucher"
+			string="Multi Receipt"
+			model="bi.multi.account.receipt" 
+			report_type="qweb-pdf"
+			file="bi_account_journal.report_multi_receipt_voucher_details" 
+			name="bi_account_journal.report_multi_receipt_voucher_details" 
+		/>
+
+		<report 
+			id="report_multi_payment_voucher"
+			string="Multi Payment"
+			model="bi.multi.account.payment" 
+			report_type="qweb-pdf"
+			file="bi_account_journal.report_multi_payment_voucher_details" 
+			name="bi_account_journal.report_multi_payment_voucher_details" 
+		/>
+
+		<report 
+			id="report_receipt_voucher"
+			string="Receipt"
+			model="bi.account.receipt" 
+			report_type="qweb-pdf"
+			file="bi_account_journal.report_receipt_voucher_details" 
+			name="bi_account_journal.report_receipt_voucher_details" 
+		/>
+
+		<report 
+			id="report_payment_voucher"
+			string="Payment"
+			model="bi.account.payment" 
+			report_type="qweb-pdf"
+			file="bi_account_journal.report_payment_voucher_details" 
+			name="bi_account_journal.report_payment_voucher_details" 
+		/>
+		<report 
+			id="report_receipt_voucher_draft"
+			string="Draft Receipt"
+			model="bi.account.receipt" 
+			report_type="qweb-pdf"
+			file="bi_account_journal.report_receipt_voucher_details_draft" 
+			name="bi_account_journal.report_receipt_voucher_details_draft" 
+		/>
+
+		<report 
+			id="report_payment_voucher_draft"
+			string="Draft Payment"
+			model="bi.account.payment" 
+			report_type="qweb-pdf"
+			file="bi_account_journal.report_payment_voucher_details_draft" 
+			name="bi_account_journal.report_payment_voucher_details_draft" 
+		/>
+		<report 
+			id="report_account_journal"
+			string="Journal"
+			model="account.move" 
+			report_type="qweb-pdf"
+			file="bi_account_journal.report_account_journal_details" 
+			name="bi_account_journal.report_account_journal_details" 
+		/>
+		<report 
+			id="report_account_voucher"
+			string="Print Voucher"
+			model="bi.journal.voucher" 
+			report_type="qweb-pdf"
+			file="bi_account_journal.report_account_voucher_details" 
+			name="bi_account_journal.report_account_voucher_details" 
+		/>
+		<report 
+			id="report_account_voucher_draft"
+			string="Draft Voucher"
+			model="bi.journal.voucher" 
+			report_type="qweb-pdf"
+			file="bi_account_journal.report_account_voucher_details_draft" 
+			name="bi_account_journal.report_account_voucher_details_draft" 
+		/>
+	</data>
+</odoo>

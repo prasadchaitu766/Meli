@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="bi_queue_management_simple_form" model="ir.ui.view">
+        <field name="name">bi.queue.management.simple.form</field>
+        <field name="model">bi.queue.management</field>
+        <field name="arch" type="xml">
+            <form string="Create a Job Position">
+                <sheet>
+                    <group>
+                        <field name="name" class="oe_inline" placeholder="e.g. Sales Manager"/>
+                        <field name="counter_id" class="oe_inline"/>
+                    </group>
+                    <footer>
+                        <button string="Create" name="close_dialog" type="object" class="btn-primary"/>
+                        <button string="Discard" class="btn-default" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_token_management">
+        <field name="name">New Application</field>
+        <field name="res_model">bi.token.management</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'search_default_department_id': [active_id], 'default_department_id': active_id}</field>
+    </record>
+
+
+    <record id="view_bi_queue_management_kanban" model="ir.ui.view">
+        <field name="name">bi.queue.management.kanban</field>
+        <field name="model">bi.queue.management</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_bi_queue_management_kanban" on_create="bi_queue_management.create_queue">
+                <field name="name"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <!-- <div t-attf-class="#{kanban_color(record.color.raw_value)}"> -->
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary" text-align="center"><t t-esc="record.name.value"/></div>
+                                    <!-- <div t-if="record.alias_name.value and record.alias_domain.value and record.state.raw_value == 'recruit'" class="o_secondary o_job_alias">
+                                        <small> <i class="fa fa-envelope-o"></i> <field name="alias_id"/> </small>
+                                    </div> -->
+                                </div>
+                                <!-- <div class="o_kanban_manage_button_section">
+                                    <a class="o_kanban_manage_toggle_button" href="#">More <i class="fa fa-caret-down"/></a>
+                                </div> -->
+                                 <div class="container o_kanban_card_content o_visible">
+                                 	<div class="row">
+                                        <div class="col-xs-12 o_kanban_primary_center">
+                                            <button class="btn btn-primary" name="%(action_token_management)d" type="action">Token Generation</button>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="row">
+                                         <div class="col-xs-12">
+                                                <b>Token No Issued:</b>
+                                                <field name="no_token_employee" title="Tokens Issued" options="{'current_value': 'no_token_employee', 'editable': true, 'edit_max_value': true}"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                         <div class="col-xs-12">
+                                                <b>Counter Name:</b>
+                                                <field name="counter_id"/>
+                                        </div>
+                                    </div>
+                                 
+                                       
+                                </div>
+                            </div>
+                          
+                        <!-- </div> -->
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    
+	<!-- <record id="bi_queue_management_tree" model="ir.ui.view">
+			<field name="name">bi.queue.management.tree</field>
+			<field name="model">bi.queue.management</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="phone"/>
+				</tree>
+			</field>
+		</record> -->
+
+
+    <record id="create_queue" model="ir.actions.act_window">
+        <field name="name">Create a Queue</field>
+        <field name="res_model">bi.queue.management</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="bi_queue_management_simple_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_queue_management">
+      <field name="name">Queue Management</field>
+      <field name="res_model">bi.queue.management</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">kanban,form</field>
+    </record> 
+
+
+   <record id="bi_token_management_form" model="ir.ui.view">
+        <field name="name">bi.token.management.form</field>
+        <field name="model">bi.token.management</field>
+        <field name="arch" type="xml">
+			<form string="Enter Your Details">
+				<header>
+                        <button name="set_start" string="Start" type="object" help="start" states="generate" class="oe_highlight" groups="bi_queue_management.group_counter_manager"/> 
+                        <button name="set_close" string="Close" type="object" help="close" states="process" class="oe_highlight" groups="bi_queue_management.group_counter_manager"/> 
+						<field name="state" widget="statusbar" statusbar_visible="draft,generate,process,close"/>
+				</header>
+				<sheet>          
+					<group>
+							<field name="pid" readonly="1"/>
+							<field name="name" width="40%"/>  
+							<field name="phone" width="40%"/>
+							<field name="date" readonly="1"/>
+							<field name="department_id"/> 
+                            <field name="counter_id" attrs="{'invisible': [('state','not in',('process','close'))]}"/>
+                            <!-- <field name="video_id"/> -->
+						<footer>
+							<button name="generate_token" string="Generate Token" type="object" class="oe_highlight" attrs="{'invisible': [('state','in', ('process','close'))]}"/>
+							<button name="print_token" custom="print" string="Print Token" type="object" class="oe_highlight" attrs="{'invisible':[('state', 'in',('draft','process','close'))]}"/>	
+						</footer>
+					</group>  
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_token_management">
+      <field name="name">Token Management</field>
+      <field name="res_model">bi.token.management</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+    </record> 
+
+    <record id="bi_token_management_tree" model="ir.ui.view">
+        <field name="name">bi.token.management.tree</field>
+        <field name="model">bi.token.management</field>
+        <field name="arch" type="xml">
+            <tree string="Token Details">
+                <field name="pid"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="date" readonly="1"/>
+                <field name="department_id"/>
+                <field name="counter_id"/>
+            </tree>
+        </field>
+    </record>
+
+     <record id="bi_token_management_filter" model="ir.ui.view">
+        <field name="name">bi.token.management.filter</field>
+        <field name="model">bi.token.management</field>
+        <field name="arch" type="xml">
+            <search string="Search Opportunities">
+                <field name="department_id"/>
+                <field name="pid"/>
+                <separator/>
+                <filter string="Today Activities" name="today"
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_token_management_tree">
+      <field name="name">Token Management</field>
+      <field name="res_model">bi.token.management</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{"search_default_today":1}</field>
+    </record>
+
+    <menuitem name="Queue Management" id="menu_queue_details" />
+  	<menuitem name="Token Interface" id="menu_token_details" parent="menu_queue_details" sequence="1"/>
+  	<menuitem name="Token Interface" id="menu_sub_token_details" parent="menu_token_details" action="action_queue_management"/>
+  	<!-- <menuitem name="Token" id="menu_token_details1" parent="menu_token_details" action="action_token_management"/> -->
+    <menuitem name="Token Details" id="menu_token_tree_details" parent="menu_token_details" action="action_token_management_tree" groups="bi_queue_management.group_counter_manager"/>
+
+    <record id="ip_address_form" model="ir.ui.view">
+        <field name="name">ip.address.setting.form</field>
+        <field name="model">ip.address.setting</field>
+        <field name="arch" type="xml">
+            <form string="Enter Your Ip Address Here">
+                <sheet>          
+                    <group name="Hardware Proxy">
+                            <field name="ip_address" required="1"/>
+                            <field name="port_no" required="1"/>
+                    </group>  
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+     <record id="ip_address_tree" model="ir.ui.view">
+        <field name="name">ip.address.setting.tree</field>
+        <field name="model">ip.address.setting</field>
+        <field name="arch" type="xml">
+            <tree string="Ip Address">
+                <field name="ip_address"/>
+                <field name="port_no"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_ip_address_setting">
+      <field name="name">Ip Address Setting</field>
+      <field name="res_model">ip.address.setting</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Settings" id="menu_ip_address_setting" parent="menu_queue_details"/>
+    <menuitem name="H/W Proxy" id="menu_sub_ip_address_setting" parent="menu_ip_address_setting" action="action_ip_address_setting"/>
+
+     <record id="youtube_link_form" model="ir.ui.view">
+        <field name="name">youtube.video.form</field>
+        <field name="model">youtube.video.link</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>          
+                    <group name="Youtube Link">
+                            <field name="video_link" required="1"/>                  
+                    </group>  
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_youtube_link_setting">
+      <field name="name">Youtube Video Setting</field>
+      <field name="res_model">youtube.video.link</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+    </record>
+
+    <menuitem name="Video Link" id="menu_sub_youtube_address_setting" parent="menu_ip_address_setting" action="action_youtube_link_setting"/>
+
+    <record id="counter_master_form" model="ir.ui.view">
+        <field name="name">counter.master.form</field>
+        <field name="model">counter.master</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>          
+                    <group name="Counter">
+                            <field name="name" required="1"/>
+                            <field name="user_id"/>
+                    </group>  
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+     <record id="counter_master_tree" model="ir.ui.view">
+        <field name="name">counter.master.tree</field>
+        <field name="model">counter.master</field>
+        <field name="arch" type="xml">
+            <tree string="Counter Details">
+                <field name="name"/>
+                <field name="user_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_counter_master_setting">
+      <field name="name">Counter Setting</field>
+      <field name="res_model">counter.master</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Master" id="menu_counter_setting" parent="menu_queue_details" sequence="2"/>
+    <menuitem name="Counter Details" id="menu_sub_counter_setting" parent="menu_counter_setting" action="action_counter_master_setting"/>
+
+</odoo>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="exam_form_inherit">
+            <field name="name">exam.exam.inherit</field>
+            <field name="model">exam.exam</field>
+            <field name="inherit_id" ref="exam.view_exam_exam_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button type="object" name="action_view_exam" class="oe_stat_button" icon="fa-laptop"
+                            string="Online Exam">
+
+                    </button>
+                </xpath>
+                <xpath expr="//form/header/button[@name='generate_exam']" position="after">
+                    <button type="object" name="generate_online_exam"  string="Generate Online Exam" states="draft" groups="exam_test_quiz.exam_master"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="extended_exam_time_table_form_inherit_quest">
+            <field name="name">time.table.inherit.que</field>
+            <field name="model">time.table</field>
+            <field name="inherit_id" ref="exam.extended_exam_time_table_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='exam_timetable_line_ids']/tree/field[@name='time_end']" position="after">
+                    <field name="question_id"
+                           context="{'default_school_id':parent.school_id,'default_subject_id':subject_id}"
+                           domain="[('school_id','=',parent.school_id),('subject_id','=',subject_id)]"/>
+                    
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

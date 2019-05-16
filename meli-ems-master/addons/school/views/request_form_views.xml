@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<odoo>
+	<record id="exam_eligible_request_tree" model="ir.ui.view">
+		<field name="name">exam.eligible.tree</field>
+		<field name="model">exam.eligible</field>
+		<field name="arch" type="xml">
+			<tree string="Student Transfer Request">
+				<field name="student_name_id"/>
+				<field name="standard_id"/> 
+				<field name="date"/>
+				<field name="note"/>  
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+
+	<record id="exam_eligible_request_menu_form" model="ir.ui.view">
+		<field name="name">exam.eligible.form</field>
+		<field name="model">exam.eligible</field>
+		<field name="arch" type="xml">
+			<form string="Student Transfer Request">
+			<header>
+			<button name="set_start" string="Start" type="object" help="start" states="draft" class="oe_highlight"/> 
+			<button name="set_approve" string="Approve" type="object" help="close" states="in_progress" class="oe_highlight" groups="school.group_school_administration"/> 
+			<button name="set_reject" string="Reject" type="object" help="reject" states="in_progress" class="oe_highlight" groups="school.group_school_administration"/>
+			<button name="set_to_reset" string="Reset" type="object" help="reset" states="in_progress" class="oe_highlight"/>
+			<field name="state" widget="statusbar" statusbar_visible="draft,in_progress,approve,rejected"/>
+			</header>
+			<sheet>
+				<group string="Make Exam Eligible Requests">
+					<group>
+						<field name="student_name_id" required="1" domain="[('state','not in',['alumni','terminate','draft'])]" options="{'no_create_edit': True}"/>
+						<field name="note" required="1" />
+					</group>
+					<group>
+						<field name="date"/>
+						<field name="standard_id" required="1" />
+					</group>
+				</group>
+			</sheet>
+			</form>
+		</field>
+	</record>
+
+
+	<record id="exam_eligibility_request_mail" model="mail.template">
+            <field name="name">Exam Eligibility Request Mail</field>
+            <field name="model_id" ref="school.model_exam_eligible"></field>
+            <field name="email_from"><![CDATA[${object.student_name_id.name} <${object.student_name_id.email}>]]></field>
+            <field name="email_to">academic_director@muslim.af</field>
+            <field name="subject">Exam Eligibility Request Submitted</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="built_in" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <p>Dear Academic Director,</p>
+                <p>${object.student_name_id.name} has submitted an exam eligibility request.</p>
+                <hr/>
+            ]]>
+            </field>
+        </record>
+
+	<!-- Search View 1 Of Student's Profiles -->
+		<record id="view_exam_eligible_request_search" model="ir.ui.view">
+			<field name="name">exam.eligible.search</field>
+			<field name="model">exam.eligible</field>
+			<field name="arch" type="xml">
+				<search string="Student Information">
+					<group col="10" colspan="4">
+						<field name="student_name_id"/>
+						<field name="standard_id"/>
+						<field name="date"/>
+					</group>
+                    <newline/>
+                    <group expand="0" string="Group By..." colspan="12" col="10">
+                        <filter string="Student" icon="terp-personal" name="student_name_id" context="{'group_by':'student_name_id'}"/>
+                        <separator orientation="vertical"/>
+                         <filter string="Date" icon="terp-personal" name="date" context="{'group_by':'date'}"/>
+                       
+                        <separator orientation="vertical"/>
+                       
+                    </group>
+					  <filter icon="terp-go-month" string="This Month" name="month" domain="[('date','&lt;=',(datetime.date.today()+relativedelta(day=31)).strftime('%Y-%m-%d')),('date','&gt;=',(datetime.date.today()-relativedelta(day=1)).strftime('%Y-%m-%d'))]"  help="Current Month"/>
+                        
+                        <filter string="Prev Month" name="prev_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%Y-%m-01')),('date','&lt;',time.strftime('%Y-%m-01'))]"/>
+                          <filter icon="terp-camera_test" string="New" domain="[('state','=','draft')]" help="Draft Slip"/>
+                            <filter icon="terp-camera_test" string="In Progress" domain="[('state','=','in_progress')]" help="In Progress Slip"/>
+                            <filter icon="terp-camera_test" string="Approved" domain="[('state','=','approve')]" help="In Progress Slip"/>
+                            <filter icon="terp-camera_test" string="Rejected" domain="[('state','=','rejected')]" help="In Progress Slip"/>
+				</search>
+			</field>
+		</record>
+
+	<record id="action_exam_eligible_request_form" model="ir.actions.act_window">
+		<field name="name">Make Exam Eligibility Request</field>
+		<field name="res_model">exam.eligible</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="domain">[]</field>
+		<field name="context">{}</field>
+		<field name="view_id" eval="False"/>
+		<field name="help" type="html">
+			<p>
+			   Make Exam Eligible
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="menu_exam_eligibility_request" 
+		name="Exam Eligibility Request" 
+		parent="menu_students_parents" 
+		action="action_exam_eligible_request_form" 
+		sequence="3"/>
+</odoo>

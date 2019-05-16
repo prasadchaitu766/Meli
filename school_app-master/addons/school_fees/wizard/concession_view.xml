@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <!-- Form View of terminate student wizard -->
+        <record id="school_concession_reason_nw" model="ir.ui.view">
+            <field name="name">Concession Reason</field>
+            <field name="model">concession.reason</field>
+            <field name="arch" type="xml">
+                <form string="Concession Reason">
+                    <sheet>
+                        <group>
+                            <field name="concession_reason" required="1" nolabel="1"/>
+                         </group>
+                        <footer>
+                            <button name="save_concession" string="Apply Concession" type="object"/>
+                            <button special="cancel" string="Cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- Action of Terminate Student Wizard -->
+        <record id="action_concession_wizard1" model="ir.actions.act_window">
+            <field name="name">Concession Reason</field>
+            <field name="res_model">concession.reason</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

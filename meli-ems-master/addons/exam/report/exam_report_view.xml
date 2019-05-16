@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<odoo>	
+	<data>
+		<report id="exam_certificate" 
+    	    string="Exam Certificate"
+        	model="exam.result" 
+    	    report_type="qweb-pdf" 
+        	file="exam.exam_result_certificate" 
+       		name="exam.exam_result_certificate_new"/>
+    </data>
+</odoo>        

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bi_queue_mangement_user,bi.queue.management.user,model_bi_queue_management,group_queue_user,1,1,0,0
+access_bi_queue_mangement_manager,bi.queue.management.manager,model_bi_queue_management,group_queue_manager,1,1,1,1
+access_bi_queue_mangement_counter,bi.queue.management.counter,model_bi_queue_management,group_counter_manager,1,1,1,1
+access_bi_token_mangement_manager,bi.token.management.manager,model_bi_token_management,group_counter_manager,1,1,1,1
+access_bi_counter_master,counter.master,model_counter_master,group_counter_manager,1,1,1,1

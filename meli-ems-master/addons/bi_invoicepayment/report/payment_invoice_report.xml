@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_payment_invoice_new">
+        <div class="header">
+            <div class="text-center"><img src="/sale/static/img/image001.jpg" style="width:200px;height:150px;"/> </div>
+        </div>
+        <div class="page">
+            <div class="oe_structure"/>
+            <div class="row">
+
+               <!--  <div style="border:3px solid #3B97B6;border-radius:5px;width:300px;margin: 10px auto"> -->
+              <p style="color:#06013f;text-align: center;font-size: 30px;margin-bottom: 0;">Payment/Receipt</p>
+              <!-- </div> -->
+              <br/>
+              <br/>
+                <div class="col-xs-6">
+                        <p  style="margin-bottom:0px" ><span><strong>Customer Name:</strong> <span t-field="doc.partner_id"></span></span></p>
+                        <p  style="margin-bottom:0px" ><span><strong>Phone Number:</strong> <span t-field="doc.partner_id.phone"></span></span></p>  
+                        <p  style="margin-bottom:0px" ><span><strong>Journal:</strong> <span t-field="doc.journal_id"></span></span></p>
+                        <p  style="margin-bottom:0px" ><span><strong>Cheque No:</strong> <span t-field="doc.cheque_no"></span></span></p>  
+                   </div>
+                    <div class="col-xs-6">
+                         <p  style="margin-bottom:0px" ><span><strong>Payment Number:</strong> <span t-field="doc.name"></span></span></p>
+                         <p  style="margin-bottom:0px" ><span><strong>Company Name:</strong> <span t-field="doc.company_id"></span></span></p>
+                          <p  style="margin-bottom:0px" ><span><strong>Payment Date:</strong> <span t-field="doc.date"></span></span></p>
+                   </div>
+                   </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+             <h2>
+                <span t-if="doc.voucher_type in 'inbound'">Receipt # </span>
+                <span t-if="doc.voucher_type in 'outbound'">Payment # </span>
+                <span t-field="doc.name"/>
+            </h2>
+ 
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div class="col-xs-12">
+            <table class="table table-bordered table-striped" >
+            <thead>
+            <tr class="bg-success">   
+                 <th>S.No.</th>  
+                 <th>Invoice Number</th>                      
+                 <th>Amount Paid</th>
+            </tr>
+            </thead>
+          <tbody class="sale_tbody">
+            <t t-set="i" t-value="1" />
+            <tr t-foreach="doc.payment_line_ids" t-as="l">   
+           <td class="text-center">
+            <span t-esc="i"/>
+            <t t-set="i" t-value="i+1"/>
+           </td>
+           <td class="text-left">
+             <span t-field="l.invoice_no"/>
+           </td>
+           <td class="text-center">
+             <span t-field="l.amountpaid"/>
+           </td>
+           </tr>
+           <tr class="text-right">
+           <td colspan="6">
+            <strong>Total: </strong>
+              <span t-field="doc.amount_total"/>
+           </td>
+           </tr>
+          </tbody>
+          </table>   
+          </div>
+
+          
+            <br/>
+            <br/>
+            <br/>
+            <p>Terms</p>
+            <p style="margin-bottom:0px;font-size:15px;"><span><strong>Paid By:</strong></span></p> 
+            <p style="margin-bottom:0px;font-size:15px;"><span><strong>Signature:</strong></span></p> 
+            <p style="margin:10px;font-family: TimesNewRoman;">Payment is 30 days net upon delivery.Safe storage of the products of MyCompany is necessary in order to ensure the quality,MyCompany will not be held accountable in case of unsafe storage of the products.</p>
+           <p><b>Thanking you and looking forward your valuable order</b></p>
+           <p><b>Best Regards</b></p>
+            <div class="oe_structure"/>
+        </div>
+<template>
+    <div class="footer">
+         <div class="text-center" style="border-top: 1px solid black;">
+            <ul class="list-inline">
+                <li>Page:</li>
+            </ul> 
+        <p>Posted by:Bassam Infotech</p>
+        <p>Contact information: <a href="mailto:www.bassaminfotech.com">
+           www.bassaminfotech.com</a>.</p>
+       </div>
+    </div> 
+</template>
+</template>
+
+
+<template id="report_paymentinvoice">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="bi_invoicepayment.report_payment_invoice_new" t-lang="doc.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+</odoo>

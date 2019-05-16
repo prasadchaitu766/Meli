@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="hr_payroll.report_payslip_new">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="report.external_layout">
+                <div class="page">
+                    <h2>Pay Slip</h2>
+                    <p t-field="o.name"/>
+
+                    <table class="table table-condensed table-bordered">
+                        <tr>
+                            <td><strong>Name</strong></td>
+                            <td><span t-field="o.employee_id"/></td>
+                            <td><strong>Designation</strong></td>
+                            <td><span t-field="o.employee_id.job_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Identification No</strong></td>
+                            <td><span t-field="o.employee_id.identification_id"/></td>
+                            <td><strong>Company</strong></td>
+                            <td><span t-field="o.company_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date From</strong></td>
+                            <td><span t-field="o.date_from"/></td>
+                            <td><strong>Date To</strong></td>
+                            <td><span t-field="o.date_to"/></td>
+                        </tr>
+                    </table>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Quantity/rate</th>
+                                <th>Amount</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip)" t-as="line">
+                                <td><span t-field="line.code"/></td>
+                                <td><span t-field="line.name"/></td>
+                                <td><span t-field="line.quantity"/></td>
+                                <td><span t-esc="line.amount"
+                                          t-esc-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                <td><span t-esc="line.total"
+                                          t-esc-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-4 pull-right">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <td><strong>Net</strong></td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_total"/>
+                                    </td>
+                                </tr>
+                                
+                            </table>
+                        </div>
+                    </div>
+                   <br/>
+                   <br/>
+                      <!-- <tr t-foreach="o.pdf_merge()" t-as="inc"/> -->
+
+                    <p class="text-right"><strong>Authorized signature</strong></p>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

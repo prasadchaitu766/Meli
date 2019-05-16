@@ -1,0 +1,18 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_etq_exam","access etq.exam","model_etq_exam","base.group_public",1,0,0,0
+"access_etq_result","access etq.result","model_etq_result","base.group_public",1,1,0,0
+"access_etq_result_question","access etq.result.question","model_etq_result_question","base.group_public",1,1,0,0
+"access_etq_question","access etq.question","model_etq_question","base.group_public",1,0,0,0
+"access_etq_question_option","access etq.question.option","model_etq_question_option","base.group_public",1,0,0,0
+"access_etq_question_prepare","access etq.question.prepare","model_etq_question_prepare","base.group_public",1,0,0,0
+
+"access_etq_question_prepare_master","access etq.question.prepare","model_etq_question_prepare","exam_master",1,1,1,1
+"access_etq_question_prepare_line_master","access etq.question.prepare_line","model_etq_question_prepare_line","exam_master",1,1,1,1
+"access_etq_question_prepare_line_option_master","access etq.question.prepare_line_option","model_etq_question_prepare_line_option","exam_master",1,1,1,1
+"access_etq_question_prepare_line_optionblank_master","access etq.question.prepare_line_optionblank","model_etq_question_prepare_line_optionblank","exam_master",1,1,1,1
+"access_etq_exam_std","access etq.exam","model_etq_exam","school.group_school_student",1,1,0,0
+"access_etq_exam_master","access etq.exam","model_etq_exam","exam_master",1,1,1,0
+"access_etq_question_exam","access etq.question","model_etq_question","exam_master",1,1,1,0
+"access_etq_result_m","access etq.result","model_etq_result","exam_master",1,1,1,0
+"access_etq_result_question_exam","access etq.result.question","model_etq_result_question","exam_master",1,1,1,0
+"access_etq_question_option_exam","access etq.question.option","model_etq_question_option","exam_master",1,1,1,0

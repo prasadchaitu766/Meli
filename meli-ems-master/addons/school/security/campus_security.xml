@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<odoo>
+    <data>
+        <record id="module_category_main_campus" model="ir.module.category">
+            <field name="name">Main Campus User</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="group_school_academic_director" model="res.groups">
+            <field name="name">Academic Director</field>
+            <field name="category_id" ref="module_category_main_campus"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_school_attendance_officer" model="res.groups">
+            <field name="name">Attendance Officer</field>
+            <field name="category_id" ref="module_category_main_campus"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="group_school_academic_officer" model="res.groups">
+            <field name="name">Academic Officer</field>
+            <field name="category_id" ref="module_category_main_campus"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_school_registrar_officer" model="res.groups">
+            <field name="name">Registrar Officer</field>
+            <field name="category_id" ref="module_category_main_campus"/>          
+        </record>
+        <record id="group_school_finance_officer" model="res.groups">
+            <field name="name">Finance Officer</field>
+            <field name="category_id" ref="module_category_main_campus"/>
+        </record>
+        <!-- finance-->
+         <record id="module_category_finance" model="ir.module.category">
+            <field name="name">Finance</field>
+            <field name="sequence">14</field>
+        </record>
+
+        <record id="group_school_finance_admin" model="res.groups">
+            <field name="name">Finance Admin</field>
+            <field name="category_id" ref="module_category_finance"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_school_finance_assistant" model="res.groups">
+            <field name="name">Finance Assistant</field>
+            <field name="category_id" ref="module_category_finance"/>
+        </record>
+
+        <!-- Inventory-->
+        <record id="module_category_inventory_1" model="ir.module.category">
+            <field name="name">Inventory Officer</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <record id="group_school_inventory" model="res.groups">
+            <field name="name">Inventory Officer</field>
+            <field name="category_id" ref="module_category_inventory_1"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+    <!-- operation manager -->
+        <record id="module_category_operation" model="ir.module.category">
+            <field name="name">Operation Manager</field>
+            <field name="sequence">26</field>
+        </record>
+
+        <record id="group_school_operation_manger" model="res.groups">
+            <field name="name">Operation Manager</field>
+            <field name="category_id" ref="module_category_operation"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+    <!-- purchase user -->
+        <record id="module_category_purchase" model="ir.module.category">
+            <field name="name">Purchase User</field>
+            <field name="sequence">28</field>
+        </record>
+
+        <record id="module_category_purchase_user" model="res.groups">
+            <field name="name">Purchase User</field>
+            <field name="category_id" ref="module_category_purchase"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <!-- IT -->
+        <record id="module_category_it" model="ir.module.category">
+            <field name="name">IT</field>
+            <field name="sequence">15</field>
+        </record>
+
+        <record id="module_category_it_manager" model="res.groups">
+            <field name="name">IT Manager</field>
+            <field name="category_id" ref="module_category_it"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="module_category_it_assistant" model="res.groups">
+            <field name="name">IT Assistant</field>
+            <field name="category_id" ref="module_category_it"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+         <!-- HR -->
+        <record id="module_category_hr" model="ir.module.category">
+            <field name="name">HR</field>
+            <field name="sequence">16</field>
+        </record>
+
+        <record id="module_category_hr_manager" model="res.groups">
+            <field name="name">HR Manager</field>
+            <field name="category_id" ref="module_category_hr"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <record id="module_category_hr_assistant" model="res.groups">
+            <field name="name">HR Assistant</field>
+            <field name="category_id" ref="module_category_hr"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="module_category_hr_personal_rule" model="res.groups">
+            <field name="name">Personal</field>
+            <field name="category_id" ref="module_category_hr"/>
+        </record>
+         <record id="rule_hr_personal_rule" model="ir.rule">
+            <field name="name">Personal</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('module_category_hr_personal_rule'))]"/>
+        </record> 
+      
+         <!-- VC -->
+        <record id="module_category_vc" model="ir.module.category">
+            <field name="name">VC</field>
+            <field name="sequence">24</field>
+        </record>
+
+        <record id="module_category_vc_user" model="res.groups">
+            <field name="name">VC</field>
+            <field name="category_id" ref="module_category_vc"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+<!-- screen user--> 
+
+       <record id="module_category_screen" model="ir.module.category">
+            <field name="name">TV User</field>
+            <field name="sequence">24</field>
+        </record>
+
+        <record id="module_category_tv_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_screen"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record> 
+    </data>
+</odoo>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+				<!-- FORM VIEW -->  
+
+			<record id="view_payment_invoice_form" model="ir.ui.view">
+						<field name="name">Payment Invoice</field>
+						<field name="model">bi.invoice.payment</field>
+						<field name="arch" type="xml">
+						<form>
+							<header>
+									<button name="post" states="draft" string="Post" type="object" help="start" class="oe_highlight"/> 
+									<!-- <button name="button_cancel" states="posted" string="Cancel Entry" type="object" help="cancel"/>  -->
+									<field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+							</header>
+							<sheet>
+							<group>
+							<group>
+							<field name="name" style="width: 60%%" />
+							<field name="currency_id"  required="1"/>
+							<field name="partner_id"  context="{'search_default_customer':1, 'show_address': 1}" options='{"always_reload": True}' domain="[('customer', '=', True)]" required="1"/>
+							<field name="journal_id" required="1"/>
+							<field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" required="1"/>
+								<field name="date"  required="1"/>
+								<field name="select_deduction"  required="1"/>
+								<field name="bank_type"  required="1"/>
+								<field name="journal_ref_id" attrs="{'invisible': [('state', '!=', 'posted')]}"/>
+								<field name="voucher_type" style="width:60%%" invisible="1"/>
+								<field name="school_id"/>
+
+						 </group>
+		
+						<group attrs="{'invisible':[('bank_type', '!=', 'cheque')] }">
+
+											<field name="cheque_no"/> 
+											<field name="Cheque_date"/> 
+											<field name="bank_branch"/>
+	                                        <field name="cheque_deposit_date"/>
+	                                        <field name="cheque_clearing_date"/>
+	                     </group> 
+
+					    </group>
+						 
+						 <notebook>
+							 <page string="Payment">
+										 <group>
+											<field name="payment_line_ids"  colspan="4" nolabel="1">
+												<tree string="Payment" editable="bottom">  
+												<field name="invoice_id" style="width:40%%" invisible="1"/> 
+												<field name="invoice_no" style="width:40%%" readonly="1"/> 
+												<field name="invoice_date" style="width:40%%" readonly="1"/>  
+												<field name="invoice_duedate" style="width:40%%" readonly="1"/>
+												<field name="amount" style="width:40%%" readonly="1"/> 
+												<field name="balance" style="width:40%%" readonly="1"/>
+												<field name="amountpaid" style="width:40%%"/>    
+												</tree>
+											 </field>
+										 </group> 
+										 <group class="oe_subtotal_footer oe_right" colspan="2" name="Total">
+												<field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary"/>
+										 </group>
+								</page>
+								<page string="Deductions" attrs="{'invisible': [('select_deduction', '!=','yes')]}">						
+								  <field name="payment_line_id"  nolabel="1"> 
+										<tree string="Deductions" editable="bottom">
+											 
+											<field name="account_id" />
+											<field name="description"/> 
+											<field name="payment_amount"/> 
+											<field name="percentage"/> 
+											<field name="amount_total" required="1"/>
+
+										</tree>
+								 </field>						
+								</page>
+							</notebook>  
+					            </sheet>
+				            </form>
+			                </field> 
+	            </record>
+
+
+
+                <!-- TREE VIEW -->
+                
+
+		<record id="view_payment_invoice_tree" model="ir.ui.view">
+		 <field name="name">Payment Invoice</field>
+			<field name="model">bi.invoice.payment</field>
+				<field name="arch" type="xml">
+				<tree>
+					 <field name="date" string="Receipt Date"/>
+					 <field name="cheque_no"/>
+					 <field name="name"/>
+					 <field name="partner_id"/>
+					 <field name="journal_id"/>
+					 <field name="amount_total"/>
+					 <field name="company_id"/>
+					 <field name="state"/>
+        		</tree>
+				</field>
+		</record>
+
+		<record id="view_payment_invoice_filter" model="ir.ui.view">
+            <field name="name">payment.invoice.filter</field>
+            <field name="model">bi.invoice.payment</field>
+            <field name="arch" type="xml">
+                <search string="Search Opportunities">
+                    <field name="cheque_no"/>
+                </search>
+            </field>
+        </record>
+
+
+		<record model="ir.actions.act_window" id="action_invoice_payment_user">
+			<field name="name">Customer Receipt Invoice</field>
+			<field name="res_model">bi.invoice.payment</field>
+			<field name="view_type">form</field>
+			<field name="domain">[('voucher_type','=', 'inbound')]</field>
+			<field name="context">{'default_voucher_type': 'inbound', 'search_default_voucher_type': 'inbound'}</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<record id="action_invoice_payment_user_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_payment_invoice_tree"/>
+            <field name="act_window_id" ref="action_invoice_payment_user"/>
+        </record>
+
+        <record id="action_invoice_payment_user_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_payment_invoice_form"/>
+            <field name="act_window_id" ref="action_invoice_payment_user"/>
+        </record>
+
+			 <menuitem name="Customer Receipt" id="menu_invoice_payment_user" sequence="10" parent="account.menu_finance_receivables" action="action_invoice_payment_user"/>
+	</data>
+</odoo>
+					 

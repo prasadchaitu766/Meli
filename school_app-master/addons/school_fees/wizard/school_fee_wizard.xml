@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_school_fee_report_wizard1" model="ir.ui.view">
+            <field name="name">vehicle.monthreport.form</field>
+            <field name="model">school.month.report</field>
+            <field name="arch" type="xml">
+            <form string="Fee Details Report">
+            <group> 
+                <group>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+                <group>
+                    <field name="school_id" required="0"/>
+                   <!--  <field name="fees_id" />
+                    <field name="semester_id"/> -->
+                </group>
+            </group>
+                <footer>
+                    <button name="generate_report" string="Print" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+        </record>
+
+
+	    <record id="action_fees_details" model="ir.actions.act_window">
+	        <field name="name">Fees Details Report</field>
+	        <field name="res_model">school.month.report</field>
+	        <field name="view_mode">form</field>
+	        <!-- <field name="view_id" ref="view_sale_report_wizard"/> -->
+	        <field name="target">new</field>
+        </record>
+
+        <!-- <menuitem
+            id="bi_menu_fees_report_main"
+            name="Daily Report"
+            parent="school.menu_ems"
+            sequence="10"/> -->
+
+        <menuitem
+            id="bi_menu_sub_fees_report_main"
+            name="Sales Report"
+            parent="account.menu_finance_reports"
+            action="action_fees_details"
+           />
+
+</odoo>

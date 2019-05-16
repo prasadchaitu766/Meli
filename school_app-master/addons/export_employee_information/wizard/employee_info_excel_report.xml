@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="employee_info_excel_report_form_view" model="ir.ui.view">
+        <field name="name">employee.info.excel.report.form.view</field>
+        <field name="model">employee.info.excel.report</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Export Employee Information List">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="school_id"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="generated_excel_report" string="Print" type="object" class="oe_highlight"/>
+                        or
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_info_excel_report" model="ir.actions.act_window">
+        <field name="name">Employee Information List </field>
+        <field name="res_model">employee.info.excel.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_employee_informatiom_excel_report"
+              action="action_employee_info_excel_report"
+              parent="bi_hr.hr_employee_menu_main" sequence="6"/>
+
+    <record id="wizard_employee_info_excel_report_form_view" model="ir.ui.view">
+        <field name="name">wizard.employee.info.excel.report.form.view</field>
+        <field name="model">wizard.emp.info.excel.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" invisible="1"/>
+                        <h1>
+                            <field name="report" filename="name"/>
+                        </h1>
+                    </group>
+                    <footer>
+                        <button special="cancel" string="Cancel" class="oe_link"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

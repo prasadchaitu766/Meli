@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<report 
+			id="report_hr_contract_id_menu"
+			string="Contract"
+			model="hr.contract" 
+			report_type="qweb-pdf"
+			file="bi_hr.report_hr_contract_details_temp_1" 
+			name="bi_hr.report_hr_contract_details_temp_1" 
+		/>
+	</data>
+</odoo>

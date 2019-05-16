@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_purchase_new_wizard" model="ir.ui.view">
+            <field name="name">Create Purchase Order</field>
+            <field name="model">create.purchase.order</field>
+            <field name="arch" type="xml">
+                <form string="Create Purchase Order">
+                    <group>
+                    <group>
+                        <field name="partner_id" domain="[('supplier','=',True)]"/>
+                    </group>
+                    </group>
+                    <footer>
+                        <button name="create_purchase_order" string="Create Purchase Order" colspan="1" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_purchase_request_line_make_purchase_order" model="ir.actions.act_window">
+            <field name="name">Create RFQ</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">create.purchase.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_purchase_new_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values" id="purchase_request_line_make_purchase_order">
+            <field name="model_id" ref="purchase_requisition.model_purchase_requisition" />
+            <field name="name">Create RFQ</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_purchase_request_line_make_purchase_order'))" />
+            <field name="key">action</field>
+            <field name="model">purchase.requisition</field>
+        </record>
+       
+    </data>
+</odoo>    

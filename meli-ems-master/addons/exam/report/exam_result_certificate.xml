@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+<template id="exam_result_certificate">
+			
+				<div class="page" t-attf-style="background-image:url('/exam/static/img/semester_certificate.png');padding-top: 180px;padding-bottom: 150px;padding-left: 50px;padding-right: 50px;background-size: 100% ;margin:-80px" >
+					<div class="oe_structure"/>
+				
+					<t t-if="o.student_id.gender == 'male'">
+
+					<div class="row" style="font-family:adumu;font-size: 21px; text-align:center;
+					   padding-bottom:270px;">
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							
+						
+							<span> 
+								It is certified that Mr.
+								<strong style="font-size: 21px;">
+									<span t-field="o.student_id.name" />
+								</strong>
+								<strong style="font-size: 21px;">
+									<span t-field="o.student_id.middle" />
+								</strong>
+								<strong style="font-size: 21px;">
+									<span t-field="o.student_id.last" />
+								</strong>
+							</span>
+							<span>S/O Mr.<strong><span style="font-size: 21px;" t-field="o.student_id.parent_id"/></strong> </span>
+							<span>bearing Reg: <strong><span style="font-size: 21px;" t-field="o.student_id.pid"/></strong> </span>					
+							<br/>
+							<span> has completed the following English Level:</span>
+							<br/>
+							<strong><i><span style="font-size: 23px;" t-field="o.student_id.semester_id"/></i></strong>
+							<br/>
+							<span> at Muslim English Language Institute.</span>
+							<br/>
+							<span> He secured average <strong><span style="font-size: 21px;" t-esc="'%.2f'% o.percentage"/>%</strong> marks and has been placed in grade <span style="font-size: 21px;" t-field="o.grade_total"/>.</span>
+							<br/>
+							<span>As an evidence of completion, this Achievement Card has been issued to</span>
+							<br/>
+							<span>him on <span t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>.</span>
+						</div>
+					</t>
+
+					<t t-elif="o.student_id.gender == 'female'">
+
+						<div class="row" style="font-size: 21px; text-align:center; padding-bottom:270px;">
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							
+							<span> It is certified that Miss.
+								<strong style="font-size: 21px;">
+									<span t-field="o.student_id.name" />
+								</strong>
+								<strong style="font-size: 21px;">
+									<span t-field="o.student_id.middle" />
+								</strong>
+								<strong style="font-size: 21px;">
+									<span t-field="o.student_id.last" />
+								</strong>
+							</span>
+							<span>D/O Mr.<strong><span style="font-size: 21px;" t-field="o.student_id.parent_id"/></strong> 
+							bearing Reg: <strong><span style="font-size: 21px;" t-field="o.student_id.pid"/></strong> </span>					
+							<br>
+							<span> has completed the following English Level:</span>
+							</br>
+							<br>
+								<strong><i><span style="font-size: 23px;" t-field="o.student_id.semester_id"/></i></strong>
+							</br>
+							<br>
+							<span> at Muslim English Language Institute.</span>
+							</br>
+							<br>
+								<span> She secured average <strong><span style="font-size: 21px;" t-field="o.percentage"/>%</strong> marks and has been placed in grade <span style="font-size: 21px;" t-field="o.grade"/>.</span>
+							</br>
+							<br>
+								<span>As an evidence of completion, this Achievement Card has been issued to</span>
+							</br>
+							<br>
+								<span>her on <span t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>.</span>
+							</br>
+						</div>
+					</t>
+
+				</div>           
+			
+</template>
+
+<template id="exam_result_certificate_new">
+		<t t-call="report.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="exam.exam_result_certificate"/>
+			</t>
+		</t>
+</template>
+	</data>
+</odoo>

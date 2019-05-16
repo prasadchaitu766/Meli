@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+	<report id="dev_emp_report_print_id"
+                    model="hr.employee"
+                    string="Employee Details"
+                    report_type="qweb-pdf"
+                    name="dev_employee_profile.dev_emp_profile_report_template"  
+                    file="dev_employee_profile.dev_emp_profile_report_template"
+                    >
+    </report>
+</data>
+</openerp>

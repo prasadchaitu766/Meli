@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<odoo>
+    
+    <data>
+
+        <!-- Sequences For fees.type (Fees Type) -->
+        <record id="seq_student_fees" model="ir.sequence">
+            <field name="name">Fees</field>
+            <field name="code">student.fees</field>
+            <field name="prefix">Fee</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+      
+
+    </data>
+</odoo>

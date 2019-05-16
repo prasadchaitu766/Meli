@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gratuity_employee_user,gratuity.employee.user,model_gratuity_employee,group_gratuity_user,1,1,0,0
+access_gratuity_employee_manager,gratuity.employee.manager,model_gratuity_employee,group_gratuity_manager,1,1,1,1
+access_bi_ctc_user,bi.ctc.user,model_bi_ctc,hr.group_hr_user,0,0,0,0
+access_bi_ctc_manager,bi.ctc.manager,model_bi_ctc,hr.group_hr_manager,1,1,1,1
+access_bi_ctc_line_user,bi.ctc.line.user,model_bi_ctc_line,hr.group_hr_user,1,1,0,0
+access_bi_ctc_line_manager,bi.ctc.line.manager,model_bi_ctc_line,hr.group_hr_manager,1,1,1,1
+access_sale_incentive_user,sale.incentive.user,model_sale_incentive,hr.group_hr_user,0,0,0,0
+access_sale_incentive_manager,sale.incentive.manager,model_sale_incentive,hr.group_hr_manager,1,1,1,1
+access_sale_incentive_line_user,sale.incentive.line.user,model_sale_incentive_line,hr.group_hr_user,1,1,0,0
+access_sale_incentive_line_manager,sale.incentive.line.manager,model_sale_incentive_line,hr.group_hr_manager,1,1,1,1
+access_employee_status_user,hr.employee.manager,model_hr_employee,employee_status_approve_user,1,1,1,1
+access_employee_warning_line_manager,employee.warning.line.manager,model_employee_warning_line,hr.group_hr_manager,1,1,1,1
+access_employee_warning_line_user,employee.warning.line.user,model_employee_warning_line,hr.group_hr_user,1,1,0,0
+access_employee_warning_line_base_user,employee.warning.line.user,model_employee_warning_line,base.group_user,1,0,0,0
+
+access_employee_contract_user,hr.contract.user,hr_contract.model_hr_contract,base.group_user,1,0,0,0

@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+       <record id="view_location_form_inherited" model="ir.ui.view">
+            <field name="name">stock.location.form.inherited</field>
+            <field name="model">stock.location</field>
+            <field name="inherit_id" ref="stock.view_location_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="school_id" required="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_stock_picking_form_inherited" model="ir.ui.view">
+            <field name="name">stock.view.picking.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="priority">250</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+                <field name="arch" type="xml">
+                    <field name="partner_id" position="before">
+                            <field name="school_id" required="1"/>
+                    </field>             
+
+                </field>
+            </record>
+
+        <record id="view_stock_warehouse_form_inherited" model="ir.ui.view">
+            <field name="name">stock.warehouse.picking.inherit</field>
+            <field name="model">stock.warehouse</field>
+            <field name="priority">250</field>
+            <field name="inherit_id" ref="stock.view_warehouse"/>
+                <field name="arch" type="xml">
+                    <field name="code" position="after">
+                            <field name="school_id" required="1"/>
+                    </field>             
+
+                </field>
+        </record>
+
+        <menuitem action="procurement.procurement_order_action_exceptions" id="stock.menu_stock_procurement_action" parent="stock.menu_warehouse_report" sequence="150" groups="school.group_invisible"/>
+    </data>
+</openerp>

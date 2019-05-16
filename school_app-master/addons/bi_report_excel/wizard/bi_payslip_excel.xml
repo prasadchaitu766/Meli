@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wizard_gstr_b2b_view_report_new" model="ir.ui.view">
+        <field name="name">Payslip Excel Report</field>
+        <field name="model">bi.payslip.rep</field>
+        <field name="arch" type="xml">
+            <form string="Choose your date">
+                <!-- <p class="oe_gray">
+                    Choose a Dates of Invoice To Generate GSTR B2B Report in Xlsx.
+                </p> -->
+                 <group>
+                    <field name="batch_ids"/>                    
+                </group>
+                <footer>
+                    <button name="print_Excel_report" string="Print Excel Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="wizard_gstr_b2b_action_report_new" model="ir.actions.act_window">
+        <field name="name">Payslip Excel Report</field>
+        <field name="res_model">bi.payslip.rep</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_gstr_b2b_view_report_new"/>
+        <field name="target">new</field>
+    </record>
+ <!-- <record model="ir.values" id="hr_payslip_report_value1_report">
+            <field name="model_id" ref="hr_payroll.model_hr_payslip" />
+            <field name="name">PaySlip Lines</field>
+            <field name="key2">client_print_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('wizard_gstr_b2b_action_report'))" />
+            <field name="key">action</field>
+            <field name="model">hr.payslip.run</field>
+        </record> -->
+<menuitem action="wizard_gstr_b2b_action_report_new" id="menu_reporting_payslip_excel_new" parent="l10n_in_hr_payroll.menu_l10n_in_hr_payroll_report" sequence="1" />  
+   
+</odoo>

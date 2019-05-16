@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_token_print">
+
+<t t-name="Tokenreceipt">
+        <receipt align='center' width='40' value-thousands-separator='' >
+            <t t-if='o.company_id.logo'>
+                <img t-att-src='o.company_id.logo' />
+                <br/>
+            </t>
+            <br /><br />
+            <h1>Your token no. is generated Successfully!!</h1>
+
+        
+
+            <div line-ratio='0.6' class="token_class">
+                <strong>TOKEN NO.:</strong><br/>
+                <span t-field="o.pid"/>
+                
+            </div>
+
+            <div line-ratio='0.6' class="attending_class">
+                <strong>Attending:</strong>
+                <strong>No. of Position:</strong>
+                <span t-field="o.pid"/>
+                
+            </div>
+
+            
+
+            <div class='footer' />
+            <p>Please take your seat,we will attain you soon!!</p>
+
+            <!-- Footer -->
+           
+
+            
+        </receipt>
+    </t>
+</template>
+
+
+<!-- <template id="report_token_view">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="bi_queue_management.report_token_print"/>
+        </t>
+    </t>
+</template> -->
+</odoo>

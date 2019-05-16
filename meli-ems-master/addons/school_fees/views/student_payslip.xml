@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<odoo>
+    <template id="student_payslip">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <template  id="report_header_custom" inherit_id="report.external_layout_header">
+                    <t t-if="o and 'company_id' in o">
+                        <t t-set="company" t-value="o.company_id"></t>
+                    </t>
+                    <t t-if="not o or not 'company_id' in o">
+                        <t t-set="company" t-value="res_company"></t>
+                    </t>
+                    <xpath expr="//div[@class='header']" position="replace">
+                        <div class="header">
+                            <div class="row" style="border-bottom: 1px;">
+                                <div class="col-xs-4">
+                                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height:50px;"/>
+                                    <br/>
+                                </div>
+                                <div class="row zero_min_height">
+                                    <div class="col-xs-12">
+                                        <div style="border-bottom: 1px solid black;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="border-bottom: 1px;">
+                                <div class="col-xs-4">
+                                    <span t-field="o.school_id.name"></span>
+                                    <br/>
+                                    <span t-field="o.school_id.street"></span>,
+                                    <span t-field="o.school_id.street2"></span>
+                                    <br/>
+                                    <span t-field="o.school_id.city"></span>
+                                    <span t-field="o.school_id.state_id"></span>
+                                    <span t-field="o.school_id.zip"></span>
+                                    <br/>
+                                    <span t-field="o.school_id.country_id"></span>
+                                    <br/>
+                                    <div class="row zero_min_height">
+                                        <div class="col-xs-12">
+                                            <div style="border-bottom: 1px solid black;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+
+                        <table  class="table table-bordered" >
+                        <tr>
+                            <td><strong>Application No :</strong></td>
+                            <td><span t-field="o.sudo().student_id.pid"/></td>
+                            <td><strong>Student ID :</strong></td>
+                            <td><span t-field="o.sudo().student_id.student_code"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Student Name :</strong></td>
+                            <td><span t-field="o.sudo().student_id.name"/></td>
+                            <td><strong>Father's Name :</strong></td>
+                            <td><span t-field="o.sudo().student_id.parent_id"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Program :</strong></td>
+                            <td><span t-field="o.sudo().student_id.program_id"/></td>
+                            <td><strong>Semester:</strong></td>
+                            <td><span t-field="o.sudo().student_id.semester_id"/></td>
+                        </tr>
+                    </table>
+                               
+                        </div>
+                    </xpath>
+                </template>
+                <div class="page">
+                    <div class="oe_structure">
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                    </div>
+                    <div class="row" align="center">
+                        <span>
+                            <h1>Fees Report</h1>
+                        </span>
+                    </div>
+                    <div class="row" align="center" style="font-family: 'Helvetica';font-size: 20px;">
+                        <span>For the month of </span>
+                        <span t-esc="get_month(o.date)"></span>
+                    </div>
+                    <br />
+                    <br />
+                    <table width="100%">
+                        <tr>
+                            <td width="15%" style="font-family: 'Helvetica';font-size: 18px;">
+                                <b>Number</b>
+                            </td>
+                            <td width="5%">
+                                <b>:</b>
+                            </td>
+                            <td width="80%" style="font-family: 'Helvetica';font-size: 16px;">
+                                <span t-field="o.number"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="15%" style="font-family: 'Helvetica';font-size: 18px;">
+                                <b>Date</b>
+                            </td>
+                            <td width="5%">
+                                <b>:</b>
+                            </td>
+                            <td width="80%" style="font-family: 'Helvetica';font-size: 16px;">
+                                <span t-esc="time.strftime('%Y-%m-%d')"></span>
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                    <t t-set="display_discount" t-value="any([l.discount for l in o.line_ids])"/>
+                    <table width="100%" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td width="5%" style="font-family: 'Helvetica';font-size: 18px;" align="left">
+                                    <b>#</b>
+                                </td>
+                                <td width="50%" align="left" style="font-family: 'Helvetica';font-size: 18px;">
+                                    <b>Fees Structure</b>
+                                </td>
+                                <td width="50%" align="left" style="font-family: 'Helvetica';font-size: 18px;">
+                                    <b>Amount</b>
+                                </td>
+                                <td width="50%" align="left" t-if="display_discount" style="font-family: 'Helvetica';font-size: 18px;">
+                                    <!-- <th t-if="display_discount" class="text-right">Disc.(%)</th> -->
+                                    <b>Disc.(%)</b>
+                                </td>
+                                <td align="right" width="45%" style="font-family: 'Helvetica';font-size: 18px;">
+                                    <b>Subtotal</b>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="counter" t-value="0"/>
+                            <t t-foreach="o.line_ids" t-as="l">
+                                <t t-set="counter" t-value="counter+1"/>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <t t-esc="counter"></t>
+                                        </span>
+                                    </td>
+                                    <!--  <td width="5%" align="left" style="font-family: 'Helvetica';font-size: 16px;"> -->
+                                    <!--                                                 <span t-esc="get_no()"></span> -->
+                                    <!-- </td> -->
+                                    <td width="50%" align="left" style="font-family: 'Helvetica';font-size: 16px;">
+                                        <span t-field="l.name"></span>
+                                    </td>
+                                    <td width="50%" align="left" style="font-family: 'Helvetica';font-size: 16px;">
+                                        <span t-field="l.amount"></span>
+                                    </td>
+                                    <td t-if="display_discount" class="text-right">
+                                        <span t-field="l.discount"/>
+                                    </td>
+                                    <td width="50%" align="right" style="font-family: 'Helvetica';font-size: 16px;">
+                                        <span t-field="l.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.currency_id}'></span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-xs-4 pull-right">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <td>
+                                        <strong>Total Fees</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.total"
+                                            t-options='{"widget": "monetary","display_currency": o.currency_id}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Amount Paid</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.paid_amount"
+                                            />
+                                    </td>
+                                </tr>
+                                <tr class="border-black">
+                                    <td>
+                                        <strong>Due Amount</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.due_amount"
+                                            />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 pull-right">
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <b>Finance Officer,</b>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <span style="font-family: 'Helvetica';font-size: 16px;">Authorized Signature</span>
+                        <br />
+                    </div>
+                </div>
+                <template id="custom_layout_footer" inherit_id="report.external_layout_footer">
+                    <xpath expr="//div[@class='footer']" position="replace">
+                        <div class="footer">
+                            <div class="text-center" style="border-top: 1px solid black;">
+                                <ul t-if="not company.custom_footer" class="list-inline">
+                                    <t t-set="company" t-value="company.sudo()"/>
+                                    <li t-if="company.phone">Phone: 
+                                        <span t-field="company.phone"/>
+                                    </li>
+                                    <li t-if="company.fax and company.phone">&amp;bull;</li>
+                                    <li t-if="company.fax">Fax: 
+                                        <span t-field="company.fax"/>
+                                    </li>
+                                    <li t-if="company.email and company.fax or company.email and company.phone">&amp;bull;</li>
+                                    <li t-if="company.email">Email: 
+                                        <span t-field="company.email"/>
+                                    </li>
+                                    <li t-if="company.website and company.email or company.website and company.fax or company.website and company.phone">&amp;bull;</li>
+                                    <li t-if="company.website">Website: 
+                                        <span t-field="company.website"/>
+                                    </li>
+                                </ul>
+                                <ul t-if="not company.custom_footer" class="list-inline" name="financial_infos">
+                                    <li t-if="company.vat">TIN: 
+                                        <span t-field="company.vat"/>
+                                    </li>
+                                </ul>
+                                <t t-if="company.custom_footer">
+                                    <span t-raw="company.rml_footer"/>
+                                </t>
+                                <ul class="list-inline">
+                                    <li>Page:</li>
+                                    <li>
+                                        <span class="page"/>
+                                    </li>
+                                    <li>/</li>
+                                    <li>
+                                        <span class="topage"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </xpath>
+                </template>
+            </t>
+        </t>
+    </template>
+</odoo>

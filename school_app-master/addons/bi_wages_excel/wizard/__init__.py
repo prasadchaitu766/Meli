@@ -1,0 +1,1 @@
+import wages_wizard

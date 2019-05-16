@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+ <!--  <menuitem name="Account Journal"
+			id="bi_menu_account_journal_root"          
+			web_icon="bi_account_journal,static/description/icon.png"/>
+			
+ -->
+		<menuitem
+			id="bi_menu_journal_voucher_main"
+			name="Journal Voucher"
+			parent="account.menu_finance"
+			sequence="3"/>
+
+		<record id="bi_view_receipt_voucher_tree" model="ir.ui.view">
+		<field name="name">bi.account.receipt.tree</field>
+		<field name="model">bi.account.receipt</field>
+		<field name="arch" type="xml">
+				<tree string="Account">        
+					<field name="name"/>
+					<field name="receipt_date"/>
+					<field name="customer"/>
+					<field name="journal_id"/>
+					<field name="account_id"/>  
+					<field name="state"/>  
+				</tree>
+		</field>
+		</record>
+		
+ 
+		<record id="bi_kanban_view_receipt_voucher" model="ir.ui.view">
+		<field name="name">bi.account.receipt.kanban</field>
+		<field name="model">bi.account.receipt</field>
+		<field name="priority">10</field>
+		<field name="arch" type="xml">
+			<kanban class="o_hr_account_kanban">              
+				<templates>
+				<t t-name="kanban-box">
+						<div class="oe_kanban_global_click">
+							<div class="oe_kanban_details">
+								<div class="o_kanban_image">
+									<img t-att-src="kanban_image()"/>
+								</div>
+								<strong><field name="name"/></strong>
+								<ul>
+									<li><b><field name="customer" ></field></b></li>
+									<li>Journal ID  : <field name="journal_id"></field></li>
+									<li>Account ID : <field name="account_id"></field></li>
+								</ul>
+							</div>
+						</div>
+				</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+	
+	 <record id="view_receipt_voucher_form" model="ir.ui.view">
+			<field name="name">bi.account.receipt.form</field>
+			<field name="model">bi.account.receipt</field>
+			<field name="arch" type="xml">
+				<form string="Account">
+					<header>
+						<button name="button_post" string="Post" type="object" states="draft"/>
+						<button name="button_draft" string="Reset to Draft" type="object" states="cancel"/>
+						<button name="button_cancel" string="Cancel" type="object" states="post" confirm="Do you want to cancel this entry?"/>
+						<field name="state" readonly="1" statusbar_visible="draft,post,cancel" widget="statusbar"/>
+					</header>
+					<sheet>
+						<div class="oe_title">
+							<label for="name" class="oe_edit_only"/>
+							<h1>
+								<field name="name" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>			
+								<field name="customer"  domain="[('parent_id', '=', False)]"/>
+								<field name="school_id" required="1"/>
+								<field name="receipt_date"/>
+								<field name="bank_type"/>
+								<field name="cheque_no"  attrs="{'invisible':[('bank_type', '!=', 'cheque')],'required':[('bank_type', '=', 'cheque')]  }"/>
+								<field name="Cheque_date"  attrs="{'invisible':[('bank_type', '!=', 'cheque')], 'required':[('bank_type', '=', 'cheque')] }"/>
+							</group>
+							<group>
+								<field name="journal_id" domain="[('name','ilike','receipt')]"/>
+								<field name="account_id"/>
+								<field name="currency_id" required="1"/>
+								<field name="move_id"/>		
+								<field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>						
+							</group>
+						</group>
+						<notebook>
+							<page string="Accounts">
+							<field name="receipt_ids">
+								<tree string="Accounts Information" editable="bottom">
+									<field name="analytic_account_id"/>
+									<field name="account_id"/>
+									<field name="name"/>
+									<field name="amount"/>
+									<field name="tax_id" widget="many2many_tags" domain="[('company_id','=',parent.company_id),('type_tax_use','=','none')]"/>
+								</tree>
+							</field>
+
+							<group class="oe_subtotal_footer oe_right">	
+									<field name="subtotal" class="oe_subtotal_footer_separator"/>
+									<field name="amount_tax" class="oe_subtotal_footer_separator"/>
+									<field name="total" class="oe_subtotal_footer_separator"/>	  
+							</group>                      
+				 
+
+							</page>
+						</notebook>	
+						<field name="narration" placeholder="Enter narrations here !"/>					
+					</sheet>
+
+				</form>
+			</field>
+		</record>
+
+		
+	  <record id="bi_view_receipt_voucher_list" model="ir.actions.act_window">
+			<field name="name">Account</field>
+			<field name="res_model">bi.account.receipt</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban,tree,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+			<field name="view_id" eval="False"/>
+			<field name="help" type="html">
+			  <p class="oe_view_nocontent_create">
+				Click to add new entry.
+			  </p>
+			  <p>
+				Receipt Voucher
+			  </p>
+			</field>
+		</record>
+
+		<menuitem
+			id="bi_menu_receipt_voucher"
+			name="Receipt Voucher"
+			action="bi_view_receipt_voucher_list"
+			parent="bi_account_journal.bi_menu_journal_voucher_main"
+			sequence="1"/>
+
+<record id="bi_view_payment_voucher_tree" model="ir.ui.view">
+		<field name="name">bi.account.payment.tree</field>
+		<field name="model">bi.account.payment</field>
+		<field name="arch" type="xml">
+				<tree string="Account">        
+<!-- 					<field name="name"/>
+ -->				<field name="payment_date"/>
+					<field name="customer"/>
+					<field name="journal_id"/>
+					<field name="account_id"/>  
+					<field name="state"/>  
+				</tree>
+		</field>
+		</record>
+		
+ 
+		<record id="bi_kanban_view_payment_voucher" model="ir.ui.view">
+		<field name="name">bi.account.payment.kanban</field>
+		<field name="model">bi.account.payment</field>
+		<field name="priority">10</field>
+		<field name="arch" type="xml">
+			<kanban class="o_hr_account_kanban">              
+				<templates>
+				<t t-name="kanban-box">
+						<div class="oe_kanban_global_click">
+							<div class="oe_kanban_details">
+								<div class="o_kanban_image">
+									<img t-att-src="kanban_image()"/>
+								</div>
+								<strong><field name="name"/></strong>
+								<ul>
+									<li><b><field name="customer" ></field></b></li>
+									<li>Journal ID  : <field name="journal_id"></field></li>
+									<li>Account ID : <field name="account_id"></field></li>
+								</ul>
+							</div>
+						</div>
+				</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+	
+	 <record id="view_payment_voucher_form" model="ir.ui.view">
+			<field name="name">bi.account.payment.form</field>
+			<field name="model">bi.account.payment</field>
+			<field name="arch" type="xml">
+				<form string="Account">
+				<header>
+						<button name="button_post" string="Post" type="object" states="draft"/>
+						<button name="button_draft" string="Reset to Draft" type="object" states="cancel"/>
+						<button name="button_cancel" string="Cancel" type="object" states="post" confirm="Do you want to cancel this entry?"/>
+						<field name="state" readonly="1" statusbar_visible="draft,post,cancel" widget="statusbar"/>
+				</header>
+					<sheet>
+						<div class="oe_title">
+							<label for="name" class="oe_edit_only"/>
+							<h1>
+								<field name="name" readonly="1" />
+							</h1>
+						</div>
+						<group>
+							<group>								
+								<field name="customer"  domain="[('parent_id', '=', False)]"/>
+								<field name="school_id" required="1"/>
+								<field name="payment_date"/>
+								<field name="bank_type"/>
+								<field name="cheque_no"  attrs="{'invisible':[('bank_type', '!=', 'cheque')],'required':[('bank_type', '=', 'cheque')]  }"/>
+								<field name="Cheque_date"  attrs="{'invisible':[('bank_type', '!=', 'cheque')], 'required':[('bank_type', '=', 'cheque')] }"/>
+							</group>
+							<group>
+								<field name="journal_id" domain="[('name','ilike','payment')]"/>
+								<field name="account_id"/>
+								<field name="currency_id" required="1"/>	
+								<field name="move_id" />
+								<field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>							
+							</group>
+						</group>
+							<notebook>
+							<page string="Accounts">
+							<field name="payment_ids">
+								<tree string="Accounts Information" editable="bottom">
+									<field name="analytic_account_id"/>
+									<field name="account_id"/>
+									<field name="name"/>
+									<field name="amount"/>
+									<field name="tax_id" widget="many2many_tags" domain="[('company_id','=',parent.company_id),('type_tax_use','=','none')]"/>
+								</tree>
+							</field>
+
+							<group class="oe_subtotal_footer oe_right">	
+									<field name="subtotal" class="oe_subtotal_footer_separator"/>
+									<field name="amount_tax" class="oe_subtotal_footer_separator"/>
+									<field name="total" class="oe_subtotal_footer_separator"/>	  
+							</group> 
+
+							</page>
+						</notebook>			
+						<field name="narration" placeholder="Enter narrations here !"/>	
+					</sheet>
+
+				</form>
+			</field>
+		</record>
+
+		
+	  <record id="bi_view_payment_voucher_list" model="ir.actions.act_window">
+			<field name="name">Account</field>
+			<field name="res_model">bi.account.payment</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban,tree,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+			<field name="view_id" eval="False"/>
+			<field name="help" type="html">
+			  <p class="oe_view_nocontent_create">
+				Click to add new entry.
+			  </p>
+			  <p>
+				Payment Voucher
+			  </p>
+			</field>
+		</record>
+
+		<menuitem
+			id="bi_menu_payment_voucher"
+			name="Payment Voucher"
+			action="bi_view_payment_voucher_list"
+			parent="bi_account_journal.bi_menu_journal_voucher_main"
+			sequence="2"/>
+
+	</data>
+</odoo>

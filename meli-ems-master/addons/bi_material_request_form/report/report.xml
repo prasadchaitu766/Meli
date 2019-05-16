@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+		<report id="material_request_report_id"
+		            model="material.request"
+		            string="Material Request Report"
+		            report_type="qweb-pdf"
+		            name="bi_material_request_form.material_request_form_template"
+		            file="bi_material_request_form.material_request_form_template"
+		            menu="True"
+		/>
+	</data>
+</odoo>

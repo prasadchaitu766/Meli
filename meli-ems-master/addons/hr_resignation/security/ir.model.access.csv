@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+view_hr_resignation,view.hr.resignation,hr_resignation.model_hr_resignation,base.group_user,1,1,1,0
+view_hr_employee,view.hr.employee,hr.model_hr_employee,base.group_user,1,1,0,0
+
+view_hr_resignation_user,hr.resignation,hr_resignation.model_hr_resignation,group_resignation_user,1,1,1,0
+view_hr_resignation_user_base,hr.resignation,hr_resignation.model_hr_resignation,base.group_user,1,1,1,0
+
+access_hr_resignation,hr.resignation,model_hr_resignation,school.group_school_academic_director,1,1,1,1
+access_resignation,hr.resignation.line,hr_resignation.model_hr_resignation_line,base.group_user,1,1,1,0

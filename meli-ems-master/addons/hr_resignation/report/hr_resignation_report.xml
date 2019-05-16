@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<report 
+            id="resignation_report_new"
+            model="hr.resignation"
+            string="Resignation Report"
+            report_type="qweb-pdf"
+            name="hr_resignation.stock_clearance_report_1"
+            file="hr_resignation.stock_clearance_report_1"
+        />
+
+</odoo>

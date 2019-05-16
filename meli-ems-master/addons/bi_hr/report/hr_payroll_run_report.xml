@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_payslip_run_new">
+    <t t-call="report.html_container">
+        <t t-call="report.external_layout">
+        <t t-foreach="docs" t-as="o">
+            <div class="page">
+                <table class="table-condensed">
+                    <tr>
+            
+                        <td colspan="2"><p style="color:#000;text-align: center;font-size: 30px;"><strong t-field="o.name"/></p></td>
+                        </tr>                           
+                            <t t-foreach="o.slip_ids" t-as="l"> 
+                                <tr>
+                                    <td style="border: 1px solid grey;">
+                                        <table class="table-condensed">
+                                        
+                                            <tr>
+                                                <td><strong>Employee Name</strong></td>
+                                                <td><p t-field="l.employee_id.name"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Designation</strong></td>
+                                                <td><p t-field="l.employee_id.job_id.name"/></td>
+                                            </tr>
+                                            <tr>                                                
+                                                <t t-set="inc" t-value="1" /> 
+                                                <t t-foreach="l.worked_days_line_ids" t-as="res">
+                                                <t t-if="res.code == 'WORK100'">
+                                                        <td><strong>Number Of Days</strong></td>
+                                                    <td><span t-field="res.number_of_days"/></td>
+                                                </t>
+                                                </t> 
+                                            </tr> 
+                                             <tr>
+                                                <td><strong>Offered Salary</strong></td>
+                                                <td><p t-field="l.contract_id.offered_salary"/></td>
+                                            </tr>
+                                           
+                                               <tr>                        
+                                               <td><table class="table-condensed">
+                                                <t t-foreach="l.line_ids.filtered(lambda line: line.salary_rule_id.appears_on_payslip)" t-as="line">
+                                                <t t-if="(line.category_id.name == 'Basic')">
+                                                <t t-if="line.amount != 0">
+                                                        <td><span t-field="line.salary_rule_id.name"/></td>
+                                                        <td><span t-field="line.amount"/></td>
+                                                </t> 
+                                                </t>                                              
+                                                <t t-if="(line.category_id.name == 'Gross')">
+                                                <t t-if="line.amount != 0">
+                                                         <tr><td><span t-field="line.salary_rule_id.name"/></td>
+                                                        <td style="text-align:right;"><span t-field="line.amount"/></td></tr>
+                                                    
+                                                </t> 
+                                                </t>  
+                                                <t t-if="line.category_id.name == 'Allowance'">
+                                                <t t-if="line.amount != 0">
+                                                        <tr><td><span t-field="line.salary_rule_id.name"/></td>
+                                                        <td style="text-align:right;"><span t-field="line.amount"/></td></tr> 
+
+                                                </t> 
+                                                </t>
+                                                </t> 
+                                                <tr>
+                                                    <td><strong>Total Earnings</strong></td>
+                                                    <td style="text-align:right;"><span t-field="l.total_earning"/></td>
+                                                </tr>
+                                                </table></td>
+                                                <td><table class="table-condensed">
+                                                <!-- <td><strong>Deduction</strong></td>  -->
+                                                <t t-set="inc" t-value="1" /> 
+                                                <t t-foreach="l.line_ids.filtered(lambda line: line.salary_rule_id.appears_on_payslip)" t-as="line">
+                                                <t t-if="line.category_id.name == 'Deduction'">
+                                                <t t-if="line.amount != 0">
+                                                        <tr><td><span t-field="line.salary_rule_id.name"/></td>
+                                                        <td style="text-align:right;"><span t-field="line.amount"/></td></tr>
+                                                        
+                                                    
+                                                </t> 
+                                                </t>  
+                                                </t>
+                                                <tr>
+                                                    <td><strong>Total Deductions</strong></td>
+                                                    <td style="text-align:right;"><span t-field="l.total_deduction"/></td>
+                                                </tr>
+                                                </table></td>
+                                                </tr>
+                                                <tr>
+                                                <td><table class="table-condensed">
+                                                <th>Net</th>
+                                                <td style="text-align:right;"><b><span t-field="l.amount_total"/></b></td>
+                                                </table></td>
+                                                </tr>
+                                        </table>
+                                    </td>
+                                       
+                                     </tr>
+                                </t>
+                         
+                       
+                        
+                         
+                    </table>
+                </div>
+        </t>
+    </t>
+    </t>
+</template>
+</odoo>
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ 		<record id="question_view_all" model="ir.actions.act_window">
+            <field name="name">SURVEY VIEW</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">question.report</field>
+            <field name="view_mode">tree,form</field>        
+        </record>
+
+
+        <record id="view_payslip_question" model="ir.ui.view">
+            <field name="name">survey tree view</field>
+            <field name="model">question.report</field>
+            <field name="arch" type="xml">
+            <tree >
+                <field name="employee_id" />
+                <field name="survey_date"/>
+                <field name="question" />
+                <field name="score" />
+            </tree>
+          </field>
+        </record>
+
+         <record id="payslip_question_filter" model="ir.ui.view">
+            <field name="name">Survey filter</field>
+            <field name="model">question.report</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                   <group expand="0" string="Group By">
+                         <filter string="Employee" name="groupby_employee" domain="[]" context="{'group_by':'employee_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window.view" id="action_tag_tree_view_question">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_payslip_question"/>
+            <field name="act_window_id" ref="question_view_all"/>
+        </record>
+
+        <menuitem id="menu_payslip_survey_question" name="Employee Valuation" parent="survey.menu_surveys" sequence="100" action="question_view_all"/>
+
+</odoo>
+
+

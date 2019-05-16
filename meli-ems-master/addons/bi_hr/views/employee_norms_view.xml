@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+		<record id="employee_norm_form" model="ir.ui.view">
+			<field name="name">employee.norm.form</field>
+			<field name="model">employee.norms</field>
+			<field name="arch" type="xml">
+				<form string="Norms">
+					<sheet>                     
+						<group>
+							<group>                          
+								<field name="employee_id" />                                                 
+							</group>
+							<group>
+								<field name="designation_id"/>
+							</group>
+						</group>  
+						<notebook>
+								<page string="Norm Details">
+								<field name="norm_ids" colspan="4" nolabel="1">
+									<tree string="Norms" editable="bottom">
+										<field name="conditon"/>
+									</tree>
+								</field>
+								</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="employee_norm_tree" model="ir.ui.view">
+			<field name="name">employee.norm.tree</field>
+			<field name="model">employee.norms</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="employee_id"/>
+					<field name="designation_id"/>
+				</tree>
+			</field>
+		</record>
+		
+	  <record id="action_norms" model="ir.actions.act_window">
+			<field name="name">Norms</field>
+			<field name="res_model">employee.norms</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+			<field name="view_id" eval="False"/>
+			<field name="help" type="html">
+			  <p class="oe_view_nocontent_create">
+				Click to add new entry.
+			  </p>            
+			</field>
+		</record>
+
+
+		<menuitem name="Norms" id="menu_norms_details" />
+      	<menuitem name="Norm Details" id="details_norms" parent="menu_norms_details" action="action_norms"/> 
+
+
+
+</odoo>

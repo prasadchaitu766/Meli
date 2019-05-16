@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="attendance_employee_rule" model="ir.rule">
+		<field name="name">Employee Attendance</field>
+		<field name="model_id" ref="model_hr_employee"/>
+		<field name="global" eval="True"/>
+		<field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]
+		</field>
+	</record>
+	<record model="ir.module.category" id="module_category_gratuity_groups">
+		<field name="name">Gratuity Groups</field>
+		<field name="description">Gratuity Groups</field>
+		<field name="sequence">17</field>
+	</record>
+
+	<record model="res.groups" id="group_gratuity_user">
+		<field name="name">Gratuity Request User</field>
+		<field name="category_id" ref="module_category_gratuity_groups"/>
+	</record>
+
+	<record model="res.groups" id="employee_status_approve_user">
+		<field name="name">Employee Status User</field>
+		<field name="category_id" ref="module_category_gratuity_groups"/>
+	</record>
+
+	<record model="res.groups" id="group_gratuity_manager">
+		<field name="name">Gratuity Approved Manager</field>
+		<field name="category_id" ref="module_category_gratuity_groups"/>
+	</record>	
+</odoo>	

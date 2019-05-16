@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="module_category_resignation" model="ir.module.category">
+            <field name="name">Resignation</field>
+            <field name="sequence">22</field>
+        </record>
+
+        <record id="group_resignation_user" model="res.groups">
+            <field name="name">Approve User</field>
+            <field name="category_id" ref="module_category_resignation"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+    </data>
+</odoo>

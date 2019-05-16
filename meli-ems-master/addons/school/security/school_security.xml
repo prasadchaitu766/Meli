@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<odoo>
+    <data>
+        
+        <record model="ir.module.category" id="module_branch_groups">
+            <field name="name">Campus</field>
+            <field name="description">Campus</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="group_invisible" model="res.groups">
+            <field name="name">Invisible </field>
+<!--             <field name="category_id" ref="module_category_school"/>
+ -->        </record>
+
+        <record model="res.groups" id="group_branch_user">
+            <field name="name">Campus User</field>
+            <field name="category_id" ref="module_branch_groups"/>
+        </record>
+
+        <record id="module_category_school" model="ir.module.category">
+            <field name="name">School Management</field>
+            <field name="sequence">22</field>
+        </record>
+
+        <record id="group_school_administration" model="res.groups">
+            <field name="name">School Administrator</field>
+            <field name="category_id" ref="module_category_school"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_school_teacher" model="res.groups">
+            <field name="name">School Teacher</field>
+            <field name="category_id" ref="module_category_school"/>
+        </record>
+
+        <record id="group_school_student" model="res.groups">
+            <field name="name">School Student</field>
+            <field name="category_id" ref="module_category_school"/>
+        </record>
+
+        <record id="group_school_parent" model="res.groups">
+            <field name="name">Student Parent</field>
+            <field name="category_id" ref="module_category_school"/>
+        </record>
+
+        <record id="group_is_admission" model="res.groups">
+            <field name="name">In Admission</field>
+            <field name="category_id" ref="module_category_school"/>
+        </record>
+
+        <!-- Rule For Creating Personal School Record As A Teacher, Student & Parent-->
+
+        <record id="rule_personal_school_record" model="ir.rule">
+            <field name="name">Rule Personal School Record</field>
+            <field name="model_id" ref="model_school_school"/>
+            <field name="domain_force">['|','|',('company_id.child_ids', 'child_of', [user.company_id.id]),('company_id', 'child_of', [user.company_id.id]),('company_id', '=', False)]</field>
+            <field name="groups" eval="[(4, ref('group_school_teacher')),(4, ref('group_school_student')),(4, ref('group_school_parent'))]"/>
+        </record>
+
+        <!-- Rule For Student Profile Record As A Student -->
+
+        <record id="rule_student_profile_record_as_student" model="ir.rule">
+            <field name="name">Rule Student Profile Record As A Student</field>
+            <field name="model_id" ref="model_student_student"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_school_student'))]"/>
+        </record>
+<!-- Record Rule student can see his own Warning -->
+        <record id="warning_message_rule_student" model="ir.rule">
+            <field name="name">Student Warning Record Rule</field>
+            <field name="model_id" ref="model_student_warning"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('student_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('school.group_school_student'))]"/>
+        </record>
+
+         <record id="warning_message_rule_teacher" model="ir.rule">
+            <field name="name">Student Warning Record Rule</field>
+            <field name="model_id" ref="model_student_warning"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('student_id.school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('school.group_school_teacher')),(4, ref('school.group_school_administration'))]"/>
+        </record>
+
+        <record id="rule_student_profile_record_as_parent" model="ir.rule">
+            <field name="name">Rule Student Profile Record As A Parent</field>
+            <field name="model_id" ref="model_student_student"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force"> [('parent_id.partner_id','=',user.partner_id.id)]</field>
+            <field name="groups" eval="[(4, ref('group_school_parent'))]"/>
+        </record>
+
+        <!-- Rule For School Standard Record As An Administrator -->
+
+     
+        <!-- Record Rule teacher can see standards related to school -->
+        <record id="rule_school_standard_teacher" model="ir.rule">
+            <field name="name">Teacher School Standard Record Rule</field>
+            <field name="model_id" ref="model_school_standard"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('school_id.company_id','=',user.company_id.id)]</field>
+            <field name="groups" eval="[(4, ref('group_school_teacher'))]"/>
+        </record>
+
+
+
+        <!-- Rule For News Update Record As A Student & Teacher -->
+
+        <record id="rule_student_news_update_record" model="ir.rule">
+            <field name="name">Rule News Update Record</field>
+            <field name="model_id" ref="model_student_news"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('user_ids.id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('school.group_school_student')),(4, ref('school.group_school_teacher'))]"/>
+        </record>
+
+        <!-- Record Rule parents can see reminder of own child -->
+        <record id="parents_reminder_record_rule" model="ir.rule">
+            <field name="name">Parents Reminder Record Rule</field>
+            <field name="model_id" ref="model_student_reminder"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('stu_id.parent_id.partner_id','=',user.partner_id.id)]</field>
+            <field name="groups" eval="[(4, ref('school.group_school_parent'))]"/>
+        </record>
+
+        <!-- Record Rule student can see reminder of their own  -->
+        <record id="student_reminder_record_rule" model="ir.rule">
+            <field name="name">Student Remainder Record Rule</field>
+            <field name="model_id" ref="model_student_reminder"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('stu_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('school.group_school_student'))]"/>
+       </record>
+        <record id="student_reminder_record_rule_teacher" model="ir.rule">
+            <field name="name">Student Remainder Record Rule</field>
+            <field name="model_id" ref="model_student_reminder"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('stu_id.school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('school.group_school_teacher'))]"/>
+       </record>
+       <record id="student_exam_eligible_rule_student" model="ir.rule">
+            <field name="name">Student Request Record Rule</field>
+            <field name="model_id" ref="model_exam_eligible"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('student_name_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('school.group_school_student'))]"/>
+       </record>
+
+      <record id="rule_personal_school_teacher" model="ir.rule">
+           <field name="name">Rule Personal teacher Record</field>
+           <field name="model_id" ref="model_school_teacher"/>
+           <field name="domain_force">[('employee_id.user_id.id', '=', user.id)]</field>
+           <field name="groups" eval="[(4, ref('group_school_teacher'))]"/>
+       </record>
+       
+       <!--  Rule For Parent Profile Record As A Parent -->
+       <record id="rule_school_parents" model="ir.rule">
+           <field name="name">Rule Parent Profile Record As A Parent</field>
+           <field name="model_id" ref="model_school_parent"/>
+           <field name="global" eval="True"/>
+           <field name="domain_force"> [('partner_id','=', user.partner_id.id)]</field>
+           <field name="groups" eval="[(4, ref('school.group_school_parent'))]"/>
+       </record>
+       <!-- Record Rule student can see own parent -->
+       <record id="rule_stud_parent" model="ir.rule">
+           <field name="name">Record rule student can see own parent</field>
+           <field name="model_id" ref="model_school_parent"/>
+           <field name="global" eval="True"/>
+           <field name="domain_force"> [('student_id.user_id','=', user.id)]</field>
+           <field name="groups" eval="[(4, ref('school.group_school_student'))]"/>
+       </record>
+       
+       <!-- Rule For Student Profile Record in Adminssion -->
+
+        <record id="rule_student_profile_record_as_student_in_admisssion" model="ir.rule">
+            <field name="name">Rule Student Profile Record As A Student for in Adminssion </field>
+            <field name="model_id" ref="model_student_student"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_is_admission'))]"/>
+        </record>
+
+        <!-- addin campus wise security -->
+        <record id="rule_school_standard_record_as_admin" model="ir.rule">
+            <field name="name">Rule School Standard Record As An Administrator</field>
+            <field name="model_id" ref="model_school_standard"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_school_administration'))]"/>
+        </record>
+
+        <record id="rule_school_school_as_admin" model="ir.rule">
+            <field name="name">Rule School School Record As An Administrator</field>
+            <field name="model_id" ref="model_school_school"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+        <record id="rule_student_student_as_admin" model="ir.rule">
+            <field name="name">Rule Student Record As An Administrator</field>
+            <field name="model_id" ref="model_student_student"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_school_administration')),(4, ref('group_school_teacher'))]"/>
+        </record>
+        <record id="rule_school_teacher_as_admin" model="ir.rule">
+            <field name="name">Rule School Teacher Record As An Administrator</field>
+            <field name="model_id" ref="model_school_teacher"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_school_administration'))]"/>
+        </record>
+    
+        <!-- addin account security -->
+         <record id="rule_accountant" model="ir.rule">
+            <field name="name">Rule for accounting</field>
+            <field name="model_id" ref="model_account_invoice"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+             <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+        <record id="rule_account_invoice_line" model="ir.rule">
+            <field name="name">Rule for account invoice line</field>
+            <field name="model_id" ref="model_account_invoice_line"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+        <record id="rule_move" model="ir.rule">
+            <field name="name">Rule for account move</field>
+            <field name="model_id" ref="model_account_move"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+             <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+       <!--   <record id="rule_move_line" model="ir.rule">
+            <field name="name">Rule for account move line</field>
+            <field name="model_id" ref="account.model_account_move_line"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record> -->
+
+        <record id="rule_purchase" model="ir.rule">
+            <field name="name">Rule for purchase</field>
+            <field name="model_id" ref="model_purchase_order"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+        <record id="rule_purchase_order_line" model="ir.rule">
+            <field name="name">Rule for purchase</field>
+            <field name="model_id" ref="model_purchase_order_line"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+        <record id="rule_sale_order" model="ir.rule">
+            <field name="name">Rule for sale</field>
+            <field name="model_id" ref="model_sale_order"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+        <record id="rule_picking" model="ir.rule">
+            <field name="name">Rule for picking</field>
+            <field name="model_id" ref="model_stock_picking"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+        <record id="rule_warehouse" model="ir.rule">
+            <field name="name">Rule for Stock Warehouse</field>
+            <field name="model_id" ref="model_stock_warehouse"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('school_id','=',False),('school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+         <record id="rule_order_point" model="ir.rule">
+            <field name="name">Rule for reordering</field>
+            <field name="model_id" ref="stock.model_stock_warehouse_orderpoint"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('warehouse_id.school_id','=',False),('warehouse_id.school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+         <record id="rule_stock_quant" model="ir.rule">
+            <field name="name">Stock Quant</field>
+            <field name="model_id" ref="stock.model_stock_quant"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('location_id.school_id','=',False),('location_id.school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+        <record id="rule_stock_inventory" model="ir.rule">
+            <field name="name">Stock Inventory</field>
+            <field name="model_id" ref="stock.model_stock_inventory"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('location_id.school_id','=',False),('location_id.school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record> 
+        <record id="rule_stock_scrap" model="ir.rule">
+            <field name="name">Stock Scrap</field>
+            <field name="model_id" ref="stock.model_stock_scrap"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('location_id.school_id','=',False),('location_id.school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record> 
+        <record id="rule_procurement_order" model="ir.rule">
+            <field name="name">procurement_order</field>
+            <field name="model_id" ref="stock.model_procurement_order"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('warehouse_id.school_id','=',False),('warehouse_id.school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record> 
+        <record id="rule_stock_move" model="ir.rule">
+            <field name="name">Stock Move</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('location_dest_id.school_id.member_ids.user_id','=',user.id),('location_id.school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+        <record id="rule_stock_picking_type" model="ir.rule">
+            <field name="name">Rule for stock_picking_type</field>
+            <field name="model_id" ref="stock.model_stock_picking_type"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('warehouse_id.school_id','=',False),('warehouse_id.school_id.member_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_branch_user'))]"/>
+        </record>
+
+        <record id="transfer_rule_student" model="ir.rule">
+            <field name="name">Student transfer Record Rule</field>
+            <field name="model_id" ref="model_student_transfer"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('student_name.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('school.group_school_student'))]"/>
+        </record>
+        <record id="withdrawal_rule_student" model="ir.rule">
+            <field name="name">Student withdrawal Record Rule</field>
+            <field name="model_id" ref="model_student_withdrawal"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('student_name.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('school.group_school_student'))]"/>
+        </record>
+    </data>
+</odoo>

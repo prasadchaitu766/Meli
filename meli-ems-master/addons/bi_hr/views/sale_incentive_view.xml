@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="sale_incentive_tree" model="ir.ui.view">
+			<field name="name">sale.incentive.tree</field>
+			<field name="model">sale.incentive</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="employee_id"/>
+					<field name="amount_total"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="sale_incentive_form" model="ir.ui.view">
+			<field name="name">sale.incentive.form</field>
+			<field name="model">sale.incentive</field>
+			<field name="arch" type="xml">
+				<form string="Incentive">
+					<sheet> 
+						<div class="oe_title">
+							<label for="name" class="oe_edit_only"/>
+							<h1>
+								<field name="name" readonly="1" />
+							</h1>
+						</div>                       
+						<group>
+							<group>                          
+								<field name="employee_id"/>                                                 
+							</group>
+						</group>  
+						<notebook>
+								<page string="Incentive Details">
+								<field name="sale_incentive_line" colspan="4" nolabel="1">
+									<tree string="Incentive" editable="bottom">
+										<field name="date"/>
+										<field name="amount"/>
+									</tree>
+								</field>
+								<group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+		                                <field name="amount_total" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                       			</group>
+								</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="sale_incentive_line_tree" model="ir.ui.view">
+			<field name="name">sale.incentive.line.tree</field>
+			<field name="model">sale.incentive.line</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="date"/>
+					<field name="employee_id"/>
+					<field name="amount"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_incentive_search" model="ir.ui.view">
+            <field name="name">Employee Search</field>
+            <field name="model">sale.incentive.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="employee_id"/>
+                    <group>
+                        <filter string="Employee" context="{'group_by': 'employee_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+		
+	  <record id="action_sale_incentive" model="ir.actions.act_window">
+			<field name="name">Incentive</field>
+			<field name="res_model">sale.incentive</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+			<field name="view_id" eval="False"/>
+			<field name="help" type="html">
+			  <p class="oe_view_nocontent_create">
+				Click to add new entry.
+			  </p>            
+			</field>
+		</record>
+
+		 <record id="action_sale_incentive_line" model="ir.actions.act_window">
+			<field name="name">Incentive Line</field>
+			<field name="res_model">sale.incentive.line</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+			<field name="view_id" eval="False"/>
+			<field name="help" type="html">
+			  <p class="oe_view_nocontent_create">
+				Click to add new entry.
+			  </p>            
+			</field>
+		</record>
+
+		<menuitem id="menu_sale_incentive" 
+			name="Incentive Details" 
+			parent="hr_payroll.menu_hr_payroll_root" 
+			action="action_sale_incentive"/>  
+
+		<menuitem id="menu_sale_incentive_line" 
+			name="Incentive Report" 
+			parent="hr_payroll.menu_hr_payroll_root" 
+			action="action_sale_incentive_line" groups="hr.group_hr_manager"/> 
+
+
+
+</odoo>

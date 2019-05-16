@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_hr_contract_details_temp_1">
+    <t t-call="report.html_container">     
+        <t t-foreach="docs" t-as="o">
+            <t t-call="report.external_layout">
+                <div class="page" style="font-size:18px;padding:10px;">
+                    <h2><center>Contract</center></h2>
+                    <br/><br/><br/> 
+                    <table class="table table-condensed table-bordered">
+                        <tr>
+                            <td><strong>Employee</strong></td>
+                            <td><t t-if="o.employee_id"><span t-field="o.employee_id.name"/></t></td>
+                            <td><strong>Department</strong></td>
+                            <td><t t-if="o.department_id"><span t-field="o.department_id.name"/></t></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date of Joining</strong></td>
+                            <td><t t-if="o.date_of_join"><span t-field="o.date_of_join"/></t></td>
+                            <td><strong>Contract Type</strong></td>
+                            <td><t t-if="o.type_id"><span t-field="o.type_id.name"/></t></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Designation</strong></td>
+                            <td><t t-if="o.job_id"><span t-field="o.job_id.name"/></t></td>
+                            <td><strong>Code</strong></td>
+                            <td><t t-if="o.code"><span t-field="o.code"/></t></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Salary</strong></td>
+                            <td><t t-if="o.wage"><span t-field="o.wage"/></t></td>
+                            <td><strong>Working Schedule</strong></td>
+                            <td><t t-if="o.working_hours"><span t-field="o.working_hours"/></t></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Offered Salary</strong></td>
+                            <td><t t-if="o.offered_salary"><span t-field="o.offered_salary"/></t></td>
+                            <td><strong>Scheduled Pay</strong></td>
+                            <td><t t-if="o.schedule_pay"><span t-field="o.schedule_pay"/></t></td>
+                        </tr>
+                    </table>
+
+                     <!-- <br/><br/><br/> -->
+                     <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                                <b>HR,</b>
+                                <br/><br/><br/>
+                                <span style="font-family: 'Helvetica';font-size: 16px;">Authorized Signature</span>
+                                <br />
+ 
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

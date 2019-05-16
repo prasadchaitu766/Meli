@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<report
+		id="student_print_badge_new1"
+		string="Student ID Card"
+		model="student.student"
+		report_type="qweb-html"
+		name="bi_employee_card.print_student_badge_new1"
+		file="bi_employee_card.print_student_badge_new1"/>
+
+	<template id="bi_employee_card.print_student_badge_new1">
+		<t t-call="report.html_container">
+			<div class="page">
+				<t t-foreach="docs" t-as="student">
+					<div class="col-sm-6">
+					 <table style="width:168pt; height:269pt; border: 1pt solid black; border-collapse:separate; border-radius:1pt; margin:12pt">
+						<div class="col-sm-6">
+
+							<style>
+								.nobr { white-space: nowrap }
+							</style>
+							   
+							<td style="width:10%;" align="center" t-attf-style="background-image:url('/bi_employee_card/static/img/card.png');opacity:1;background-size:59mm 94mm;">
+								<br/>
+								
+							
+								<table style="width:77pt; height:150pt">
+									<tr style="height:70%;">
+										<td align="center" valign="center">
+											<img t-if="student.photo" t-att-src="'data:image/png;base64,%s' % (student.photo,)" style="max-height:125pt;max-width:200%;position: absolute; top: 88px;margin-left:-38px;margin-top:6px;width: 80px;height: 85px;" alt="Student Image"/>
+											<br/>
+								<br/>
+								<br/>
+								<br/>
+								<br/> 
+								<br/>
+
+											<tr><th><div style="font-size:12pt;color:#FFB956;margin-bottom:0pt;margin-top:0pt;" align="center"><nobr><span><span t-esc="student.name"/><span> </span><span t-esc="student.middle"/><span> </span><span t-esc="student.last"/></span></nobr></div></th></tr>
+											<tr><td><div align="center" style="font-size:10pt;color:#FFB956;font-weight:bold;margin-bottom:-1pt;border-top:2px solid #FFB956; border-length: 7px;"><nobr>F/N:<t t-esc="student.parent_id"/></nobr></div></td></tr>
+											<tr><td><div align="center" style="font-size:10pt;color:#034ec6;font-weight:bold;margin-bottom:0pt;"><nobr><t t-esc="student.student_code"/></nobr></div></td></tr> 
+											<tr><td><div align="center" style="font-size:9pt;font-weight:bold;margin-bottom:2pt;"><nobr>Issue Date:<t t-esc="student.admission_donedate"/></nobr></div></td></tr>
+											<tr><td><div align="center" style="font-size:9pt;font-weight:bold;margin-bottom:5pt;"><nobr>Expired Date:<t t-esc="student.expired_date"/></nobr></div></td></tr>                                       
+										</td>
+									</tr>
+									<!-- <td align="center" valign="center">
+										
+											<img t-if="student.company_id and student.company_id.logo" t-att-src="'data:image/png;base64,%s' % (student.company_id.logo,)" style="max-height:35pt;max-width:90%" alt="Company Logo"/>
+
+									</td> -->
+								</table>
+							</td>
+							
+
+							</div>
+						</table>
+					</div>
+				</t>
+			</div>
+		</t>
+	</template>
+</odoo>

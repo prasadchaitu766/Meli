@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_loan_user,hr.loan.user,model_hr_loan,hr.group_hr_user,1,1,1,1
+access_hr_loan_manager,hr.loan.manager,model_hr_loan,hr.group_hr_manager,1,1,1,1
+access_hr_loan_line_user,hr.loan.line.user,model_hr_loan_line,hr.group_hr_user,1,1,1,1
+access_hr_loan_line_manager,hr.loan.line.manager,model_hr_loan_line,hr.group_hr_manager,1,1,1,1
+
+access_hr_loan_approve_user,hr.loan.user,model_hr_loan,group_loan_user,1,1,1,1
+access_hr_loan_line_approve_user,hr.loan.line.user,model_hr_loan_line,group_loan_user,1,1,1,1
+access_hr_loan_approve_user_base,hr.loan.user,model_hr_loan,base.group_user,1,1,1,1
+access_hr_loan_line_approve_user_base,hr.loan.line.user,model_hr_loan_line,base.group_user,1,1,1,1
+access_hr_loan_line_approve_base_move,account.move.line,account.model_account_move_line,base.group_user,1,1,1,1
+access_hr_loan_line_base_move,account.move,account.model_account_move,group_loan_user,1,1,1,1
+access_hr_loan_line_base_re,account.partial.reconcile.,account.model_account_partial_reconcile,group_loan_user,1,1,1,1
+access_hr_loan_line_base_type,accountaccount.type.,account.model_account_account_type,group_loan_user,1,1,1,1

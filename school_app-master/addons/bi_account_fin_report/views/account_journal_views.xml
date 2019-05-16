@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+ <record id="account.view_account_financial_report_form" model="ir.ui.view">
+            <field name="name">account.financial.report.form</field>
+            <field name="model">account.financial.report</field>
+            <field name="arch" type="xml">
+                <form string="Account Report">
+                    <group col="4">
+                        <field name="name"/>
+                        <field name="parent_id"/>
+                        <field name="sequence"/>
+                        <field name="type"/>
+                        <field name="sign"/>
+                        <field name="style_overwrite"/>
+                    </group>
+                    <notebook attrs="{'invisible': [('type','not in',['accounts','account_type','account_tag','account_report'])]}">
+                        <page string="Report">
+                            <group>
+                                <field name="display_detail" attrs="{'invisible': [('type','not in',['accounts','account_type','account_tag'])]}"/>
+                                <field name="account_report_id" attrs="{'invisible': [('type', '!=', 'account_report')]}"/>
+                            </group>
+                            <field name="account_ids" attrs="{'invisible': [('type', '!=', 'accounts')]}"/>
+                            <field name="account_type_ids" attrs="{'invisible': [('type', '!=', 'account_type')]}"/>
+                             <field name="account_tag_ids" attrs="{'invisible': [('type', '!=', 'account_tag')]}">
+                             	 <tree string="Account Tag">
+					                    <field name="name"/>
+					                </tree>
+					            </field>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+	</data>
+</odoo>

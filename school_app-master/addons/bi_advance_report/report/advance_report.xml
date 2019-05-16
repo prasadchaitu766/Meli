@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	 <report 
+        id="report_advance" 
+        model="bi.employee.salary" 
+        string="Advance Report"
+        report_type="qweb-pdf"
+        name="bi_advance_report.employee_report_advance" 
+        file="bi_advance_report.employee_report_advance"
+	    />
+</odoo>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+
+  <menuitem
+			id="bi_menu_sqlconnect_root"
+			name="SQL Config"           
+			parent="base.menu_custom"
+			sequence="75"/>
+
+		
+		 <record id="sqls_connection_form1" model="ir.ui.view">
+            <field name="name">sqls.connection.form</field>
+            <field name="model">bi.connector.sqlserver</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            <form string="Employee attendances">
+                <header>
+                	<button name="connect" type="object"  string="Connect" groups="bi_sqlconnector.essl_manager"/>
+                	<button name="show_attendance" type="object"  string="Show Attendance" groups="bi_sqlconnector.essl_manager"/>
+                	<button name="generate_attendance" type="object"  string="Generate Attendance" groups="bi_sqlconnector.essl_manager"/>
+                    <button name="generate_all" type="object"  string="Download Attendance" groups="bi_sqlconnector.essl_attendance"/>
+                </header>
+                    <sheet>
+                        <group>
+                        	<group>
+                            <field name="name" groups="bi_sqlconnector.essl_manager"/>
+                            <field name="db_name" groups="bi_sqlconnector.essl_manager"/>
+                            <field name="db_ip" groups="bi_sqlconnector.essl_manager"/>
+                            <field name="db_user" groups="bi_sqlconnector.essl_manager"/>
+                           </group> <group>
+                            <field name="password" groups="bi_sqlconnector.essl_manager"/>
+                            <field name="db_port" groups="bi_sqlconnector.essl_manager"/>
+                            <field name="last_server_pull_date" groups="bi_sqlconnector.essl_manager"/>
+                            <field name="last_update_date" groups="bi_sqlconnector.essl_manager"/>
+                            <field name="last_update_id"/>
+                        </group>
+                        </group>
+                    </sheet>
+            </form>
+            </field>
+        </record>
+
+
+        <record id="sqls_connection_tree" model="ir.ui.view">
+            <field name="name">sqls.connection.tree</field>
+            <field name="model">bi.connector.sqlserver</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Employee attendances">
+                    <field name="name"/>
+                    <field name="db_ip"/>
+                    <field name="db_user"/>
+                    <field name="last_update_date"/>
+                    <field name="last_update_id"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+         
+        <record id="sqls_connection_view" model="ir.actions.act_window">
+            <field name="name">Manage ESSL</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bi.connector.sqlserver</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sqls_connection_tree"/>
+        </record>
+        <menuitem action="sqls_connection_view" id="menu_sqls_connection_settings"
+            name="Connections settings" parent="bi_menu_sqlconnect_root" sequence="1"/>
+
+
+        <record id="sqls_attendance_tree" model="ir.ui.view">
+            <field name="name">sqls.attendance.tree</field>
+            <field name="model">bi.attendance.sqlserver</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Attendance Details">
+                	 <field name="att_logid"/>
+                    <field name="emp_code"/>
+                    <field name="emp_name"/>
+                    <field name="att_date"/>
+                    <field name="att_intime" context = "{'tz':'Asia/Calcutta'}"/>
+                    <field name="att_outtime" context = "{'tz':'Asia/Calcutta'}"/>
+                    <field name="att_dur"/>
+                    <field name="att_status"/>
+                    <field name="att_punch"/>
+                    <field name="emp_team"/>
+                    <field name="user_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="sqls_attendance" model="ir.actions.act_window">
+            <field name="name">Attendance Details</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bi.attendance.sqlserver</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sqls_attendance_tree"/>
+        </record>
+
+    <record id="hr_attendance.hr_attendance_view_form" model="ir.ui.view">
+        <field name="name">hr.attendance.form</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+        <form string="Employee attendances">
+            <sheet>
+                <group>
+                <group>
+                    <field name="employee_id"/>
+                    <field name="check_in"/>
+                    <field name="check_out"/>
+                     <field name="att_date" required="1"/>
+                    <field name="att_status" required="1"/>
+                    <field name="att_dur"/>
+                    <field name="company_id"/>
+                    <field name="user_type"/>
+                </group>
+                <group>
+                   
+                </group>
+            </group>
+
+            </sheet>
+        </form>
+        </field>
+    </record>
+
+
+ <record id="view_attendance_tree_inherit" model="ir.ui.view">
+            <field name="name">hr.attendance.tree</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+            <field name="arch" type="xml">
+             <xpath expr="//tree/field[@name='check_out']" position="after">
+               <field name="att_date"/>
+               <field name="att_punch"/>
+               <field name="att_status"/>
+               <field name="company_id"/>
+               <field name="att_dur"/>
+               <field name="user_type"/>
+         	</xpath>
+            <field name="check_in" position="before">
+                <field name="att_date"/>
+            </field>
+            </field>
+             
+        </record>
+
+<record id="hr_attendance.hr_attendance_view_filter" model="ir.ui.view">
+        <field name="name">hr_attendance_view_filter</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <search string="Hr Attendance Search">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <filter name="today" string="Today" domain="[('check_in', '&gt;=', datetime.datetime.now().replace(hour=0, minute=0, second=0)),('check_in', '&lt;=', datetime.datetime.now().replace(hour=23, minute=59, second=59))]" />
+                <filter string="Current Month" domain="[('check_in', '&gt;=', datetime.datetime.now().strftime('%Y-%m-01'))]" />
+                <separator/>
+                <filter string="No Check Out" domain="[('check_out', '=', False)]" />
+                <separator/>
+                <filter string="My Attendances" domain="[('employee_id.user_id.id', '=', uid)]" />
+                <group expand="0" string="Group By">
+                    <filter name="employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                    <separator/>
+                    <filter name="groupby_name" string="Month" context="{'group_by':'check_in'}"/>
+                    <separator/>
+                    <filter name="company" string="Company" context="{'group_by':'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+ <menuitem id="hr_attendance.menu_hr_attendance_root" name="Attendances" sequence="90" groups="hr.group_hr_attendance" web_icon="hr_attendance,static/description/icon.png" action="hr_attendance.hr_attendance_action"/>
+         <menuitem action="sqls_attendance" id="menu_attendance_details"
+            name="Attendance Details" parent="bi_menu_sqlconnect_root" sequence="2"/>
+      <menuitem action="sqls_connection_view" id="menu_essl_attendance_details"
+            name="Attendance ESSL" parent="hr_attendance.menu_hr_attendance_manage_attendances" sequence="30" groups="bi_sqlconnector.essl_attendance"/>
+    
+        
+    </data>
+
+    <data noupdate="1">
+    	 <record model="ir.cron" id="bi_read_data_job">
+            <field name='name'>Read Attendance From SqlServer</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="model">bi.connector.sqlserver</field>
+            <field name="function">show_attendance</field>
+            <field name="args">()</field>
+        </record>
+
+         <record model="ir.cron" id="bi_generate_data_job">
+            <field name='name'>Generate Attendance</field>
+            <field name='interval_number'>1</field>
+            <field name='interval_type'>days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="model">bi.connector.sqlserver</field>
+            <field name="function">generate_attendance</field>
+            <field name="args">()</field>
+        </record>
+
+       
+    </data>
+
+	</odoo>

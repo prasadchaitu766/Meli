@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<report
+			id="excel_payslip_report_new"
+			model="hr.contribution.register"
+			string="Print Excel"
+			report_type="xlsx"
+			name="bi_hr_tp.excel.payslip.xlsx"
+			file="bi_hr_tp.excel.payslip.xlsx"
+			attachment_use="False"
+		    menu="False"
+		/>
+		
+		
+	</data>
+</odoo>
+

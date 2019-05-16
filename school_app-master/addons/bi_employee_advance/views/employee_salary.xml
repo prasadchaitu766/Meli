@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+
+		<record id="bi_view_employee_tree" model="ir.ui.view">
+		<field name="name">bi.employee.salary.tree</field>
+		<field name="model">bi.employee.salary</field>
+		<field name="arch" type="xml">
+				<tree string="Employee">        
+					<field name="name"/>
+					<field name="company_id"/>	
+					<field name="department_id"/>
+					<field name="request_date"/>
+					<field name="confirm_date"/>
+					<field name="employee_id"/>
+					<field name="account_no"/>
+					<field name="ifsc_code"/>
+					<field name="design_id"/>
+					<field name="amount"/>  
+					<field name="state"/>  
+				</tree>
+		</field>
+		</record>
+
+		 <record id="bi_employee_advance_filter" model="ir.ui.view">
+            <field name="name">Employee Advance Filter</field>
+            <field name="model">bi.employee.salary</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                	<filter string="This Month Request" name="this_month_report" domain="[('request_date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),('request_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Employee" name="employee_id" domain="[]" context="{'group_by':'employee_id'}"/>
+                        <filter string="Department" name="department" domain="[]" context="{'group_by':'design_id'}"/>
+                        <filter string="Company" name="company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--<record id="bi_action_employee_advance_filter" model="ir.actions.act_window">
+            <field name="name">Employee Advance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bi.employee.salary</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="bi_employee_advance_filter"/> 
+            <field name="context">{'search_default_this_month':1}</field>
+        </record> -->
+
+		<record id="bi_kanban_view_employee" model="ir.ui.view">
+		<field name="name">bi.employee.salary.kanban</field>
+		<field name="model">bi.employee.salary</field>
+		<field name="priority">10</field>
+		<field name="arch" type="xml">
+			<kanban class="o_hr_employee_kanban">              
+				<templates>
+				<t t-name="kanban-box">
+						<div class="oe_kanban_global_click">
+							<div class="oe_kanban_details">
+								
+								<strong><field name="name"/></strong>
+								<ul>
+									<li><b><field name="employee_id" ></field></b></li>
+									<li>Department  : <field name="design_id"></field></li>
+									<li>Request Date : <field name="request_date"></field></li>
+									<li>Confirm Date : <field name="confirm_date"></field></li>
+								</ul>
+							</div>
+						</div>
+				</t>
+				</templates>
+			</kanban>
+		</field>
+	</record>
+	
+	 <record id="view_employee_form" model="ir.ui.view">
+			<field name="name">bi.employee.salary.form</field>
+			<field name="model">bi.employee.salary</field>
+			<field name="arch" type="xml">
+				<form string="Employee">
+					<header>
+						<button name="button_request" string="Send Request" type="object" states="draft"/>
+						<button name="button_approve" string="Approve Request" type="object" states="request" groups="bi_employee_advance.group_approved_user"/>
+						<button name="button_reject" string="Reject Request" type="object" states="request" groups="bi_employee_advance.group_approved_user"/>
+						<button name="button_paid" string="Paid" type="object" states="approve" groups="bi_employee_advance.group_approved_user"/>
+						<field name="state" readonly="1" statusbar_visible="draft, request, approve, paid" widget="statusbar"/>
+					</header>
+
+					<sheet>
+						<div class="oe_title">
+							<label for="name" class="oe_edit_only"/>
+							<h1>
+								<field name="name"/>
+							</h1>
+						</div>
+						<group>
+
+							<group>								
+								<field name="employee_id" domain="[('state','=','draft')]"/>
+								<field name="design_id"/>
+								<field name="department_id"/>
+								<field name="amount" required="1"/>
+								<field name="company_id"/>		
+							</group>
+							<group>
+								<field name="request_date"/>
+								<field name="confirm_date"/>
+								<field name="confirm_manager"/>
+								<field name="account_no"/>
+								<field name="ifsc_code"/>
+							</group>
+							<group>
+								<field name="note"/>
+							</group>
+						</group>
+						
+					</sheet>
+
+				</form>
+			</field>
+		</record>
+
+
+		 <record id="advance_salary_request_mail" model="mail.template">
+            <field name="name">Advance Salary Request Mail</field>
+            <field name="model_id" ref="bi_employee_advance.model_bi_employee_salary"></field>
+            <field name="email_from"><![CDATA[${object.employee_id.name} <${object.employee_id.work_email}>]]></field>
+            <field name="email_to">${object.employee_id.line_manager_id.work_email|safe}</field>
+            <field name="subject">Advance Salary Request Submitted</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="built_in" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <p>Dear ${object.employee_id.line_manager_id.name},</p>
+                <p>${object.employee_id.name} have submitted an advance salary request.</p>
+                <hr/>
+                
+            ]]>
+            </field>
+        </record>
+
+		
+	  <record id="bi_view_employee" model="ir.actions.act_window">
+			<field name="name">Employee</field>
+			<field name="res_model">bi.employee.salary</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,kanban,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+			<field name="view_id" eval="False"/>
+			<field name="help" type="html">
+			  <p class="oe_view_nocontent_create">
+				Click to add new entry.
+			  </p>
+			  <p>
+				Employee Details
+			  </p>
+			</field>
+		</record>
+
+		<record id="bi_view_employee_approve" model="ir.actions.act_window">
+			<field name="name">Employee</field>
+			<field name="res_model">bi.employee.salary</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('state','!=','paid')]</field>
+			<field name="context">{}</field>
+			<field name="view_id" eval="False"/>
+			<field name="help" type="html">
+			  <p class="oe_view_nocontent_create">
+				Click to add new entry.
+			  </p>
+			  <p>
+				Employee Details
+			  </p>
+			</field>
+		</record>
+
+		<menuitem
+			id="bi_menu_advance_sal"
+			name="Advance Salary Request"
+			parent="bi_hr.hr_requests_menu_main"
+			sequence="1"
+			action="bi_view_employee"/>
+		<menuitem
+			id="bi_menu_advance_sal_approve"
+			name="Advance Salary To Approve"
+			action="bi_view_employee_approve"
+			parent="bi_hr.hr_approve_menu_main"
+			sequence="2"
+			groups="bi_employee_advance.group_approved_user"
+			/>
+	</data>
+</odoo>

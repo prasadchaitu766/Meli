@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	<record id="seq_bi_passport" model="ir.sequence">
+			<field name="name">Asset Management</field>
+			<field name="code">account.asset.asset</field>
+			<field name="prefix">AM</field>
+			<field name="padding">5</field>
+			<field name="company_id" eval="False"/>
+		</record>
+	</data>
+</odoo>

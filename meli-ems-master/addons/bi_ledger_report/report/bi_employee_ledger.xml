@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		
+		<report
+			id="bi_employee_ledger_report"
+			model="hr.payslip.run"
+			string="Employee Ledger"
+			report_type="xlsx"
+			name="account.bi.employee.ledger.xlsx"
+			file="account.bi.employee.ledger.xlsx"
+			attachment_use="False"
+		    menu="False"
+		/>
+	</data>
+</odoo>

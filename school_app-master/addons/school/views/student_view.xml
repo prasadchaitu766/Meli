@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<odoo>
+	<!-- Form View 1 Of Student's Profiles -->
+		<record id="view_student_student_form_1" model="ir.ui.view">
+			<field name="name">student.student.form.1</field>
+			<field name="model">student.student</field>
+			<field name="arch" type="xml">
+				<form string="Student Information" create="false" delete="false">
+					<header>
+						<button class="oe_stat_button" name="%(school.action_followup_wizard)d" string="Follow up list" type="action" states="done,draft,movesemester,repeat" groups="school.group_school_administration,school.group_school_registrar_officer,school.group_school_academic_officer,school.group_school_finance_officer" />
+						<button class="oe_highlight oe_stat_button" name="%(school.action_terminate_wizard)d" string="Terminate" type="action" icon="fa-ban" states="done,followup,movesemester,repeat" groups="school.group_school_administration,school.group_school_registrar_officer" />
+						<button class="oe_stat_button" name="set_alumni" string="Alumni" type="object" icon="fa-archive" states="done,followup,movesemester,repeat" groups="school.group_school_administration,school.group_school_registrar_officer,school.group_school_finance_officer" />
+						<button class="oe_stat_button" name="set_reset" string="Reset to Draft" type="object" icon="fa-archive" states="terminate" groups="school.group_school_administration,school.group_school_registrar_officer,school.group_school_finance_officer" />
+						<button class="oe_stat_button" icon="fa-check" name="admission_done" type="object" string="Done" groups="school.group_school_administration,school.group_school_registrar_officer,school.group_school_academic_officer,school.group_school_finance_officer" attrs="{'invisible':[('state','in',['terminate','draft','done','movesemester','repeat'])]}"/>
+						<field name="state" widget="statusbar" statusbar_visible="draft,invoiced,done"/>
+					</header>
+					<sheet>
+						<div class="oe_button_box" name="buttons"></div>
+						<div class="oe_inline">
+							<newline />
+							<separator string="Personal Information" />
+							<b>
+								<field name="pid" nolabel="1" readonly="1" />
+							</b>
+							<br />
+							<field name="photo" widget="image" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" class="oe_avatar oe_left" style="max-width:100px;max-height:117px;"/>
+							<div class="oe_title">
+								<group>
+									<field name="name" placeholder="First Name" nolabel="1" required="1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" style="width:60%%"/>
+									<br />
+									<field name="middle" placeholder="Middle Name" nolabel="1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" style="width:60%%"/>
+									<br />
+									<field name="last" placeholder="Last Name" nolabel="1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" style="width:60%%"/>
+									<br />
+									<!-- <field name="pid" invisible="1"/> -->
+								</group>
+							</div>
+						</div>
+<!--                         <div class="oe_right oe_button_box" name="buttons"></div> -->
+						<group>
+							<group string="Student Information">
+								<field name="student_code" readonly="1" />
+								<field name="roll_no" help="Roll number of Student" readonly="1"/>
+								<field name="school_id" placeholder="Campus" help="Campus of Student" attrs="{'readonly':['|',('state','in',['alumni','terminate']),('teachr_user_grp','=',True)]}"/>
+								<field name="availability" attrs="{'invisible':[('state','in',['done','alumni'])]}"/>
+							</group>
+                            <group string="Program Information" >
+                                <field name="program_id" placeholder="Program" options="{'no_create_edit': True,'no_create': True,'no_open': True}" required="1"/>
+                                <field name="medium_id" placeholder="Shift" options="{'no_create_edit': True,'no_create': True,'no_open': True}"  required="1"/>
+                                <field name="semester_id" domain="[('standard_id','=',program_id)]" options="{'no_create_edit': True,'no_create': True,'no_open': True}"  required="1"/>
+                                <field name="standard_id" placeholder="Class" domain="[('school_id','=',school_id),('medium_id','=',medium_id),('standard_id','=',program_id),('semester_id','=',semester_id),('state','!=','close')]" attrs="{'invisible':[('state','not in',['invoiced','done','alumni','terminate']),('is_class','!=',True)]}" options="{'no_create_edit': True,'no_create': True,'no_open': True}" />
+                                <field name="is_class" invisible="1" />
+                                <field name="division" placeholder="Class Room"  attrs="{'invisible':[('state','not in',['invoiced','done','alumni','terminate']),('is_class','!=',True)]}" options="{'no_create_edit': True,'no_create': True,'no_open': True}"/> 
+                                <field name="start_class" readonly="1" attrs="{'invisible':[('state','in',['draft','done','movesemester','repeat','alumni','followup'])]}" />                             
+							</group>
+							<!-- <group>
+								<field name="att_device" widget="selection"/>
+								<button class="oe_stat_button" name="create_device_user" type="object" string="Create Device User" states="done" groups="school.group_school_administration"/>
+							</group> -->
+						</group>
+						<group>
+							<group>
+								<label for="street" string="Current Address" />
+								<div class="o_address_format">
+									<field name="street" class="o_address_street" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+									<field name="street2" class="o_address_street" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+									<field name="city" placeholder="City" class="o_address_city" required="1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+									<field name="state_id" domain="[('country_id','=',country_id)]" class="o_address_state" required="1" placeholder="State" options="{&quot;no_open&quot;: True}" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+									<field name="zip" placeholder="ZIP" class="o_address_zip" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+									<field name="country_id" placeholder="Country" class="o_address_country,oe_no_button" options="{&quot;no_open&quot;: True}" required="1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+								</div>
+							</group>
+							<group>
+								<label for="permanent_street" string="Permanent Address" />
+								<div class="o_address_format">
+									<field name="permanent_street" class="o_address_street" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+									<field name="permanent_street2" class="o_address_street" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+									<field name="permanent_city" placeholder="City" class="o_address_city" required="1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+									<field name="permanent_state_id" domain="[('country_id','=',country_id)]" class="o_address_state" required="1" placeholder="State" options="{&quot;no_open&quot;: True}" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+									<field name="permanent_zip" placeholder="District" class="o_address_zip" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+									<field name="permanent_country_id" placeholder="Country" class="o_address_country,oe_no_button" options="{&quot;no_open&quot;: True}" required="1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+								</div>
+							</group>
+							<group>
+								<field name = "same_address"/>
+							</group>
+							<group>
+								<field name="phone" placeholder="Phone Number" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+								<field name="mobile" placeholder="Mobile Number" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+								<field name="email" placeholder="Email Address" String="Email" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+								<!-- <field name="website" widget="url" placeholder="e.g. www.serpentcs.com" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/> -->
+								<field name="teachr_user_grp" invisible="1"/>
+								<field name="admission_user_id" required="1" readonly="1"/>
+                                <field name="class_added_by" required="0" readonly="1"/>
+							</group>
+						</group>
+						<notebook>
+							<page string="General" name="general">
+								<group>
+									<group>
+										<field name="nid" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" required="1"/>
+										<field name="date_of_birth" widget="date" placeholder="Birthdate" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+										<field name="gender" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" placeholder="Gender" required="1"/>
+										<field name="age"/>
+<!-- 										<field name="qr_code"  widget="image" style="width: 120px; height: 120px;"/>
+ -->										<field name="occupation"/>
+									</group>
+									<group>
+										<field name="parent_id" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" placeholder="Parent Name"/>
+										<field name="grandparent_id" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" placeholder="Grand Parent Name"/>
+										<field name="admission_date" widget="date" readonly="1"/>
+										<field name="admission_donedate" widget="date" readonly="1" attrs="{'invisible':[('state','in',['draft','invoiced'])]}"/>
+										<field name="expired_date" widget="date" readonly="1" attrs="{'invisible':[('state','in',['draft','invoiced','followup'])]}" invisible="1"/>
+										<field name="maritual_status" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" placeholder="Maritial Status"/>
+									</group>
+									<newline />
+									<separator string="Emergency Contact Details" colspan="4" />
+									<newline />
+									<group colspan="4" col="4">
+										<field name="contact_phone1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" placeholder="Phone Number"/>
+										<field name="contact_mobile1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" placeholder="Mobile Number"/>
+									</group>
+									<newline />
+								</group>
+								<newline/>
+								<separator string="Termination Reason" attrs="{'invisible':[('state','in',['draft','done','alumni'])]}"/>
+								<group>
+										<field name="terminate_reason" attrs="{'invisible':[('state','in',['draft','done','alumni'])]}" readonly="1"/>
+								  </group>
+								<newline/>
+								<separator string="Follow Up Reason" attrs="{'invisible':[('state','in',['draft','done','alumni','terminate'])]}"/>
+								<group>
+										<field name="followup_id" attrs="{'invisible':[('state','in',['draft','done','alumni'])]}" readonly="1"/>
+								  </group>
+							</page>
+							 
+							<page string="Remarks">
+								<field name="description" nolabel="1" colspan="4" attrs="{'readonly':[('state','in',['alumni','terminate'])]}">
+									<form string="Extra Details">
+										<group col="4" colspan="2">
+											<field name="name" placeholder="Field Name" />
+											<field name="description" placeholder="Description" />
+										</group>
+									</form>
+									<tree string="Remarks" editable="top">
+										<field name="name" required="1" placeholder="Enter Name"/>
+										<field name="description" placeholder="Enter Description"/>
+									</tree>
+								</field>
+							</page>
+							<page string="History" groups="school.group_school_administration,school.group_school_teacher,school.group_school_parent,school.group_school_student">
+								<field name="history_ids" nolabel="1" colspan="4" readonly="1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"
+									options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}">
+									<tree string="History">
+										<field name="standard_id" required="1"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="roll_no"/>
+										<field name="percentage"/>
+										<field name="result"/>
+									</tree>
+									<form string="History">
+										<group col="4" colspan="4">
+											<field name="standard_id" placeholder="Select or Create Class" />
+                                            <field name="start_date"/>
+                                            <field name="end_date"/>
+                                            <field name="roll_no"/>
+											<field name="percentage" />
+											<field name="result" />
+										</group>
+									</form>
+								</field>
+							</page>
+							<page string="Previous Campus">
+								<field name="line_ids">
+									<tree string="Previous Campus Details" editable="bottom">
+										<field name="stud_name"/>
+										<field name="from_campus_id"/>
+										<field name="to_campus_id"/> 
+										<field name="transfer_date"/>
+										<field name="reason_id"/>
+										<field name="previous_standard_id"/> 
+										<field name="previous_semester_id"/>
+										<field name="previous_medium_id"/>
+										<!-- <field name="course_id" widget="selection" /> -->
+									</tree>
+									
+								</field>
+							</page>
+						</notebook>
+<!--                         <field name="state" invisible="1" /> -->
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<!-- Tree View 1 Of Student's Profiles -->
+		<record id="view_student_student_tree_1" model="ir.ui.view">
+			<field name="name">student.student.tree.1</field>
+			<field name="model">student.student</field>
+			<field name="arch" type="xml">
+				<tree string="Student Information" create="false" delete="false">
+					<field name="student_code" />
+					<field name="name" />
+					<field name="parent_id" />
+					<field name="program_id" />
+					<field name="medium_id" />
+					<field name="student_name" invisible="1" />
+					<field name="year" widget="selection" invisible="1"/>
+					<field name="standard_id" />
+					<field name="semester_id" />
+					<field name="admission_date" />
+					<field name="gender" />
+					<field name="state" />
+					<field name="school_id" />
+					<field name="mobile"/>
+					<field name="email"/>
+					<field name="followup_id" attrs="{'invisible':[('state','!=','followup')]}"/>
+					<field name="availability" attrs="{'invisible':[('state','!=','followup')]}"/>
+				</tree>
+			</field>
+		</record>
+		<!-- Search View 1 Of Student's Profiles -->
+		<record id="view_student_student_search_1" model="ir.ui.view">
+			<field name="name">student.student.search.1</field>
+			<field name="model">student.student</field>
+			<field name="arch" type="xml">
+				<search string="Student Information">
+					<group col="10" colspan="4">
+						<field name="student_name"/>
+						<field name="student_code" />
+						<field name="pid" />
+						<field name="parent_id"/>
+						<field name="grandparent_id"/>
+						<field name="year" />
+						<field name="gender" />
+						<field name="mobile"/>
+						<field name="school_id" placeholder="Campus"/>
+					</group>
+					<newline />
+					<group expand="0" string="Group By..." colspan="12" col="10">
+						<filter icon="terp-project" string="Class" help="By Class" context="{'group_by':'standard_id'}" />
+						<filter icon="terp-project" string="Gender" help="By Gender" context="{'group_by':'gender'}" />
+						<filter icon="terp-project" string="Name" help="By Class" context="{'group_by':'student_name'}" />
+						<filter icon="terp-project" string="Campus" help="By Campus" context="{'group_by':'school_id'}" />
+						<filter icon="terp-project" string="State" help="By State" context="{'group_by':'state'}"/>
+					</group>
+					<separator/>
+					<filter icon="terp-project" string="Alumni" domain="[('state','=', 'alumni')]" help="Admission In Confirm State"/>
+					<filter icon="terp-project" string="Terminated" domain="[('state','=', 'terminate')]" help="Admission In Pending State"/>
+					<filter icon="terp-project" string="Done" domain="[('state','=', 'done')]" help="Admission In Done State"/>
+				</search>
+			</field>
+		</record>
+		<!-- Kanban View Of Student's Profiles -->
+		<record id="student_student_kanban_view" model="ir.ui.view">
+			<field name="name">Student KANBAN</field>
+			<field name="model">student.student</field>
+			<field name="arch" type="xml">
+				<kanban default_group_by="standard_id" nocreate="1" create="false">
+					<field name="color" />
+					<field name="name" />
+					<field name="email" />
+					<templates>
+						<t t-name="kanban-box">
+							<t t-set="color" t-value="kanban_color(record.color.raw_value || record.name.raw_value)" />
+							<div t-att-class="color + (record.color.raw_value == 1 ? ' oe_kanban_color_alert' : '')">
+								<div class="oe_kanban_box oe_kanban_color_border">
+									<div class="oe_kanban_box_header oe_kanban_color_bgdark oe_kanban_color_border oe_kanban_draghandle">
+										<table class="oe_kanban_table">
+											<tr>
+												<td class="oe_kanban_title1" align="left" valign="middle" style="padding-left:10px;">
+													<h4>
+														<a type="open">
+															<field name="name" style="width:4=60%%"/>
+															<field name="middle" style="width:60%%"/>
+															<field name="last" style="width:60%%"/>
+															<field name="student_name" invisible="1" />
+															<field name="standard_id" invisible="1" />
+															<field name="school_id" invisible="1" />
+															<field name="gender" invisible="1" />
+															<field name="state" invisible="1" />
+<!--                                                             <field name="app_no" invisible="1" />
+ -->
+														</a>
+													</h4>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="oe_kanban_box_content oe_kanban_color_bglight oe_kanban_box_show_onclick_trigger oe_kanban_color_border">
+										<table class="oe_kanban_table">
+											<tr width="300">
+												<td valign="top" width="64" align="left">
+													<a type="open">
+														<img heigh="80" width="80" t-att-src="kanban_image('student.student', 'photo', record.id.value)" />
+													</a>
+												</td>
+												<td valign="top" align="left" style="padding-left:10px;">
+													<table>
+														<!-- <tr attrs="{'invisible':[('state','=','done')]}">
+															<td>Application No :</td>
+															<td style="padding-left:10px;">
+																<b>
+																	<field name="app_no" />
+																</b>
+															</td>
+														</tr> -->
+														<tr attrs="{'invisible':[('state','!=','draft')]}">
+															<td>Application NO:</td>
+															<td style="padding-left:10px;">
+																<b>
+																	<field name="pid" />
+																</b>
+															</td>
+														</tr>
+														<tr attrs="{'invisible':[('state','=','draft')]}">
+															<td>Student Code:</td>
+															<td style="padding-left:10px;">
+																<b>
+																	<field name="student_code" />
+																</b>
+															</td>
+														</tr>
+														<tr>
+															<td>Class : </td>
+															<td style="padding-left:10px;">
+																<b>
+																	<field name="standard_id" />
+																</b>
+															</td>
+														</tr>
+														<tr>
+															<td>Admission Date : </td>
+															<td style="padding-left:10px;">
+																<b>
+																	<field name="admission_date" />
+																</b>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<center>
+														<b>
+															<field name="gender" />
+														</b>
+													</center>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="oe_kanban_buttons_set oe_kanban_color_border oe_kanban_color_bglight oe_kanban_box_show_onclick">
+										<div class="oe_kanban_left">
+											<a string="Edit" class="btn btn-sm btn-default fa fa-pencil" type="edit" groups="school.group_school_administration"/>
+											<a string="Change Color" icon="color-picker" type="color" name="color" />
+										</div>
+										<br class="oe_kanban_clear" />
+									</div>
+								</div>
+							</div>
+						</t>
+					</templates>
+				</kanban>
+			</field>
+		</record>
+		<!-- Form View Of Admission Register Information -->
+		<record id="view_student_student_form_2" model="ir.ui.view">
+			<field name="name">student.student.form.2</field>
+			<field name="model">student.student</field>
+			<field name="arch" type="xml">
+				<form string="Add Application">
+					<header>
+						<button class="oe_stat_button" name="%(school.action_followup_wizard)d" string="Follow up list" type="action" states="done,draft,movesemester,repeat" groups="school.group_school_administration,school.group_school_registrar_officer" />
+						<button class="oe_highlight oe_stat_button" name="set_terminate" string="Terminate" type="object" icon="fa-ban" states="done,followup,movesemester,repeat" groups="school.group_school_administration"/>
+						<button class="oe_stat_button" name="set_alumni" string="Alumni" type="object" icon="fa-archive" states="done,movesemester,repeat" groups="school.group_school_administration,school.group_school_registrar_officer" />
+						<button class="oe_stat_button" icon="fa-check" name="admission_done" type="object" string="Done" states="invoiced" groups="school.group_school_administration,school.group_school_registrar_officer,school.group_school_academic_officer" />
+						<button class="oe_stat_button" name="set_reset" string="Reset to Draft" type="object" icon="fa-archive" states="terminate" groups="school.group_school_administration,school.group_school_registrar_officer,school.group_school_finance_officer" />
+						<button class="oe_stat_button" icon="fa-ban" name="cancel_admission" type="object" string="Cancel" states="draft" groups="school.group_school_administration,school.group_school_registrar_officer,school.group_school_academic_officer"/>
+						<field name="state" widget="statusbar" statusbar_visible="draft,cancel,invoiced"/>
+					</header>
+					<sheet>
+						<div class="oe_button_box" name="buttons1"></div>
+						<div class="oe_inline">
+							<newline />
+							<separator string="Personal Information" />
+							<field name="photo" widget="image" class="oe_avatar oe_left" style="max-width:100px;max-height:117px;" />
+							<div class="oe_title">
+								<group>
+									<field name="pid" nolabel="1" readonly="1"/>
+									<br />
+									<field name="name" placeholder="First Name" nolabel="1" required="1" attrs="{'readonly':[('state','=','alumni')]}" style="width:60%%"/>
+									<br />
+									<field name="middle" placeholder="Middle Name" nolabel="1" attrs="{'readonly':[('state','=','alumni')]}" style="width:60%%"/>
+									<br />
+									<field name="last" placeholder="Last Name" nolabel="1" attrs="{'readonly':[('state','=','alumni')]}" style="width:60%%"/>
+									<br/>
+									<field name="active" invisible="1"/>
+								</group>
+							</div>
+						</div>
+						<group>
+							<group string="Campus Information">
+								<field name="school_id" placeholder="Campus Name" required="1" 
+									attrs="{'readonly':[('state','=','alumni')]}" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+								<field name="availability" attrs="{'invisible':[('state','in',['done','alumni'])]}"/>
+                            </group>
+                             <group string="Program Information" >
+                                <field name="program_id" placeholder="Program" required="1" options="{'no_create_edit': True,'no_create': True,'no_open': True}"/>
+                                <field name="medium_id" placeholder="Shift" required="1" options="{'no_create_edit': True,'no_create': True,'no_open': True}"/>
+                                <field name="semester_id" domain="[('standard_id','=',program_id)]" required="1" options="{'no_create_edit': True,'no_create': True,'no_open': True}"/>
+                                <field name="standard_id" placeholder="Class" domain="[('school_id','=',school_id),('medium_id','=',medium_id),('standard_id','=',program_id),('semester_id','=',semester_id),('state','!=','close')]" attrs="{'invisible':[('state','not in',['invoiced','done','alumni','terminate']),('is_class','!=',True)]}" options="{'no_create_edit': True,'no_create': True,'no_open': True}"/>
+                                <field name="is_class" invisible="1" />
+                                <field name="division" placeholder="Class Room"  attrs="{'invisible':[('state','not in',['invoiced','done','alumni']),('is_class','!=',True)]}" options="{'no_create_edit': True,'no_create': True,'no_open': True}"/>
+                               <field name="start_class" readonly="1" attrs="{'invisible':[('state','in',['draft','done','movesemester','repeat','alumni','followup'])]}" />    
+                            </group>
+                        </group>
+                        <group colspan="4">
+                            <group>
+                                <label for="street" string="Current Address" />
+                                <div class="o_address_format">
+                                    <field name="street" class="o_address_street" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                    <field name="street2" class="o_address_street" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                    <field name="city" placeholder="City" class="o_address_city" required="1" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                    <field name="state_id" class="o_address_state" domain="[('country_id','=',country_id)]" placeholder="State" options="{&quot;no_open&quot;: True}" required="1" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                    <field name="zip" placeholder="District" class="o_address_zip" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                    <field name="country_id" placeholder="Country" class="o_address_country,oe_no_button" required="1" options="{&quot;no_open&quot;: True}" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                </div>
+                            </group>
+                            <group>
+                                <label for="permanent_street" string="Permanent Address" />
+                                <div class="o_address_format">
+                                    <field name="permanent_street" class="o_address_street" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+                                    <field name="permanent_street2" class="o_address_street" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+                                    <field name="permanent_city" placeholder="City" class="o_address_city" required="1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+                                    <field name="permanent_state_id" domain="[('country_id','=',country_id)]" class="o_address_state" required="1" placeholder="State" options="{&quot;no_open&quot;: True}" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+                                    <field name="permanent_zip" placeholder="District" class="o_address_zip" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+                                    <field name="permanent_country_id" placeholder="Country" class="o_address_country,oe_no_button" options="{&quot;no_open&quot;: True}" required="1" attrs="{'readonly':[('state','in',['alumni','terminate'])]}"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name = "same_address"/>
+                            </group>
+                            <group>
+                                <field name="phone" placeholder="Phone Number" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                <field name="mobile" placeholder="Mobile Number" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                <field name="email" placeholder="Email Address" String="Email" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                <field name="admission_user_id" required="1" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="General">
+                                <form string="General">
+                                    <sheet>
+                                        <group string="General Information">
+                                            <group>
+                                                <field name="nid" attrs="{'readonly':[('state','in',['alumni','terminate'])]}" required="1"/>
+                                                <field name="gender" placeholder="Gender" attrs="{'readonly':[('state','=','alumni')]}" required="1"/>
+                                                <field name="date_of_birth" placeholder="Birthdate" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                                <field name="age" />
+                                                <field name = "occupation"/>
+                                            </group>
+                                            <group>
+                                                <field name="parent_id" placeholder="Parent Name" attrs="{'readonly':[('state','=','alumni')]}"/>
+                                                <field name="grandparent_id" placeholder="Grand Parent Name" attrs="{'readonly':[('state','=','alumni')]}"/>
+												<field name="admission_date" readonly="1"/>
+												<field name="admission_donedate" widget="date" readonly="1" attrs="{'invisible':[('state','in',['draft','invoiced','followup'])]}"/>
+												<field name="maritual_status" placeholder="Select Marital Status" attrs="{'readonly':[('state','=','alumni')]}"/>
+											</group>
+											<newline />
+											<separator string="Emergency Contact Details" colspan="4" />
+											<newline />
+											<group colspan="4" col="4">
+												<field name="contact_phone1" attrs="{'readonly':[('state','=','alumni')]}" placeholder="Phone Number"/>
+												<field name="contact_mobile1" attrs="{'readonly':[('state','=','alumni')]}" placeholder="Mobile Number"/>
+											</group>
+										</group>
+									</sheet>
+								</form>
+							</page>
+							
+
+							<page string="Previous Campus">
+								<field name="line_ids" colspan="4" readonly="1" >
+
+									<tree string="Previous Campus Details">
+										<field name="stud_name"/>
+										<field name="from_campus_id"/>
+										<field name="to_campus_id"/>
+										<field name="transfer_date"/>
+										<field name="reason_id"/>
+
+										<!-- <field name="course_id" widget="selection" /> -->
+									</tree>
+									
+								</field>
+							</page> 
+						   
+							<page string="Remarks">
+								<form string="Remarks">
+									<field name="remark" placeholder="Remark" nolabel="1" colspan="4" attrs="{'readonly':[('state','=','alumni')]}"/>
+								</form>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		<!-- Tree View Of Admission Register Information -->
+		<record id="view_student_student_tree_2" model="ir.ui.view">
+			<field name="name">student.student.tree.2</field>
+			<field name="model">student.student</field>
+			<field name="arch" type="xml">
+				<tree string="Add Application">
+					<field name="pid" />
+					<field name="name" />
+					<field name="parent_id" />
+					<field name="program_id" />
+					<field name="medium_id" />
+					<field name="student_name" invisible="1" />
+					<field name="year" invisible="1"/>
+					<field name="standard_id" invisible="1" />
+					<field name="semester_id" />
+					<field name="school_id" />
+					<field name="admission_date" />
+					<field name="gender" />
+					<field name="state" />
+				</tree>
+			</field>
+		</record>
+		<!-- Search View Of Admission Register Information -->
+		<record id="view_student_student_search_2" model="ir.ui.view">
+			<field name="name">student.student.search.2</field>
+			<field name="model">student.student</field>
+			<field name="arch" type="xml">
+				<search string="Add Application">
+					<separator orientation="vertical" />
+					<field name="student_name"/>
+					<field name="pid"/>
+					<field name="parent_id"/>
+					<field name="grandparent_id"/>
+					<field name="year" />
+					<field name="standard_id" />
+					<field name="gender" />
+					<field name="school_id"/>
+					<field name="mobile"/>
+					<newline />
+					<filter icon="terp-project" string="Draft" name="state_student" domain="[('state','=', 'draft')]" help="Admission In Draft State" />
+					<group expand="0" string="Group By..." colspan="12" col="10">
+						<filter icon="terp-project" string="Class" domain="[]" help="By Class" context="{'group_by':'standard_id'}" />
+						<filter icon="terp-project" string="Gender" domain="[]" help="By Gender" context="{'group_by':'gender'}" />
+						<filter icon="terp-project" string="Name" domain="[]" help="By Class" context="{'group_by':'student_name'}" />
+						<filter icon="terp-project" string="Campus" help="By Campus" context="{'group_by':'school_id'}" />
+					</group>
+
+				</search>
+			</field>
+		</record>
+	 <!-- Action Of Form, Tree & Kanban View Of Admission Register Information -->
+		<record id="action_student_student_form_2" model="ir.actions.act_window">
+			<field name="name">Add Application</field>
+			<field name="res_model">student.student</field>
+			<field name="domain">['|','|','|','|',('state','=','draft'),('state','=','invoiced'),('state','=','cancel'),('state','=','movesemester'),('state','=','repeat')]</field>
+<!--             <field name="context">{'search_default_state_student': 1}</field> -->
+			<field name="view_type">form</field>
+			<field name="view_id" ref="view_student_student_form_2" />
+			<field name="search_view_id" ref="view_student_student_search_2" />
+			<field name="view_mode">tree,form,kanban</field>
+		</record>
+		<!-- Action View 2 Of Kanban View Of Student Information -->
+		<record id="action_view_student_student_kanban_2" model="ir.actions.act_window.view">
+			<field name="view_mode">kanban</field>
+			<field eval="21" name="sequence" />
+			<field name="view_id" ref="student_student_kanban_view" />
+			<field name="act_window_id" ref="action_student_student_form_2" />
+		</record>
+		<!-- Action View 2 Of Tree View Of Student Information -->
+		<record id="action_student_student_tree_2" model="ir.actions.act_window.view">
+			<field name="view_mode">tree</field>
+			<field eval="20" name="sequence" />
+			<field name="view_id" ref="view_student_student_tree_2" />
+			<field name="act_window_id" ref="action_student_student_form_2" />
+		</record>
+		<!-- Action Of Form, Tree & Kanban Views Of Student Information -->
+		<record id="action_student_student_form_12" model="ir.actions.act_window">
+			<field name="name">Students</field>
+			<field name="domain">[('state', '=', 'done')]</field>
+			<field name="context">{'search_default_done_student':1}</field>
+			<field name="res_model">student.student</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="view_student_student_tree_1" />
+			<field name="search_view_id" ref="view_student_student_search_1" />
+			<field name="view_mode">tree,form,kanban</field>
+		</record>
+		<!-- Action of Alumni state -->
+		<record id="action_student_alumni" model="ir.actions.act_window">
+			<field name="name">Student Alumni</field>
+			<field name="domain">['|',('state','=','alumni'),('state','=','terminate')]</field>
+			<field name="res_model">student.student</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,kanban,form</field>
+		</record>
+		 <!-- Action of Terminate state -->
+		<record id="action_student_terminate" model="ir.actions.act_window">
+			<field name="name">Students Terminated</field>
+			<field name="domain">[('state','=','terminate')]</field>
+			<field name="res_model">student.student</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,kanban,form</field>
+		</record>
+		<!-- Action View 1 Of Kanban View Of Student Information-->
+		<!-- <record id="action_view_student_student_kanban_1" model="ir.actions.act_window.view">
+			<field name="view_mode">kanban</field>
+			<field eval="31" name="sequence" />
+			<field name="view_id" ref="student_student_kanban_view" />
+			<field name="act_window_id" ref="action_student_student_form_12" />
+		</record> -->
+
+        <!-- Action of followup state -->
+        <record id="action_student_followup" model="ir.actions.act_window">
+            <field name="name">Student Followup</field>
+            <field name="domain">[('state','=','followup')]</field>
+            <field name="res_model">student.student</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Action of Student Contact -->
+        <record id="action_student_contact" model="ir.actions.act_window">
+            <field name="name">Contacts</field>
+            <field name="domain">[('state','!=','draft')]</field>
+            <field name="res_model">student.student</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+</odoo>

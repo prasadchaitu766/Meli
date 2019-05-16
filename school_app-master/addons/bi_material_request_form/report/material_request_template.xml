@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="material_request_form_template">
+    <t t-call="report.html_container">     
+        <t t-foreach="docs" t-as="o">
+            <t t-call="report.internal_layout">
+                <div class="page" style="font-size:18px;padding:10px;">
+                    <h2><center>Material Request Form</center></h2>
+                    <br/><br/> 
+                    <div class="col-xs-12">
+                        <div class="col-xs-6">
+                            <span><strong>Number:</strong><t t-if="o.name">
+                            <p t-field="o.name"/></t></span>
+                            <span><strong>Reference:</strong><t t-if="o.reference">
+                            <p t-field="o.reference"/></t></span>
+                        </div>
+                        <div class="col-xs-6">
+                            <span><strong>Scheduled Date :</strong><t t-if="o.transfer_date"> <span t-field="o.transfer_date"/><br/></t></span>                            
+                        </div>
+                       
+                    </div>
+                     <br/><br/><br/>
+                    <table class="table table-bordered" style="line: 1px solid black;;margin-left: -10px;width: 1010px;">
+                        <thead>  
+                            <th style="text-align:left;line: 1px solid black;">Product</th> 
+                            <th style="text-align:left;line: 1px solid black;">Quantity</th>
+                            <th style="text-align:left;line: 1px solid black;">Unit of Measure</th>
+                        </thead>
+                        <tbody class="account_tbody" style="border: 1px solid black;">
+                                <!-- <t t-set="i" t-value="1"/> -->
+                            <tr t-foreach="o.material_line_ids" t-as="l">
+                                    <!-- <td style="text-align:left;line: 1px solid black;">
+                                        <span t-esc="i"/>
+                                            <t t-set="i" t-value="i+1"/>
+                                    </td> -->
+                                    <td style="text-align:left;line: 1px solid black;">
+                                        <span t-field="l.product_id.name"/><br/>
+                                    </td>  
+                                    <td style="text-align:left;line: 1px solid black;">
+                                        <span t-field="l.quantity"/><br/>
+                                    </td>
+                                    <td style="text-align:left;line: 1px solid black;">
+                                        <span t-field="l.unit_of_measure"/><br/>
+                                    </td>  
+                            </tr>                               
+                        </tbody>
+                    </table> 
+                    <br/><br/><br/>
+                    <div class="col-xs-12">
+                        <div class="col-xs-4" >                    
+                        </div>
+                        <div class="col-xs-4">                    
+                        </div> 
+                        <div class="col-xs-4" style="center">
+                        <p class="text-center" style="padding-left:5mm; border-top:3px solid black; border-length: 7px;">Approved By</p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

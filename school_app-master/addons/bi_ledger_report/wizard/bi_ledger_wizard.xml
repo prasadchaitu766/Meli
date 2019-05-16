@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wizard_employee_ledger_report" model="ir.ui.view">
+        <field name="name">Employee Ledger Report</field>
+        <field name="model">bi.employee.ledger</field>
+        <field name="arch" type="xml">
+            <form string="Choose your date">
+                <!-- <p class="oe_gray">
+                    Choose a Dates of Invoice To Generate GSTR B2B Report in Xlsx.
+                </p> -->
+                <group>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </group>
+                <group>
+                    <field name="employee_id"/>
+                    <field name="company_id"/>
+                </group>
+                <footer>
+                    <button name="print_Excel_report" string="Print Excel Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="wizard_employee_ledger_action_report" model="ir.actions.act_window">
+        <field name="name">Employee Ledger Report</field>
+        <field name="res_model">bi.employee.ledger</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_employee_ledger_report"/>
+        <field name="target">new</field>
+    </record>
+ 
+    <menuitem action="wizard_employee_ledger_action_report" id="menu_reporting_employee_ledger_excel" parent="l10n_in_hr_payroll.menu_l10n_in_hr_payroll_report" sequence="5" />  
+
+   
+   
+</odoo>
